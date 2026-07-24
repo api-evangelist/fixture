@@ -1,0 +1,1261 @@
+openapi: 3.1.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Accounts Deals API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- description: Create, read, update, and delete Deal records.
+  name: Deals
+paths:
+  /api/v1/deals:
+    get:
+      deprecated: false
+      description: Return a paginated list of Deals. Supports filtering by `pipeline_id`, `pipeline_stage_id`, `account_id`, free-text `search` across Deal names, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`.
+      operationId: listDeals
+      parameters:
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Maximum number of records to return.
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          example: 50
+          type: integer
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque cursor returned by the previous page. Omit for the first page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          example: eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Sort by a supported field. Prefix with `-` for descending order.
+        in: query
+        name: sort
+        required: false
+        schema:
+          default: -created_at
+          example: -created_at
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque Pipeline ID with the `pipeline_` prefix.
+        in: query
+        name: pipeline_id
+        required: false
+        schema:
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque Pipeline stage ID with the `stage_` prefix.
+        in: query
+        name: pipeline_stage_id
+        required: false
+        schema:
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Search by Deal name.
+        in: query
+        name: search
+        required: false
+        schema:
+          example: renewal
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque Account ID with the `account_` prefix.
+        in: query
+        name: account_id
+        required: false
+        schema:
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque Contact ID with the `contact_` prefix.
+        in: query
+        name: contact_id
+        required: false
+        schema:
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records created after this ISO 8601 timestamp.
+        in: query
+        name: created_after
+        required: false
+        schema:
+          example: '2026-03-01T00:00:00Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records created before this ISO 8601 timestamp.
+        in: query
+        name: created_before
+        required: false
+        schema:
+          example: '2026-03-31T23:59:59Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records updated after this ISO 8601 timestamp.
+        in: query
+        name: updated_after
+        required: false
+        schema:
+          example: '2026-03-01T00:00:00Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records updated before this ISO 8601 timestamp.
+        in: query
+        name: updated_before
+        required: false
+        schema:
+          example: '2026-03-31T23:59:59Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter by owner relationship. Use `owner:user_...` for owned records or `owner:none` for unowned records.
+        in: query
+        name: relationship
+        required: false
+        schema:
+          example: owner:user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  created_at: '2026-03-15T10:00:00Z'
+                  expected_close_date: '2026-06-30'
+                  id: deal_5N2jXRFuLpTQ3nM4PkGvW7
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  name: Enterprise renewal
+                  pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+                  pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                  relationships:
+                    owner:
+                      users:
+                      - id: user_9T5jXRFuLpTQ3nM4PkGvW2
+                  stage_name: Qualified
+                  stage_type: qualified
+                  updated_at: '2026-03-22T14:00:01Z'
+                  value: 120000
+                pagination:
+                  has_more: false
+                  limit: 50
+                  next_cursor: null
+              schema:
+                $ref: '#/components/schemas/V1DealListPayload'
+          description: Paginated Deal list.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid cursor
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid filter or pagination parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: List Deals
+      tags:
+      - Deals
+    post:
+      deprecated: false
+      description: Create a new Deal linked to an Account and a Pipeline stage. If no `pipeline_id` is provided, the organization's default Pipeline is used; if no `pipeline_stage_id` is provided, the Pipeline's first stage is used.
+      operationId: createDeal
+      requestBody:
+        content:
+          application/json:
+            example:
+              account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+              contact_ids:
+              - contact_6M4jXRFuLpTQ3nM4PkGvW8
+              expected_close_date: '2026-06-30'
+              name: Enterprise renewal
+              pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+              pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+              relationships:
+                owner:
+                  set:
+                  - user_id: user_9T5jXRFuLpTQ3nM4PkGvW2
+              value: 120000
+            schema:
+              $ref: '#/components/schemas/V1CreateDealRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  contacts:
+                  - email: alex@acme.example
+                    id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    is_primary: true
+                    name: Alex Morgan
+                  created_at: '2026-03-15T10:00:00Z'
+                  expected_close_date: '2026-06-30'
+                  id: deal_5N2jXRFuLpTQ3nM4PkGvW7
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  name: Enterprise renewal
+                  notes: Expansion to two teams.
+                  pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+                  pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                  relationships:
+                    owner:
+                      users:
+                      - id: user_9T5jXRFuLpTQ3nM4PkGvW2
+                  stage_name: Qualified
+                  stage_type: qualified
+                  updated_at: '2026-03-22T14:00:01Z'
+                  value: 120000
+              schema:
+                $ref: '#/components/schemas/V1DealDetailResponsePayload'
+          description: Deal created.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: name is required
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Request validation failed.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Account not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Referenced Account, Pipeline, stage, or Contact not found.
+      security:
+      - bearerAuth: []
+      summary: Create a Deal
+      tags:
+      - Deals
+  /api/v1/deals/{deal_id}:
+    delete:
+      deprecated: false
+      description: Delete a Deal by ID. Associated Contact links are removed, but the underlying Contacts and Account remain.
+      operationId: deleteDeal
+      parameters:
+      - deprecated: false
+        description: Opaque Deal ID with the `deal_` prefix.
+        in: path
+        name: deal_id
+        required: true
+        schema:
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                deleted: true
+                id: deal_5N2jXRFuLpTQ3nM4PkGvW7
+              schema:
+                $ref: '#/components/schemas/V1DealDeletePayload'
+          description: Deal deleted.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Deal ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Deal ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Deal not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Deal not found.
+      security:
+      - bearerAuth: []
+      summary: Delete a Deal
+      tags:
+      - Deals
+    get:
+      deprecated: false
+      description: Return a single Deal by its `deal_` ID with full detail fields, including the Pipeline, current stage, and primary Contact (when set).
+      operationId: getDeal
+      parameters:
+      - deprecated: false
+        description: Opaque Deal ID with the `deal_` prefix.
+        in: path
+        name: deal_id
+        required: true
+        schema:
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  contacts:
+                  - email: alex@acme.example
+                    id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    is_primary: true
+                    name: Alex Morgan
+                  created_at: '2026-03-15T10:00:00Z'
+                  expected_close_date: '2026-06-30'
+                  id: deal_5N2jXRFuLpTQ3nM4PkGvW7
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  name: Enterprise renewal
+                  notes: Expansion to two teams.
+                  pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+                  pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                  relationships:
+                    owner:
+                      users:
+                      - id: user_9T5jXRFuLpTQ3nM4PkGvW2
+                  stage_name: Qualified
+                  stage_type: qualified
+                  updated_at: '2026-03-22T14:00:01Z'
+                  value: 120000
+              schema:
+                $ref: '#/components/schemas/V1DealDetailResponsePayload'
+          description: Deal detail.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Deal ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Deal ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Deal not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Deal not found.
+      security:
+      - bearerAuth: []
+      summary: Get a Deal
+      tags:
+      - Deals
+    patch:
+      deprecated: false
+      description: Partially update a Deal by ID. Changing `pipeline_stage_id` must reference a stage in the Deal's current Pipeline; use the Pipelines endpoints to discover valid stage IDs.
+      operationId: updateDeal
+      parameters:
+      - deprecated: false
+        description: Opaque Deal ID with the `deal_` prefix.
+        in: path
+        name: deal_id
+        required: true
+        schema:
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              notes: Expanded to two teams.
+              pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+              pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+              relationships:
+                owner:
+                  set:
+                  - user_id: user_9T5jXRFuLpTQ3nM4PkGvW2
+              value: 150000
+            schema:
+              $ref: '#/components/schemas/V1UpdateDealRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  contacts:
+                  - email: alex@acme.example
+                    id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    is_primary: true
+                    name: Alex Morgan
+                  created_at: '2026-03-15T10:00:00Z'
+                  expected_close_date: '2026-06-30'
+                  id: deal_5N2jXRFuLpTQ3nM4PkGvW7
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  name: Enterprise renewal
+                  notes: Expansion to two teams.
+                  pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+                  pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                  relationships:
+                    owner:
+                      users:
+                      - id: user_9T5jXRFuLpTQ3nM4PkGvW2
+                  stage_name: Qualified
+                  stage_type: qualified
+                  updated_at: '2026-03-22T14:00:01Z'
+                  value: 120000
+              schema:
+                $ref: '#/components/schemas/V1DealDetailResponsePayload'
+          description: Updated Deal.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: expected_close_date must be an ISO 8601 date
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid ID or request body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Deal not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Deal or referenced Pipeline stage not found.
+      security:
+      - bearerAuth: []
+      summary: Update a Deal
+      tags:
+      - Deals
+  /api/v1/deals/{deal_id}/contacts:
+    get:
+      deprecated: false
+      description: Return the set of Contacts currently associated with a Deal, along with which Contact is marked primary. Use `PUT /api/v1/deals/{deal_id}/contacts` to change the set.
+      operationId: listDealContacts
+      parameters:
+      - deprecated: false
+        description: Opaque Deal ID with the `deal_` prefix.
+        in: path
+        name: deal_id
+        required: true
+        schema:
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - contact:
+                    email: alex@acme.example
+                    id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    name: Alex Morgan
+                  contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                  is_primary: true
+              schema:
+                $ref: '#/components/schemas/V1DealContactAssociationsResponsePayload'
+          description: Deal Contact associations.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Deal ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Deal ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Deal not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Deal not found.
+      security:
+      - bearerAuth: []
+      summary: List Deal Contacts
+      tags:
+      - Deals
+    put:
+      deprecated: false
+      description: Replace the complete set of Contacts associated with a Deal. The payload is a full replacement — Contacts not listed in `contact_ids` are unlinked from the Deal. `primary_contact_id`, if provided, must appear in `contact_ids`.
+      operationId: updateDealContacts
+      parameters:
+      - deprecated: false
+        description: Opaque Deal ID with the `deal_` prefix.
+        in: path
+        name: deal_id
+        required: true
+        schema:
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              contact_ids:
+              - contact_6M4jXRFuLpTQ3nM4PkGvW8
+              - contact_6M4jXRFuLpTQ3nM4PkGvW9
+              primary_contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW9
+            schema:
+              $ref: '#/components/schemas/UpdateDealContactsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - contact:
+                    email: alex@acme.example
+                    id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    name: Alex Morgan
+                  contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                  is_primary: true
+              schema:
+                $ref: '#/components/schemas/V1DealContactAssociationsResponsePayload'
+          description: Updated Deal Contact associations.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: primary_contact_id must be included in contact_ids
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Deal ID or Contact association payload.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: deals:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Deal not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Deal not found.
+      security:
+      - bearerAuth: []
+      summary: Replace Deal Contacts
+      tags:
+      - Deals
+components:
+  schemas:
+    V1DealListPayload:
+      description: Paginated list response for Deals.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1DealListItemPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1DealListPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1DealContactAssociationsResponsePayload:
+      description: Deal-Contact association response envelope.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1DealContactAssociationPayload'
+          type: array
+      required:
+      - data
+      title: V1DealContactAssociationsResponsePayload
+      type: object
+    V1OwnerRelationshipSetUserPayload:
+      description: User assignment entry for an owner relationship update.
+      properties:
+        user_id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - user_id
+      type: object
+    V1OwnerUserPayload:
+      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
+      properties:
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - id
+      type: object
+    V1OwnerRelationshipPayload:
+      description: Owner relationship state for an Account or Deal.
+      properties:
+        users:
+          description: Current owner Users. This list has zero or one item.
+          items:
+            $ref: '#/components/schemas/V1OwnerUserPayload'
+          type: array
+      required:
+      - users
+      type: object
+    V1RelationshipsWritePayload:
+      description: Relationship updates accepted on Account and Deal writes.
+      properties:
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
+      type: object
+    V1DealDetailPayload:
+      properties:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        contacts:
+          items:
+            $ref: '#/components/schemas/V1DealContactPayload'
+          type: array
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        expected_close_date:
+          example: '2026-06-30'
+          oneOf:
+          - example: '2026-06-30'
+            format: date
+            type: string
+          - example: '2026-06-30'
+            type: 'null'
+        id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        name:
+          type: string
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          type: string
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsPayload'
+        stage_name:
+          type: string
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required:
+      - account_id
+      - contacts
+      - created_at
+      - expected_close_date
+      - id
+      - last_activity_at
+      - name
+      - notes
+      - pipeline_id
+      - pipeline_stage_id
+      - relationships
+      - stage_name
+      - stage_type
+      - updated_at
+      - value
+      title: V1DealDetailPayload
+      type: object
+    V1UpdateDealRequest:
+      description: Request body for partially updating a Deal.
+      properties:
+        expected_close_date:
+          example: '2026-06-30'
+          oneOf:
+          - example: '2026-06-30'
+            format: date
+            type: string
+          - example: '2026-06-30'
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          oneOf:
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: string
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: 'null'
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          oneOf:
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: string
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: 'null'
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsWritePayload'
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required: []
+      title: V1UpdateDealRequest
+      type: object
+    V1DealContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        is_primary:
+          type: boolean
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - is_primary
+      - name
+      title: V1DealContactPayload
+      type: object
+    V1DealListItemPayload:
+      properties:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        expected_close_date:
+          example: '2026-06-30'
+          oneOf:
+          - example: '2026-06-30'
+            format: date
+            type: string
+          - example: '2026-06-30'
+            type: 'null'
+        id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        name:
+          type: string
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          type: string
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsPayload'
+        stage_name:
+          type: string
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required:
+      - account_id
+      - created_at
+      - expected_close_date
+      - id
+      - last_activity_at
+      - name
+      - pipeline_id
+      - pipeline_stage_id
+      - relationships
+      - stage_name
+      - stage_type
+      - updated_at
+      - value
+      title: V1DealListItemPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1CreateDealRequest:
+      description: Request body for creating a Deal.
+      properties:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        contact_ids:
+          description: List of opaque `contact_` IDs.
+          oneOf:
+          - description: List of opaque `contact_` IDs.
+            example:
+            - contact_6M4jXRFuLpTQ3nM4PkGvW8
+            items:
+              description: Opaque `contact_` identifier.
+              example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+              type: string
+            type: array
+          - description: List of opaque `contact_` IDs.
+            type: 'null'
+        expected_close_date:
+          example: '2026-06-30'
+          oneOf:
+          - example: '2026-06-30'
+            format: date
+            type: string
+          - example: '2026-06-30'
+            type: 'null'
+        name:
+          type: string
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          oneOf:
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: string
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: 'null'
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          oneOf:
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: string
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: 'null'
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsWritePayload'
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required:
+      - account_id
+      - name
+      title: V1CreateDealRequest
+      type: object
+    V1DealDetailResponsePayload:
+      description: Single-Deal response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1DealDetailPayload'
+      required:
+      - data
+      title: V1DealDetailResponsePayload
+      type: object
+    V1RelationshipsPayload:
+      description: Relationships attached to an Account or Deal.
+      properties:
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
+      required:
+      - owner
+      type: object
+    V1DealAssociationContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - name
+      title: V1DealAssociationContactPayload
+      type: object
+    UpdateDealContactsRequest:
+      description: Request body for replacing the Contacts associated with a Deal.
+      properties:
+        contact_ids:
+          description: List of opaque `contact_` IDs.
+          example:
+          - contact_6M4jXRFuLpTQ3nM4PkGvW8
+          items:
+            description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: string
+          type: array
+        primary_contact_id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          oneOf:
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: string
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: 'null'
+      required:
+      - contact_ids
+      title: UpdateDealContactsRequest
+      type: object
+    V1OwnerRelationshipWritePayload:
+      description: Owner relationship update payload.
+      properties:
+        propagate_to_open_deals:
+          default: false
+          description: For Account owner updates, also update open child Deals.
+          type: boolean
+        set:
+          description: Set to one User to assign an owner, or an empty list to clear the owner.
+          items:
+            $ref: '#/components/schemas/V1OwnerRelationshipSetUserPayload'
+          maxItems: 1
+          type: array
+      required:
+      - set
+      type: object
+    V1DealContactAssociationPayload:
+      properties:
+        contact:
+          $ref: '#/components/schemas/V1DealAssociationContactPayload'
+        contact_id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        is_primary:
+          type: boolean
+      required:
+      - contact
+      - contact_id
+      - is_primary
+      title: V1DealContactAssociationPayload
+      type: object
+    V1DealDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1DealDeletePayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

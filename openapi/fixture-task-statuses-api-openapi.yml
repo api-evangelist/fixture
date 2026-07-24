@@ -1,0 +1,119 @@
+openapi: 3.1.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Accounts Task Statuses API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- description: List Task status definitions available to the current organization.
+  name: Task Statuses
+paths:
+  /api/v1/task-statuses:
+    get:
+      deprecated: false
+      description: 'Return the Task status definitions available in the current organization as a compact `{"data": [...]}` list in position order (no pagination). Use the returned `taskstatus_` IDs (or names) when creating or updating Tasks.'
+      operationId: listTaskStatuses
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - category: todo
+                  color: gray
+                  id: taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1
+                  name: To Do
+                  position: 0
+              schema:
+                $ref: '#/components/schemas/V1TaskStatusListPayload'
+          description: Task status list.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: tasks:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: List Task Statuses
+      tags:
+      - Task Statuses
+components:
+  schemas:
+    V1TaskStatusListPayload:
+      description: Task status list response envelope.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1TaskStatusPayload'
+          type: array
+      required:
+      - data
+      title: V1TaskStatusListPayload
+      type: object
+    V1TaskStatusPayload:
+      description: Task status definition payload.
+      properties:
+        category:
+          type: string
+        color:
+          type: string
+        id:
+          description: Opaque `taskstatus_` identifier.
+          example: taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+      required:
+      - category
+      - color
+      - id
+      - name
+      - position
+      title: V1TaskStatusPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

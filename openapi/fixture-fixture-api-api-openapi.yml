@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Accounts Fixture API API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- name: Fixture API
+paths:
+  /api/v1:
+    get:
+      deprecated: false
+      description: Return a lightweight status payload for the v1 API namespace. Useful as a connectivity and API-key validation probe before issuing real requests.
+      operationId: getApiStatus
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                status: ok
+                version: v1
+              schema:
+                $ref: '#/components/schemas/V1RootPayload'
+          description: API status payload.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The request is authenticated but access to this API is forbidden.
+      security:
+      - bearerAuth: []
+      summary: Get API status
+      tags:
+      - Fixture API
+components:
+  schemas:
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1RootPayload:
+      description: Status payload for the public v1 API namespace.
+      properties:
+        status:
+          type: string
+        version:
+          type: string
+      required:
+      - status
+      - version
+      title: V1RootPayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

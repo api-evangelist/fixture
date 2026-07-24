@@ -1,0 +1,324 @@
+openapi: 3.1.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Accounts Pipelines API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- description: List Pipelines and inspect their nested stages.
+  name: Pipelines
+paths:
+  /api/v1/pipelines:
+    get:
+      deprecated: false
+      description: Return every Pipeline in the organization with its ordered stage definitions nested inline. Pipelines are the container for Deal stages — read this first to discover valid `pipeline_id` and `pipeline_stage_id` values for the Deal endpoints. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`.
+      operationId: listPipelines
+      parameters:
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Maximum number of records to return.
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          example: 50
+          type: integer
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque cursor returned by the previous page. Omit for the first page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          example: eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Sort by a supported field. Prefix with `-` for descending order.
+        in: query
+        name: sort
+        required: false
+        schema:
+          default: -created_at
+          example: -created_at
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - created_at: '2026-03-01T09:00:00Z'
+                  id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+                  name: Sales Pipeline
+                  stages:
+                  - color: blue
+                    id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                    name: Qualified
+                    position: 0
+                    stage_type: qualified
+                  - color: amber
+                    id: stage_2R7jXRFuLpTQ3nM4PkGvW5
+                    name: Proposal
+                    position: 1
+                    stage_type: proposal
+                  updated_at: '2026-03-22T14:00:01Z'
+                pagination:
+                  has_more: false
+                  limit: 50
+                  next_cursor: null
+              schema:
+                $ref: '#/components/schemas/V1PipelineListPayload'
+          description: Paginated Pipeline list.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid cursor
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid pagination or sort parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: pipelines:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: List Pipelines
+      tags:
+      - Pipelines
+  /api/v1/pipelines/{pipeline_id}:
+    get:
+      deprecated: false
+      description: Return a single Pipeline by its `pipe_` ID with all nested stage definitions in position order.
+      operationId: getPipeline
+      parameters:
+      - deprecated: false
+        description: Opaque Pipeline ID with the `pipeline_` prefix.
+        in: path
+        name: pipeline_id
+        required: true
+        schema:
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  created_at: '2026-03-01T09:00:00Z'
+                  id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+                  name: Sales Pipeline
+                  stages:
+                  - color: blue
+                    id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                    name: Qualified
+                    position: 0
+                    stage_type: qualified
+                  - color: amber
+                    id: stage_2R7jXRFuLpTQ3nM4PkGvW5
+                    name: Proposal
+                    position: 1
+                    stage_type: proposal
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1PipelineDetailResponsePayload'
+          description: Pipeline detail.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Pipeline ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Pipeline ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: pipelines:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Pipeline not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Pipeline not found.
+      security:
+      - bearerAuth: []
+      summary: Get a Pipeline
+      tags:
+      - Pipelines
+components:
+  schemas:
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1PipelineStagePayload:
+      description: Nested Pipeline stage payload.
+      properties:
+        color:
+          type: string
+        id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - color
+      - id
+      - name
+      - position
+      - stage_type
+      title: V1PipelineStagePayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1PipelinePayload:
+      description: Pipeline payload with nested stage definitions.
+      properties:
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          type: string
+        name:
+          type: string
+        stages:
+          items:
+            $ref: '#/components/schemas/V1PipelineStagePayload'
+          type: array
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - id
+      - name
+      - stages
+      - updated_at
+      title: V1PipelinePayload
+      type: object
+    V1PipelineDetailResponsePayload:
+      description: Single-Pipeline response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1PipelinePayload'
+      required:
+      - data
+      title: V1PipelineDetailResponsePayload
+      type: object
+    V1PipelineListPayload:
+      description: Paginated list response for Pipelines.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1PipelinePayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1PipelineListPayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

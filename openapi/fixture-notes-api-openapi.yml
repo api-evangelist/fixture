@@ -1,0 +1,280 @@
+openapi: 3.1.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Accounts Notes API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- description: Create Notes linked to CRM entities.
+  name: Notes
+paths:
+  /api/v1/notes:
+    post:
+      deprecated: false
+      description: Create a Note attached to one primary CRM entity (Account, Contact, Deal, or Lead) and up to several optional related entities. Notes are stored as Activities of event type `note_created`, so they appear in the Activity feed.
+      operationId: createNote
+      requestBody:
+        content:
+          application/json:
+            example:
+              additional_entity_links:
+              - entity_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                entity_type: account
+              content: Hello from v1
+              entity_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+              entity_type: contact
+            schema:
+              $ref: '#/components/schemas/V1CreateNoteRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  actor: null
+                  content: Hello from v1
+                  created_at: '2026-03-22T14:00:01Z'
+                  entities:
+                  - entity_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    entity_type: contact
+                    role: primary
+                  - entity_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                    entity_type: account
+                    role: related
+                  external_id: null
+                  id: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+                  occurred_at: '2026-03-22T14:00:00Z'
+                  title: null
+                  type: note_added
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1NoteCreateResponsePayload'
+          description: Note created.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: content must not be empty
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid entity ID or request body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: activities:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope or the caller lacks write access.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Referenced entity not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: One or more referenced entities were not found.
+      security:
+      - bearerAuth: []
+      summary: Create a Note
+      tags:
+      - Notes
+components:
+  schemas:
+    V1ActivityEntityPayload:
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+        role:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - entity_id
+      - entity_type
+      - role
+      title: V1ActivityEntityPayload
+      type: object
+    V1CreateNoteRequest:
+      description: Request body for creating a Note attached to one primary CRM entity.
+      properties:
+        additional_entity_links:
+          items:
+            $ref: '#/components/schemas/V1CreateNoteEntityLinkRequest'
+          type: array
+        content:
+          type: string
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+      required:
+      - content
+      - entity_id
+      - entity_type
+      title: V1CreateNoteRequest
+      type: object
+    V1ActivityDetailPayload:
+      properties:
+        actor:
+          oneOf:
+          - $ref: '#/components/schemas/V1ActivityActorPayload'
+          - type: 'null'
+        content:
+          oneOf:
+          - type: string
+          - type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          oneOf:
+          - example: '2026-03-22T14:00:01Z'
+            format: date-time
+            type: string
+          - example: '2026-03-22T14:00:01Z'
+            type: 'null'
+        entities:
+          items:
+            $ref: '#/components/schemas/V1ActivityEntityPayload'
+          type: array
+        external_id:
+          description: Client-supplied idempotency key for custom Activities.
+          example: invoice-1042
+          oneOf:
+          - description: Client-supplied idempotency key for custom Activities.
+            example: invoice-1042
+            type: string
+          - description: Client-supplied idempotency key for custom Activities.
+            example: invoice-1042
+            type: 'null'
+        id:
+          description: Opaque `activity_` identifier.
+          example: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+          type: string
+        occurred_at:
+          example: '2026-03-22T14:00:00Z'
+          oneOf:
+          - example: '2026-03-22T14:00:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-22T14:00:00Z'
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        type:
+          type: string
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          oneOf:
+          - example: '2026-03-22T14:00:01Z'
+            format: date-time
+            type: string
+          - example: '2026-03-22T14:00:01Z'
+            type: 'null'
+      required:
+      - actor
+      - content
+      - created_at
+      - entities
+      - external_id
+      - id
+      - occurred_at
+      - title
+      - type
+      - updated_at
+      title: V1ActivityDetailPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1NoteCreateResponsePayload:
+      description: Created-Note response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1ActivityDetailPayload'
+      required:
+      - data
+      title: V1NoteCreateResponsePayload
+      type: object
+    V1CreateNoteEntityLinkRequest:
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+      required:
+      - entity_id
+      - entity_type
+      title: V1CreateNoteEntityLinkRequest
+      type: object
+    V1ActivityActorPayload:
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - name
+      title: V1ActivityActorPayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

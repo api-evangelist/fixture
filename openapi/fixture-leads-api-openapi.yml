@@ -1,0 +1,1557 @@
+openapi: 3.1.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Accounts Leads API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- description: Create, read, update, and convert Leads.
+  name: Leads
+paths:
+  /api/v1/leads:
+    get:
+      deprecated: false
+      description: Return a paginated list of Leads. Supports filtering by `status` (new, contacted, qualified, unqualified, converted), `source`, `name`, `email`, `company_name`, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`. Use `fields` to choose which public Lead fields appear in each record.
+      operationId: listLeads
+      parameters:
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Maximum number of records to return.
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          example: 50
+          type: integer
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque cursor returned by the previous page. Omit for the first page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          example: eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Sort by a supported field. Prefix with `-` for descending order.
+        in: query
+        name: sort
+        required: false
+        schema:
+          default: -created_at
+          example: -created_at
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter Leads by status.
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          example: qualified
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter Leads by source.
+        in: query
+        name: source
+        required: false
+        schema:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          example: website
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter Leads by a partial, case-insensitive person name match.
+        in: query
+        name: name
+        required: false
+        schema:
+          example: Taylor
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter by an exact email address.
+        in: query
+        name: email
+        required: false
+        schema:
+          example: alex@acme.example
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: linkedin_url
+        required: false
+        schema:
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter Leads by company name.
+        in: query
+        name: company_name
+        required: false
+        schema:
+          example: Prospect Labs
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records created after this ISO 8601 timestamp.
+        in: query
+        name: created_after
+        required: false
+        schema:
+          example: '2026-03-01T00:00:00Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records created before this ISO 8601 timestamp.
+        in: query
+        name: created_before
+        required: false
+        schema:
+          example: '2026-03-31T23:59:59Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records updated after this ISO 8601 timestamp.
+        in: query
+        name: updated_after
+        required: false
+        schema:
+          example: '2026-03-01T00:00:00Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Return only records updated before this ISO 8601 timestamp.
+        in: query
+        name: updated_before
+        required: false
+        schema:
+          example: '2026-03-31T23:59:59Z'
+          format: date-time
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Choose which public fields appear in each list record. Omit or pass a blank value for the default list fields, use `*` alone for every public detail field, or pass comma-separated names.
+        in: query
+        name: fields
+        required: false
+        schema:
+          example: id,name,created_at
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - company_name: Prospect Labs
+                  created_at: '2026-03-20T12:00:00Z'
+                  email: taylor@prospect.example
+                  estimated_value: 50000
+                  id: lead_4P2jXRFuLpTQ3nM4PkGvW6
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  name: Taylor Reed
+                  phone: +1-415-555-0199
+                  source: website
+                  status: qualified
+                  title: Head of Revenue
+                  updated_at: '2026-03-24T18:05:00Z'
+                pagination:
+                  has_more: false
+                  limit: 50
+                  next_cursor: null
+              schema:
+                $ref: '#/components/schemas/V1LeadListPayload'
+          description: Paginated Lead list.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: 'Invalid status: ''unknown''. Allowed: [''new'', ''contacted'', ''qualified'', ''unqualified'', ''converted'']'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid filter or pagination parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: List Leads
+      tags:
+      - Leads
+    post:
+      deprecated: false
+      description: Create a new Lead for an unqualified prospect. Leads are kept separate from Accounts and Contacts until explicitly converted via `POST /api/v1/leads/{lead_id}/convert`.
+      operationId: createLead
+      requestBody:
+        content:
+          application/json:
+            example:
+              company_name: Prospect Labs
+              email: taylor@prospect.example
+              estimated_value: 50000
+              name: Taylor Reed
+              source: website
+              title: Head of Revenue
+            schema:
+              $ref: '#/components/schemas/V1CreateLeadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  city: New York
+                  company_employee_count: 85
+                  company_industry: Fintech
+                  company_name: Prospect Labs
+                  company_website: https://prospect.example
+                  converted_account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  converted_at: '2026-03-24T18:05:00Z'
+                  converted_contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                  country: US
+                  created_at: '2026-03-20T12:00:00Z'
+                  email: taylor@prospect.example
+                  estimated_value: 50000
+                  id: lead_4P2jXRFuLpTQ3nM4PkGvW6
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  linkedin_url: https://www.linkedin.com/in/taylor-reed
+                  name: Taylor Reed
+                  notes: Requested a demo next week.
+                  phone: +1-415-555-0199
+                  source: website
+                  state: NY
+                  status: qualified
+                  title: Head of Revenue
+                  updated_at: '2026-03-24T18:05:00Z'
+              schema:
+                $ref: '#/components/schemas/V1LeadDetailResponsePayload'
+          description: Lead created.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: email must be a valid email address
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Request validation failed.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: Create a Lead
+      tags:
+      - Leads
+  /api/v1/leads/{lead_id}:
+    delete:
+      deprecated: false
+      description: Delete a Lead by ID. Leads that have already been converted can still be deleted; the Account, Contact, and Deal produced by conversion are unaffected.
+      operationId: deleteLead
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                deleted: true
+                id: lead_4P2jXRFuLpTQ3nM4PkGvW6
+              schema:
+                $ref: '#/components/schemas/V1LeadDeletePayload'
+          description: Lead deleted.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Lead ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Lead ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Lead not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead not found.
+      security:
+      - bearerAuth: []
+      summary: Delete a Lead
+      tags:
+      - Leads
+    get:
+      deprecated: false
+      description: Return a single Lead by its `lead_` ID with full detail fields.
+      operationId: getLead
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  city: New York
+                  company_employee_count: 85
+                  company_industry: Fintech
+                  company_name: Prospect Labs
+                  company_website: https://prospect.example
+                  converted_account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  converted_at: '2026-03-24T18:05:00Z'
+                  converted_contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                  country: US
+                  created_at: '2026-03-20T12:00:00Z'
+                  email: taylor@prospect.example
+                  estimated_value: 50000
+                  id: lead_4P2jXRFuLpTQ3nM4PkGvW6
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  linkedin_url: https://www.linkedin.com/in/taylor-reed
+                  name: Taylor Reed
+                  notes: Requested a demo next week.
+                  phone: +1-415-555-0199
+                  source: website
+                  state: NY
+                  status: qualified
+                  title: Head of Revenue
+                  updated_at: '2026-03-24T18:05:00Z'
+              schema:
+                $ref: '#/components/schemas/V1LeadDetailResponsePayload'
+          description: Lead detail.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Lead ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Lead ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Lead not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead not found.
+      security:
+      - bearerAuth: []
+      summary: Get a Lead
+      tags:
+      - Leads
+    patch:
+      deprecated: false
+      description: Partially update a Lead by ID. Setting `status` to `converted` on its own does not create downstream records — use the convert endpoint to produce an Account, Contact, and optional Deal.
+      operationId: updateLead
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              estimated_value: 50000
+              notes: Requested a demo next week.
+              status: qualified
+            schema:
+              $ref: '#/components/schemas/V1UpdateLeadRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  city: New York
+                  company_employee_count: 85
+                  company_industry: Fintech
+                  company_name: Prospect Labs
+                  company_website: https://prospect.example
+                  converted_account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                  converted_at: '2026-03-24T18:05:00Z'
+                  converted_contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                  country: US
+                  created_at: '2026-03-20T12:00:00Z'
+                  email: taylor@prospect.example
+                  estimated_value: 50000
+                  id: lead_4P2jXRFuLpTQ3nM4PkGvW6
+                  last_activity_at: '2026-03-24T17:30:00Z'
+                  linkedin_url: https://www.linkedin.com/in/taylor-reed
+                  name: Taylor Reed
+                  notes: Requested a demo next week.
+                  phone: +1-415-555-0199
+                  source: website
+                  state: NY
+                  status: qualified
+                  title: Head of Revenue
+                  updated_at: '2026-03-24T18:05:00Z'
+              schema:
+                $ref: '#/components/schemas/V1LeadDetailResponsePayload'
+          description: Updated Lead.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: 'status must be one of: new, contacted, qualified, unqualified, converted'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid ID or request body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Lead not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead not found.
+      security:
+      - bearerAuth: []
+      summary: Update a Lead
+      tags:
+      - Leads
+  /api/v1/leads/{lead_id}/convert:
+    post:
+      deprecated: false
+      description: Convert a Lead into an Account and Contact, and optionally create a Deal in a single step. You can target an existing Account via `existing_account_id` or let Fixture create a new one from the Lead's `company_name`. On success the Lead is marked `converted` and linked to the newly created records.
+      operationId: convertLead
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              create_account: true
+              create_deal: true
+              deal_name: Prospect Labs expansion
+              deal_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+              deal_value: 50000
+              name: Taylor Reed
+              pipeline_id: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            schema:
+              $ref: '#/components/schemas/V1ConvertLeadRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  account:
+                    id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                    name: Prospect Labs
+                  contact:
+                    email: taylor@prospect.example
+                    id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    name: Taylor Reed
+                  deal:
+                    id: deal_5N2jXRFuLpTQ3nM4PkGvW7
+                    name: Prospect Labs expansion
+                    pipeline_stage_id: stage_2R7jXRFuLpTQ3nM4PkGvW4
+                    stage_name: Qualified
+                    stage_type: qualified
+                    value: 50000
+                  lead:
+                    city: New York
+                    company_employee_count: 85
+                    company_industry: Fintech
+                    company_name: Prospect Labs
+                    company_website: https://prospect.example
+                    converted_account_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                    converted_at: '2026-03-24T18:05:00Z'
+                    converted_contact_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    country: US
+                    created_at: '2026-03-20T12:00:00Z'
+                    email: taylor@prospect.example
+                    estimated_value: 50000
+                    id: lead_4P2jXRFuLpTQ3nM4PkGvW6
+                    last_activity_at: '2026-03-24T17:30:00Z'
+                    linkedin_url: https://www.linkedin.com/in/taylor-reed
+                    name: Taylor Reed
+                    notes: Requested a demo next week.
+                    phone: +1-415-555-0199
+                    source: website
+                    state: NY
+                    status: converted
+                    title: Head of Revenue
+                    updated_at: '2026-03-24T18:05:00Z'
+              schema:
+                $ref: '#/components/schemas/V1LeadConversionResponsePayload'
+          description: Lead converted.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: deal_stage_id must refer to a stage in the selected Pipeline
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid ID or request body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: accounts:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing a required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Lead not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead or referenced Account, Pipeline, or stage not found.
+      security:
+      - bearerAuth: []
+      summary: Convert a Lead
+      tags:
+      - Leads
+components:
+  schemas:
+    V1LeadDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `lead_` identifier.
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1LeadDeletePayload
+      type: object
+    V1LeadDetailResponsePayload:
+      description: Single-Lead response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
+      required:
+      - data
+      title: V1LeadDetailResponsePayload
+      type: object
+    V1LeadDetailPayload:
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        converted_account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        converted_at:
+          example: '2026-03-24T18:05:00Z'
+          oneOf:
+          - example: '2026-03-24T18:05:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T18:05:00Z'
+            type: 'null'
+        converted_contact_id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          oneOf:
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: string
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        id:
+          description: Opaque `lead_` identifier.
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          type: string
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+      required:
+      - city
+      - company_employee_count
+      - company_industry
+      - company_name
+      - company_website
+      - converted_account_id
+      - converted_at
+      - converted_contact_id
+      - country
+      - created_at
+      - email
+      - estimated_value
+      - id
+      - last_activity_at
+      - linkedin_url
+      - name
+      - notes
+      - phone
+      - source
+      - state
+      - status
+      - title
+      - updated_at
+      title: V1LeadDetailPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1UpdateLeadRequest:
+      description: Request body for partially updating a Lead.
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          oneOf:
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: string
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1UpdateLeadRequest
+      type: object
+    V1LeadConversionResponsePayload:
+      description: Lead conversion response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadConversionResultPayload'
+      required:
+      - data
+      title: V1LeadConversionResponsePayload
+      type: object
+    V1LeadConversionResultPayload:
+      properties:
+        account:
+          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
+        contact:
+          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
+        deal:
+          oneOf:
+          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
+          - type: 'null'
+        lead:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
+      required:
+      - account
+      - contact
+      - deal
+      - lead
+      title: V1LeadConversionResultPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1LeadRelatedDealPayload:
+      properties:
+        id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+        name:
+          type: string
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        stage_name:
+          type: string
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required:
+      - id
+      - name
+      - pipeline_stage_id
+      - stage_name
+      - stage_type
+      - value
+      title: V1LeadRelatedDealPayload
+      type: object
+    V1LeadRelatedContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - name
+      title: V1LeadRelatedContactPayload
+      type: object
+    V1LeadSelectedFieldsPayload:
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        converted_account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        converted_at:
+          example: '2026-03-24T18:05:00Z'
+          oneOf:
+          - example: '2026-03-24T18:05:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T18:05:00Z'
+            type: 'null'
+        converted_contact_id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          oneOf:
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: string
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        id:
+          description: Opaque `lead_` identifier.
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          type: string
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+      required: []
+      title: V1LeadSelectedFieldsPayload
+      type: object
+    V1ConvertLeadRequest:
+      description: Request body for converting a Lead into an Account and Contact.
+      properties:
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        create_account:
+          default: true
+          type: boolean
+        create_deal:
+          default: false
+          type: boolean
+        deal_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        deal_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          oneOf:
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: string
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: 'null'
+        deal_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        existing_account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          oneOf:
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: string
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1ConvertLeadRequest
+      type: object
+    V1LeadRelatedAccountPayload:
+      properties:
+        id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+      title: V1LeadRelatedAccountPayload
+      type: object
+    V1CreateLeadRequest:
+      description: Request body for creating a Lead.
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          oneOf:
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: string
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1CreateLeadRequest
+      type: object
+    V1LeadListPayload:
+      description: Paginated list response for Leads.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1LeadSelectedFieldsPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1LeadListPayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http
