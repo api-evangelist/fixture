@@ -1,0 +1,74 @@
+generated: '2026-07-20'
+method: searched
+source: https://fixture.app/docs/api-reference/overview, https://status.fixture.app, https://downloads.fixture.app/fixture-cli/latest.json,
+  openapi/fixture-v1-openapi.json, live probes
+versioning:
+  scheme: URI path prefix
+  current_version: v1
+  prefix: /api/v1
+  spec_version_field: v1
+  documented: true
+  docs: https://fixture.app/docs/api-reference/overview
+  notes: All v1 endpoints are prefixed with /api/v1. No header-based, query-based, or date-based
+    versioning is documented. The OpenAPI description is generated from the running service
+    and served at https://fixture.app/docs/openapi/fixture-v1.json.
+maturity:
+  stage: beta
+  evidence: The documented API host is beta-api.fixture.app and the dashboard is beta.fixture.app.
+    The company is a Y Combinator Winter 2026 company and the product is gated behind an early-access
+    request. The CLI documents FIXTURE_HOST=https://api.fixture.app as the general-availability
+    host shape, but api.fixture.app currently returns 404.
+deprecation_policy:
+  published: false
+  sunset_header: not documented
+  deprecation_header: not documented
+  rfc8594: false
+  notes: No deprecation or sunset policy is published, and no operation in the OpenAPI is marked
+    deprecated. Fixture does, however, ship a concrete record-level lifecycle signal - merged
+    Contacts return 301 with merged_into on read and 410 with merged_into on write.
+deprecated_operations: []
+record_lifecycle:
+- entity: Contact
+  event: merge
+  signals:
+  - status: 301
+    on: GET /api/v1/contacts/{contact_id}
+    payload_field: merged_into
+  - status: 410
+    on: PATCH and DELETE /api/v1/contacts/{contact_id}
+    payload_field: merged_into
+  guidance: Follow merged_into and repoint stored IDs at the surviving Contact.
+- entity: Lead
+  event: conversion
+  signals:
+  - operation: convertLead
+    fields:
+    - converted_at
+    - converted_account_id
+    - converted_contact_id
+  guidance: A converted Lead retains pointers to the Account and Contact (and optionally Deal)
+    it became.
+status_page:
+  url: https://status.fixture.app
+  status_at_probe: All services are online
+  probed: '2026-07-20'
+  monitored_services:
+  - beta.fixture.app
+  history: Daily per-service operational history published, running back to at least 2026-04-22.
+  sections:
+  - Status
+  - Maintenance
+  - Previous incidents
+sla:
+  published: false
+  notes: No public SLA or uptime commitment is published; the status page reports observed
+    uptime only.
+changelog:
+  published: false
+  notes: No dated public API changelog was found at /changelog or /docs/changelog (both 404).
+    The only dated release signal is the CLI release feed.
+release_feeds:
+- name: Fixture CLI releases
+  url: https://downloads.fixture.app/fixture-cli/latest.json
+  latest_version: v0.1.1
+  published_at: '2026-05-11T19:47:18Z'

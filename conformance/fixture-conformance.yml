@@ -1,0 +1,95 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/fixture-v1-openapi.json, https://beta-api.fixture.app/.well-known/oauth-authorization-server,
+  https://beta-api.fixture.app/.well-known/oauth-protected-resource, https://fixture.app/docs/api-reference/overview,
+  https://fixture.app/docs/api-reference/errors
+summary: Fixture conforms to OAuth 2.x authorization-server and protected-resource discovery,
+  PKCE, dynamic client registration, and the Model Context Protocol. It does not use RFC 9457
+  problem+json, and no industry vertical standard (FHIR, PSD2, SCIM, OData, FAPI) applies
+  to a general-purpose CRM API.
+conformance:
+- id: openapi
+  conforms: true
+  version: 3.1.0
+  evidence: Provider publishes a generated OpenAPI 3.1.0 description at https://fixture.app/docs/openapi/fixture-v1.json,
+    and the API reference pages are rendered from it. 20 paths, 37 operations, 74 component
+    schemas, every operation has an operationId.
+- id: oauth2
+  conforms: true
+  evidence: Authorization code grant with refresh tokens, authorization/token/revocation endpoints
+    published in RFC 8414 metadata at https://beta-api.fixture.app/.well-known/oauth-authorization-server.
+- id: rfc8414
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 with issuer, authorization_endpoint,
+    token_endpoint, revocation_endpoint, registration_endpoint, grant_types_supported, code_challenge_methods_supported,
+    and scopes_supported.
+- id: rfc9728
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource returns 200 for the MCP endpoint with resource,
+    authorization_servers, scopes_supported, and bearer_methods_supported.
+- id: rfc7636
+  conforms: true
+  evidence: code_challenge_methods_supported is ["S256"] and token_endpoint_auth_methods_supported
+    is ["none"], i.e. public clients are required to use PKCE with S256.
+- id: rfc7591
+  conforms: true
+  evidence: registration_endpoint https://beta-api.fixture.app/api/oauth/register is advertised,
+    enabling dynamic client registration for MCP clients.
+- id: rfc7009
+  conforms: true
+  evidence: revocation_endpoint https://beta-api.fixture.app/api/oauth/revoke is advertised.
+- id: rfc6750
+  conforms: true
+  evidence: Bearer tokens are carried in the Authorization header; bearer_methods_supported
+    is ["header"]; 401 unauthorized on missing or invalid token.
+- id: mcp
+  conforms: true
+  evidence: Official remote MCP server over streamable HTTP at https://beta-api.fixture.app/api/mcp
+    with OAuth authorization, documented for Claude Code, Claude Desktop, Cursor, VS Code,
+    Windsurf, and Codex.
+- id: llmstxt
+  conforms: true
+  evidence: https://fixture.app/docs/llms.txt returns 200 in llms.txt format, and every docs
+    page has a .md variant.
+- id: idempotency
+  conforms: partial
+  evidence: Idempotent replay is implemented on POST /api/v1/activities via a caller-supplied
+    external_id (200 on identical replay, 409 idempotency_conflict on divergent replay). There
+    is no Idempotency-Key header and no idempotency on other create operations.
+- id: pagination
+  conforms: true
+  evidence: Cursor pagination across list endpoints with limit (default 50, range 1-100) and
+    an opaque cursor, and a pagination object carrying limit, next_cursor, has_more.
+- id: rfc9457
+  conforms: false
+  evidence: Errors use a custom envelope {"error":{"code","message"}} with application/json,
+    not application/problem+json. See errors/fixture-problem-types.yml.
+- id: rfc8594
+  conforms: false
+  evidence: No Sunset or Deprecation headers and no published deprecation policy.
+- id: json:api
+  conforms: false
+  evidence: Custom data/pagination envelope, not the JSON:API media type or document structure.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on both fixture.app and beta-api.fixture.app.
+    OAuth is used for authorization only, not identity.
+- id: fhir
+  conforms: not-applicable
+  evidence: General-purpose sales CRM; no healthcare surface.
+- id: fapi
+  conforms: not-applicable
+  evidence: No financial-grade or open-banking surface.
+- id: psd2
+  conforms: not-applicable
+  evidence: No payment-initiation or account-information surface.
+- id: scim
+  conforms: false
+  evidence: Users are exposed read-only via GET /api/v1/users; no SCIM provisioning endpoints.
+- id: odata
+  conforms: false
+  evidence: No OData metadata document or $-query conventions.
+compliance_certifications:
+  published: false
+  evidence: No trust center, and no named certification (SOC 2, ISO 27001, PCI DSS, HIPAA,
+    FedRAMP) is published on fixture.app. See security/ artifacts.

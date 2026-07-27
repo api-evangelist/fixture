@@ -1,0 +1,55 @@
+# Fixture Docs
+
+- [What is Fixture](/): Fixture is a CRM that keeps itself up to date so you can spend your time on the work.
+- **Guides**
+
+- [How Fixture works](/guides/how-fixture-works): Fixture captures, enriches, surfaces, and lets Agents handle the rest.
+- [Your first hour](/guides/your-first-hour): Connect Gmail, Calendar, and your team. Records populate while you set up.
+- [Contacts](/guides/contacts): Contacts are the buyers and partners on the other side of your work, tied to an Account.
+- [Accounts](/guides/accounts): Accounts are the businesses you work with — the hub for related Deals, Contacts, and Activity.
+- [Deals](/guides/deals): Deals are the opportunities you're working to close, moving through a customizable Pipeline.
+- [Tasks](/guides/tasks): Tasks are to-dos tied to the Accounts, Contacts, and Deals you're working.
+- [Activity](/guides/activity): Activity is the single timeline of everything that happens on a record, across every connected source.
+- **Integrations**
+
+- [Gmail](/guides/integrations/gmail): Capture email threads as Activity on the Contacts and Accounts they touch.
+- [Google Calendar](/guides/integrations/google-calendar): Capture meetings as Activity on the Accounts, Contacts, and Deals they involve.
+- [Slack](/guides/integrations/slack): Connect Slack so Fixture can unfurl record links and power Slack Connect sync.
+- [Slack Connect](/guides/integrations/slack-connect): Bring customer-facing shared Slack channels into Fixture as Activity, Contacts, and Account context.
+- [Granola](/guides/integrations/granola): Pull Granola meeting transcripts and notes into Fixture as Activity on the matching records.
+- [Notion Meetings](/guides/integrations/notion-meetings): Sync AI meeting transcripts and notes from Notion into Fixture as Activity on the matching records.
+- [Circleback](/guides/integrations/circleback): Send meeting events from Circleback into Fixture so transcripts and notes land on the right records.
+- [Stripe](/guides/integrations/stripe): Send Stripe payment events into Fixture so revenue context lands on the matching Accounts.
+- **Agents & developer tools**
+
+- [Agent prompting](/guides/agents/agent-prompting): How to delegate work to Fixture's in-app Agent — what it can do and how to ask.
+- [Fixture MCP](/guides/agents/fixture-mcp): Connect Claude, Codex, Cursor, and other MCP clients to Fixture so your Agent can read and update Fixture.
+- [Fixture CLI](/guides/agents/fixture-cli): Drive Fixture from your terminal or scripts. Built so Agents can pipe it without parsing help text.
+- **Settings**
+
+- [Notifications](/guides/settings/notifications): Notifications surface things that should change a decision — not everything that happened.
+- [Pipelines and Stages](/guides/settings/pipelines): Configure the Pipelines and Stages your team's Deals move through. Owner-only.
+- [Team and invites](/guides/settings/team): Invite teammates, manage roles, and revoke access from Settings → Team Settings.
+- [Task Statuses](/guides/settings/task-statuses): Customize the Statuses Tasks can hold in your Workspace. Owner-only.
+- [Email aliases](/guides/settings/email-aliases): Add other email addresses you send and receive from so their Activity is attributed to you in Fixture.
+- **Getting Started**
+
+- [Quickstart](/getting-started/quickstart): Create an API key and make your first Fixture API request.
+- **Authentication**
+
+- [API Keys](/authentication/api-keys): How to create and use API keys for Fixture API authentication.
+- [Scopes & Permissions](/authentication/scopes): API key scopes control which resources a key can access.
+- **API Reference**
+
+- [Overview](/api-reference/overview): Base URL, authentication, response format, and pagination for the V1 API.
+- [Accounts](/api-reference/accounts): Create, read, update, delete, and assign company Accounts.
+- [Contacts](/api-reference/contacts): Create, read, update, and delete Contacts (people).
+- [Deals](/api-reference/deals): Create, read, update, delete, and assign Deals.
+- [Pipelines](/api-reference/pipelines): Read Pipelines and their Stages.
+- [Leads](/api-reference/leads): Create, read, update, delete, and convert leads.
+- [Activities](/api-reference/activities): Read Activity history and create custom Activities.
+- [Notes](/api-reference/notes): Create Notes attached to Fixture entities.
+- [Tasks](/api-reference/tasks): Create, read, update, and delete Tasks.
+- [Task Statuses](/api-reference/task-statuses): Read the task status definitions configured for your workspace.
+- [V1 Error Codes](/api-reference/errors): Error response format and codes for the V1 API.
+- [Rate Limiting](/api-reference/rate-limiting): Rate limit policies for the Fixture API.

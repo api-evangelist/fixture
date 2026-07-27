@@ -1,0 +1,173 @@
+generated: '2026-07-20'
+method: searched
+source: https://fixture.app/docs/api-reference/overview, https://fixture.app/docs/api-reference/errors,
+  https://fixture.app/docs/api-reference/rate-limiting, https://fixture.app/docs/api-reference/activities,
+  https://fixture.app/docs/authentication/api-keys, https://fixture.app/docs/authentication/scopes,
+  openapi/fixture-v1-openapi.json
+docs: https://fixture.app/docs/api-reference/overview
+summary: Cross-cutting runtime semantics for the Fixture v1 API — one bearer auth style, opaque
+  prefixed IDs, cursor pagination, a coded error envelope, per-key rate limiting with standard
+  headers, and idempotent Activity ingestion keyed on a caller-supplied external_id.
+api_style: REST/JSON
+base_url: https://beta-api.fixture.app/api/v1
+media_type: application/json
+authentication:
+  style: bearer
+  header: Authorization
+  credentials:
+  - API key with fx_ prefix (external integrations and service jobs)
+  - Fixture OAuth access token, eyJ... (CLI, Agent, and MCP clients)
+  session_cookies_accepted: false
+  scopes_required: true
+  detail: ../authentication/fixture-authentication.yml
+  scopes: ../scopes/fixture-scopes.yml
+identifiers:
+  style: opaque prefixed string
+  guidance: Treat IDs as opaque values. Do not parse or construct them.
+  prefixes:
+  - entity: Account
+    prefix: account_
+    example: account_7B5jXRFuLpTQ3nM4PkGvW2
+  - entity: Contact
+    prefix: contact_
+    example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+  - entity: Deal
+    prefix: deal_
+    example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+  - entity: Lead
+    prefix: lead_
+    example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+  - entity: Activity
+    prefix: activity_
+    example: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+  - entity: Task
+    prefix: task_
+    example: task_123
+idempotency:
+  supported: true
+  style: caller-supplied natural key on the request body
+  field: external_id
+  scope: POST /api/v1/activities (createActivity)
+  replay_identical: Returns 200 with the existing Activity rather than creating a duplicate.
+  replay_conflicting: Returns 409 with error code idempotency_conflict when external_id already
+    exists but request fields do not match the original Activity.
+  header: none — Fixture does not use an Idempotency-Key header
+  docs: https://fixture.app/docs/api-reference/activities
+  notes: Idempotency is scoped to Activity ingestion, which is the endpoint external systems
+    replay. Other creates are not documented as idempotent.
+pagination:
+  style: cursor
+  request_params:
+  - name: limit
+    type: integer
+    default: 50
+    min: 1
+    max: 100
+  - name: cursor
+    type: string
+    description: Opaque cursor taken from the previous page's next_cursor.
+  response_object: pagination
+  response_fields:
+  - limit
+  - next_cursor
+  - has_more
+  exceptions:
+  - GET /api/v1/task-statuses returns only data (small reference-data endpoint, unpaginated)
+sorting:
+  param: sort
+  descending_prefix: '-'
+  default: '-created_at'
+  allowed:
+  - resource: CRM list endpoints (accounts, contacts, deals, leads, tasks)
+    values:
+    - created_at
+    - '-created_at'
+  - resource: Activity lists
+    values:
+    - occurred_at
+    - '-occurred_at'
+  - resource: Pipeline lists
+    values:
+    - created_at
+    - '-created_at'
+filtering:
+  date_range_params:
+  - created_after
+  - created_before
+  - updated_after
+  - updated_before
+  format: ISO 8601 datetime
+envelopes:
+  single_resource:
+    shape: '{ "data": { ... } }'
+  collection:
+    shape: '{ "data": [ ... ], "pagination": { "limit": ..., "next_cursor": ..., "has_more":
+      ... } }'
+  delete:
+    shape: '{ "deleted": true, "id": "account_..." }'
+  error:
+    shape: '{ "error": { "code": "...", "message": "..." } }'
+    guidance: Branch on code. message is human-readable and may change — do not match on it.
+    catalog: ../errors/fixture-problem-types.yml
+rate_limiting:
+  scope: per API key
+  limit: 100 requests per minute
+  algorithm: sliding window counter per key, per server instance
+  exempt: session-authenticated requests
+  response_headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  over_limit:
+    status: 429
+    code: rate_limit_exceeded
+    headers:
+    - name: Retry-After
+      semantics: relative seconds to wait
+    - name: X-RateLimit-Reset
+      semantics: absolute Unix timestamp of the reset boundary
+  guidance:
+  - Check X-RateLimit-Remaining before bursting.
+  - Honor Retry-After on 429.
+  - Use exponential backoff.
+  docs: https://fixture.app/docs/api-reference/rate-limiting
+versioning:
+  style: URI path prefix
+  current: v1
+  prefix: /api/v1
+  note: All v1 endpoints are prefixed with /api/v1. No date-based or header-based versioning
+    is documented.
+  detail: ../lifecycle/fixture-lifecycle.yml
+request_id_tracing:
+  documented: false
+  note: Fixture does not document a request-id or trace header in its public API reference.
+metadata_fields:
+  documented: false
+  note: No generic customer-defined metadata bag is documented on v1 resources. external_id
+    on Activities is the one caller-controlled correlation field.
+expansion:
+  documented: false
+  note: No expand or sparse-fieldset query parameter is documented. Some detail payloads embed
+    related objects directly (Deals embed contacts and stage fields; Pipelines embed stages;
+    records embed a relationships.owner object).
+status_codes:
+- code: 200
+  meaning: Success (get, update, delete, idempotent replay)
+- code: 201
+  meaning: Created
+- code: 301
+  meaning: Contact has been merged; follow merged_into
+- code: 400
+  meaning: Validation error or invalid parameter
+- code: 401
+  meaning: Unauthorized (missing or invalid bearer token)
+- code: 403
+  meaning: Forbidden (missing required scope)
+- code: 404
+  meaning: Resource not found
+- code: 409
+  meaning: Idempotency conflict on Activity ingestion
+- code: 410
+  meaning: Contact gone after merge
+- code: 429
+  meaning: Rate limit exceeded

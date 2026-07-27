@@ -1,0 +1,117 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Fixture API v1
+  version: 1.0.0
+extends: ../openapi/fixture-v1-openapi.json
+x-generated: '2026-07-20'
+x-method: generated
+x-source: openapi/fixture-v1-openapi.json plus https://fixture.app/docs (overview, errors,
+  rate-limiting, authentication, scopes, activities)
+actions:
+- target: $.info
+  description: Add contact, license placeholder, terms, and external docs so the description
+    is self-contained.
+  update:
+    contact:
+      name: Fixture
+      url: https://fixture.app/docs
+    termsOfService: https://fixture.app/terms
+    x-logo:
+      url: https://fixture.app/logo-for-black.svg
+    x-status: beta
+    x-apis-io-provider: fixture
+- target: $
+  description: Attach external documentation and the agent-facing surfaces that are documented
+    but absent from the generated description.
+  update:
+    externalDocs:
+      description: Fixture Docs
+      url: https://fixture.app/docs
+    x-llms-txt: https://fixture.app/docs/llms.txt
+    x-mcp-server:
+      endpoint: https://beta-api.fixture.app/api/mcp
+      transport: http
+      authorization: oauth2
+      docs: https://fixture.app/docs/guides/agents/fixture-mcp
+    x-cli:
+      name: fixture
+      install: curl -fsSL https://downloads.fixture.app/fixture-cli/install.sh | bash
+      docs: https://fixture.app/docs/guides/agents/fixture-cli
+    x-status-page: https://status.fixture.app
+- target: $.servers
+  description: Document the beta host explicitly rather than leaving an unlabeled server entry.
+  update:
+  - url: https://beta-api.fixture.app
+    description: Beta / current customer release host. Pairs with the beta.fixture.app dashboard.
+- target: $.components.securitySchemes.bearerAuth
+  description: Record the two credential shapes accepted by the single bearer scheme, and
+    that session cookies are rejected.
+  update:
+    x-credential-types:
+    - type: api-key
+      prefix: fx_
+      used_by: External integrations and service jobs
+      docs: https://fixture.app/docs/authentication/api-keys
+    - type: oauth-access-token
+      prefix: eyJ
+      used_by: Fixture CLI, in-app Agent, and MCP clients
+      docs: https://fixture.app/docs/authentication/scopes
+    x-session-cookies-accepted: false
+    x-oauth-metadata: https://beta-api.fixture.app/.well-known/oauth-authorization-server
+    x-scopes-docs: https://fixture.app/docs/authentication/scopes
+- target: $.paths['/api/v1/activities'].post
+  description: Make the external_id idempotency contract machine-readable on the one operation
+    that implements it.
+  update:
+    x-idempotency:
+      supported: true
+      style: body-field
+      field: external_id
+      replay_identical_status: 200
+      conflict_status: 409
+      conflict_code: idempotency_conflict
+      header: none
+      docs: https://fixture.app/docs/api-reference/activities
+- target: $.paths['/api/v1/contacts/{contact_id}'].get
+  description: Record the merged-Contact redirect semantics as a machine-readable lifecycle
+    signal.
+  update:
+    x-lifecycle:
+      merged_redirect_status: 301
+      pointer_field: merged_into
+      guidance: Follow merged_into and repoint stored Contact IDs at the surviving record.
+- target: $.paths['/api/v1/leads/{lead_id}/convert'].post
+  description: Record the compound scope requirement documented for Lead conversion.
+  update:
+    x-required-scopes:
+      always:
+      - leads:write
+      - accounts:write
+      - contacts:write
+      conditional:
+      - scope: deals:write
+        when: create_deal is true
+      failure_status: 403
+      docs: https://fixture.app/docs/authentication/scopes
+- target: $.components
+  description: Publish the rate-limit response headers as reusable header components, since
+    the generated description omits them.
+  update:
+    headers:
+      X-RateLimit-Limit:
+        description: Maximum requests allowed in the current window (100 per minute per API
+          key).
+        schema:
+          type: integer
+      X-RateLimit-Remaining:
+        description: Requests remaining in the current window.
+        schema:
+          type: integer
+      X-RateLimit-Reset:
+        description: Unix timestamp at which the current window resets.
+        schema:
+          type: integer
+      Retry-After:
+        description: Seconds to wait before retrying, returned on 429.
+        schema:
+          type: integer

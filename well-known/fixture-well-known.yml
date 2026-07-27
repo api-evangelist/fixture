@@ -1,0 +1,36 @@
+generated: '2026-07-20'
+method: searched
+source: live HTTP probes of fixture.app and beta-api.fixture.app
+summary: Fixture publishes no security.txt, OpenID Connect discovery document, api-catalog,
+  or ai-plugin.json. It does publish both OAuth 2.0 Authorization Server Metadata (RFC 8414)
+  and OAuth 2.0 Protected Resource Metadata (RFC 9728) on the API host, which is what makes
+  the remote MCP endpoint discoverable and auto-authorizable by MCP clients.
+hosts:
+- host: fixture.app
+  probes:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: beta-api.fixture.app
+  probes:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: fixture-oauth-authorization-server.json
+    spec: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: fixture-oauth-protected-resource.json
+    spec: RFC 9728
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404

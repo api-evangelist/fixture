@@ -1,0 +1,34 @@
+{
+  "provider": "fixture",
+  "sources": [
+    "fixture-accounts-api-openapi.yml",
+    "fixture-activities-api-openapi.yml",
+    "fixture-contacts-api-openapi.yml",
+    "fixture-deals-api-openapi.yml",
+    "fixture-fixture-api-api-openapi.yml",
+    "fixture-leads-api-openapi.yml",
+    "fixture-notes-api-openapi.yml",
+    "fixture-pipelines-api-openapi.yml",
+    "fixture-task-statuses-api-openapi.yml",
+    "fixture-tasks-api-openapi.yml",
+    "fixture-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "fixture-accounts-api-openapi.yml",
+    "fixture-activities-api-openapi.yml",
+    "fixture-contacts-api-openapi.yml",
+    "fixture-deals-api-openapi.yml",
+    "fixture-fixture-api-api-openapi.yml",
+    "fixture-leads-api-openapi.yml",
+    "fixture-notes-api-openapi.yml",
+    "fixture-pipelines-api-openapi.yml",
+    "fixture-task-statuses-api-openapi.yml",
+    "fixture-tasks-api-openapi.yml",
+    "fixture-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

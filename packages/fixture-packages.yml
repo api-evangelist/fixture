@@ -1,0 +1,40 @@
+generated: '2026-07-20'
+method: searched
+source: registry.npmjs.org, pypi.org, https://fixture.app/docs, https://downloads.fixture.app/fixture-cli/latest.json
+summary: Fixture publishes no first-party client libraries to any public package registry
+  as of this pass. npm (fixture-cli, @fixture/sdk, @fixture-app/sdk), PyPI (fixture-sdk, fixture-cli),
+  and an npm text search for "fixture crm" all returned no first-party package. The only
+  official distributed binary is the Fixture CLI, served from the provider's own downloads
+  host rather than a registry. Integration is expected to happen through the REST v1 API,
+  the remote MCP server, or the CLI.
+registries_checked:
+- registry: npm
+  queries:
+  - name: fixture-cli
+    status: 404
+  - name: '@fixture/sdk'
+    status: 404
+  - name: '@fixture-app/sdk'
+    status: 404
+  - name: text search "fixture crm"
+    status: 200
+    result: no first-party package in results
+- registry: PyPI
+  queries:
+  - name: fixture-sdk
+    status: 404
+  - name: fixture-cli
+    status: 404
+packages:
+- name: fixture
+  kind: cli-binary
+  official: true
+  language: n/a (compiled binary)
+  registry: none
+  distribution: https://downloads.fixture.app/fixture-cli
+  install: curl -fsSL https://downloads.fixture.app/fixture-cli/install.sh | bash
+  version: v0.1.1
+  published_at: '2026-05-11T19:47:18Z'
+  docs: https://fixture.app/docs/guides/agents/fixture-cli
+  detail: cli/fixture-cli.yml
+sdks: []

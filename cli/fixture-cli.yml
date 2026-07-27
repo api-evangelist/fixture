@@ -1,0 +1,86 @@
+generated: '2026-07-20'
+method: searched
+source: https://fixture.app/docs/guides/agents/fixture-cli, https://downloads.fixture.app/fixture-cli/install.sh,
+  https://downloads.fixture.app/fixture-cli/latest.json
+docs: https://fixture.app/docs/guides/agents/fixture-cli
+name: fixture
+official: true
+description: The official command-line client for the Fixture API, explicitly designed to
+  serve both a person at a terminal and an Agent calling it through a shell.
+latest_version: v0.1.1
+latest_published_at: '2026-05-11T19:47:18Z'
+install:
+- method: script
+  command: curl -fsSL https://downloads.fixture.app/fixture-cli/install.sh | bash
+  base_url: https://downloads.fixture.app/fixture-cli
+  notes: Hosted installer fetches the latest release archive for the detected platform. Overridable
+    via FIXTURE_CLI_BASE_URL, FIXTURE_CLI_VERSION, FIXTURE_CLI_INSTALL_DIR, or the --version
+    / --install-dir / --base-url flags. Requires curl and tar. Default install dir /usr/local/bin
+    or ~/.local/bin.
+- method: direct-download
+  url: https://downloads.fixture.app/fixture-cli/v0.1.1
+  notes: Versioned release artifacts served directly; no public package-registry distribution
+    (no npm, PyPI, Homebrew, or crates.io package found).
+verify: fixture version
+authentication:
+  default: OAuth device/browser flow, tokens stored in a named local profile
+  commands:
+  - fixture auth login
+  - fixture auth status
+  env_override:
+    FIXTURE_HOST: https://api.fixture.app
+    FIXTURE_ACCESS_TOKEN: Fixture OAuth access token (eyJ...) for user-scoped auth, or an
+      API key (fx_...) for service jobs
+  notes: Env-var override is documented for CI and shared environments.
+command_shape: Every resource follows the same list / get / create / update / delete pattern.
+resources:
+- accounts
+- contacts
+- deals
+- leads
+- activities
+- notes
+- pipelines
+- tasks
+- task-statuses
+commands:
+- group: auth
+  commands:
+  - fixture auth login
+  - fixture auth status
+- group: resource-crud
+  commands:
+  - fixture accounts list --limit 5
+  - fixture contacts get contact_123
+  - fixture deals create --raw-field name="Acme renewal" --raw-field account_id=account_123
+  - fixture tasks update task_123 --raw-field task_status_name=Done
+  - fixture leads delete lead_123 --force
+- group: raw
+  commands:
+  - fixture api accounts/account_123
+  - fixture api activities --raw-field type=billing.invoice_paid --raw-field title="Invoice
+      paid" --raw-field occurred_at=2026-03-21T12:00:00Z --raw-field account_id=account_123
+  notes: fixture api auto-POSTs when --field, --raw-field, --body, or --input is passed.
+- group: agent
+  commands:
+  - fixture agent-context
+  - fixture version
+agent_affordances:
+- affordance: agent-context
+  description: Prints versioned, machine-readable metadata about every command, resource,
+    output format, and auth capability, so an Agent does not have to scrape help text.
+- affordance: output auto-detection
+  description: Table when stdout is a terminal, compact JSON when piped. Force with --json
+    or --output toon.
+- affordance: --jq <expr>
+  description: Filters JSON output in-process without piping to a separate jq.
+- affordance: --fields a,b,c
+  description: Narrows what is rendered without changing what the server returns.
+- affordance: --all
+  description: Pages through every page of a list result and merges them into one response.
+- affordance: --input -
+  description: Reads a JSON body from stdin so one command's output can become another's
+    body.
+- affordance: destructive gating
+  description: Deletes require --force to actually send, or --dry-run to print what they would
+    do.

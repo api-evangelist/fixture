@@ -1,0 +1,57 @@
+generated: '2026-07-20'
+method: searched
+source: https://fixture.app/docs/guides/agents/fixture-mcp, https://beta-api.fixture.app/.well-known/oauth-protected-resource
+docs: https://fixture.app/docs/guides/agents/fixture-mcp
+name: Fixture MCP
+status: official
+hosting: remote
+transport: http
+endpoint: https://beta-api.fixture.app/api/mcp
+dashboard: https://beta.fixture.app
+notes: Fixture exposes its CRM through the Model Context Protocol so any MCP-aware client
+  can read and update a Workspace the same way the in-app Agent does. The MCP tool set tracks
+  the in-app Agent's tool set. The MCP page inside the Fixture dashboard carries the current
+  per-client setup snippet. An unauthenticated probe of the endpoint returns 401.
+authentication:
+  type: oauth2
+  flow: authorization_code
+  pkce: S256
+  dynamic_client_registration: true
+  authorization_servers:
+  - https://beta-api.fixture.app
+  protected_resource_metadata: https://beta-api.fixture.app/.well-known/oauth-protected-resource
+  bearer_methods_supported:
+  - header
+  scopes_supported:
+  - crm:read
+  - crm:write
+  - tasks:read
+  - tasks:write
+  - users:read
+  token_binding: Token is scoped to the signed-in user and their active Organization. Clients
+    are prompted to reconnect when a token expires or permissions change.
+clients_documented:
+- Claude Code
+- Claude Desktop
+- Cursor
+- VS Code
+- Windsurf
+- Codex
+install:
+- client: Claude Code
+  command: claude mcp add --transport http fixture-crm https://beta-api.fixture.app/api/mcp
+- client: Codex
+  command: codex mcp add fixture-crm --url https://beta-api.fixture.app/api/mcp
+capabilities:
+- capability: search
+  description: Fuzzy search across Accounts, Contacts, Deals, and Leads with one query.
+- capability: read
+  description: Read the full detail of any record, including the Activity timeline.
+- capability: write
+  description: Create or update Accounts, Contacts, Deals, and Leads; add Notes; change Deal
+    Stages; assign and complete Tasks; convert a Lead into an Account, Contact, and Deal.
+- capability: plan
+  description: Pull Pipelines with deal counts and values; list overdue and upcoming Tasks.
+tools_note: Fixture does not publish a per-tool manifest publicly; the capability list above
+  is taken verbatim from the MCP guide. The underlying REST operations are enumerated in
+  openapi/fixture-v1-openapi.json.

@@ -1,0 +1,81 @@
+generated: '2026-07-20'
+method: searched
+source: https://fixture.app/docs/authentication/scopes, https://beta-api.fixture.app/.well-known/oauth-authorization-server,
+  https://beta-api.fixture.app/.well-known/oauth-protected-resource
+docs: https://fixture.app/docs/authentication/scopes
+summary: Fixture runs two related scope vocabularies. API keys carry fine-grained resource
+  scopes (contacts:read, deals:write, ...) chosen explicitly at key creation. Fixture OAuth
+  access tokens — used by the CLI, the in-app Agent, and remote MCP clients — carry coarser
+  scopes (crm:read, crm:write, tasks:read, tasks:write, users:read) that map onto the same
+  API key scope requirements. Write implies read; there is no implicit full-access default.
+rules:
+- Write implies read. A key with contacts:write can also read Contacts.
+- The wildcard scope (*) satisfies any scope requirement. Intended for development keys.
+- A missing scope fails the request with 403 forbidden and a message naming the scope.
+- Some operations require multiple scopes because they create resources across entities.
+scope_sets:
+- name: api-key
+  description: Fine-grained scopes assigned to a workspace API key at creation time.
+  source: https://fixture.app/docs/authentication/scopes
+  scopes:
+  - scope: contacts:read
+    description: View Contacts and their details
+  - scope: contacts:write
+    description: Create, update, and delete Contacts
+  - scope: accounts:read
+    description: View Accounts and their details
+  - scope: accounts:write
+    description: Create, update, and delete Accounts
+  - scope: deals:read
+    description: View Deals and their details
+  - scope: deals:write
+    description: Create, update, and delete Deals
+  - scope: users:read
+    description: View Team Users that can own Accounts and Deals
+  - scope: pipelines:read
+    description: View Pipelines and their Stages
+  - scope: leads:read
+    description: View Leads and their details
+  - scope: leads:write
+    description: Create, update, and delete Leads
+  - scope: activities:read
+    description: View Activities and interaction history
+  - scope: activities:write
+    description: Create custom Activities
+  - scope: '*'
+    description: Full access to all resources
+- name: oauth
+  description: Scopes advertised by the Fixture Authorization Server metadata and required
+    by the remote MCP endpoint. Granted CRM and task scopes map onto the API key scope requirements.
+  issuer: https://beta-api.fixture.app
+  source: https://beta-api.fixture.app/.well-known/oauth-authorization-server
+  scopes:
+  - scope: crm:read
+    description: Read CRM records (Accounts, Contacts, Deals, Leads, Activities, Pipelines)
+  - scope: crm:write
+    description: Create and update CRM records
+  - scope: tasks:read
+    description: Read Tasks and Task Statuses
+  - scope: tasks:write
+    description: Create, update, and complete Tasks
+  - scope: users:read
+    description: Read team Users
+compound_requirements:
+- operation: convertLead
+  path: POST /api/v1/leads/{id}/convert
+  requires:
+  - scope: leads:write
+    always: true
+  - scope: accounts:write
+    always: true
+  - scope: contacts:write
+    always: true
+  - scope: deals:write
+    always: false
+    condition: only when create_deal is true
+missing_scope_response:
+  status: 403
+  body:
+    error:
+      code: forbidden
+      message: 'Missing required scope: contacts:write'

@@ -1,0 +1,1 @@
+{"resource":"https://beta-api.fixture.app/api/mcp","authorization_servers":["https://beta-api.fixture.app"],"scopes_supported":["crm:read","crm:write","tasks:read","tasks:write","users:read"],"bearer_methods_supported":["header"]}

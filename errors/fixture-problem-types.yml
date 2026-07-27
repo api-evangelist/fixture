@@ -1,0 +1,72 @@
+generated: '2026-07-20'
+method: searched
+source: https://fixture.app/docs/api-reference/errors, https://fixture.app/docs/api-reference/rate-limiting,
+  https://fixture.app/docs/authentication/scopes, openapi/fixture-v1-openapi.json
+docs: https://fixture.app/docs/api-reference/errors
+format: custom
+rfc9457: false
+media_type: application/json
+envelope:
+  shape: '{ "error": { "code": "...", "message": "..." } }'
+  code_field: error.code
+  message_field: error.message
+  schema: V1ErrorResponse
+guidance: Check the code field to determine the type of error programmatically. The message
+  field is human-readable and may change — do not match on it.
+problem_types:
+- code: validation_error
+  status: 400
+  title: Request body validation failed
+  remediation: Correct the request body to satisfy the documented schema for the operation.
+- code: invalid_parameter
+  status: 400
+  title: Query parameter parsing failed
+  detail: For example a bad date format on created_after/updated_before, or an unknown sort
+    field.
+  remediation: Use ISO 8601 datetimes for date filters and only the sort fields documented
+    for that resource.
+- code: unauthorized
+  status: 401
+  title: Missing or invalid bearer token
+  remediation: Send Authorization Bearer with a valid fx_ API key or Fixture OAuth access
+    token. Session cookies are not accepted on /api/v1/*.
+- code: forbidden
+  status: 403
+  title: Valid bearer token but missing required scope
+  detail: 'Message names the missing scope, e.g. "Missing required scope: contacts:write".'
+  remediation: Reissue the API key with the required scope, or re-authorize the OAuth client
+    for the needed scope. Note that write implies read.
+- code: not_found
+  status: 404
+  title: Resource does not exist
+  remediation: Verify the opaque prefixed ID and that it belongs to the authenticated Workspace.
+- code: idempotency_conflict
+  status: 409
+  title: external_id already exists with different fields
+  detail: Raised by POST /api/v1/activities when a replay reuses an external_id but the request
+    fields do not match the original Activity. Identical replays return 200 with the existing
+    Activity instead.
+  remediation: Either replay with byte-identical fields, or mint a new external_id for a genuinely
+    different Activity.
+- code: rate_limit_exceeded
+  status: 429
+  title: Rate limit hit
+  detail: 100 requests per minute per API key. Response carries Retry-After (relative seconds)
+    and X-RateLimit-Reset (absolute Unix timestamp).
+  remediation: Wait for Retry-After, then retry with exponential backoff. Check X-RateLimit-Remaining
+    before bursting.
+special_responses:
+- status: 301
+  operation: getContact
+  schema: V1MergedContactRedirectResponse
+  title: Contact was merged into another Contact
+  detail: Response carries merged_into pointing at the surviving Contact.
+  remediation: Follow merged_into and update the stored ID on your side.
+- status: 410
+  operations:
+  - updateContact
+  - deleteContact
+  schema: V1MergedContactGoneResponse
+  title: Contact is gone after a merge
+  detail: Response carries error plus merged_into.
+  remediation: Retarget the write at the surviving Contact named in merged_into.

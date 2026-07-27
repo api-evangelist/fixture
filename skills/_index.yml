@@ -1,0 +1,76 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/fixture-v1-openapi.json, https://fixture.app/docs (api-reference, authentication,
+  agents)
+summary: Packaged Agent Skills for the Fixture v1 CRM API. Every step is grounded in a real
+  operationId from the provider-published OpenAPI 3.1 description, plus the documented conventions
+  (bearer auth, opaque prefixed IDs, cursor pagination, coded error envelope, external_id
+  idempotency, 100 req/min per key).
+provider_published_skills:
+  found: false
+  checked:
+  - https://fixture.app/docs (no AGENTS.md, skills directory, or skill manifest published)
+  note: Fixture does publish agent-facing surfaces of a different kind — a remote MCP server
+    (mcp/fixture-mcp.yml), an agent-oriented CLI with a machine-readable `fixture agent-context`
+    command (cli/fixture-cli.yml), and llms.txt (llms/fixture-llms.txt).
+skills:
+- name: fixture-lead-intake-and-conversion
+  file: fixture-lead-intake-and-conversion.md
+  description: Capture an inbound lead and convert it into an Account, Contact, and optionally
+    a Deal, handling the compound scope requirement.
+  operations:
+  - createLead
+  - listLeads
+  - getLead
+  - updateLead
+  - convertLead
+- name: fixture-idempotent-activity-ingestion
+  file: fixture-idempotent-activity-ingestion.md
+  description: Push external events into the Fixture activity graph exactly once using external_id
+    as the idempotency key.
+  operations:
+  - createActivity
+  - listActivities
+  - getActivity
+- name: fixture-deal-pipeline-management
+  file: fixture-deal-pipeline-management.md
+  description: Create a Deal against an Account, attach the buying committee, and move it
+    through configurable Pipeline stages.
+  operations:
+  - listPipelines
+  - getPipeline
+  - listAccounts
+  - createDeal
+  - listDeals
+  - getDeal
+  - updateDeal
+  - listDealContacts
+  - updateDealContacts
+  - listUsers
+- name: fixture-contact-sync-with-merge-handling
+  file: fixture-contact-sync-with-merge-handling.md
+  description: Sync people and companies into Accounts and Contacts, correctly following merged-Contact
+    301 and 410 responses.
+  operations:
+  - listContacts
+  - getContact
+  - createContact
+  - updateContact
+  - deleteContact
+  - listAccounts
+  - createAccount
+  - getAccount
+  - updateAccount
+  - createNote
+- name: fixture-task-triage
+  file: fixture-task-triage.md
+  description: Create, assign, and complete Tasks against Accounts, Contacts, and Deals using
+    the workspace's configurable Task Status vocabulary.
+  operations:
+  - listTaskStatuses
+  - listTasks
+  - getTask
+  - createTask
+  - updateTask
+  - deleteTask
+  - listUsers

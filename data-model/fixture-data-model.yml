@@ -1,0 +1,297 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/fixture-v1-openapi.json, https://fixture.app/docs/api-reference/overview,
+  https://fixture.app/docs/guides/how-fixture-works
+summary: Fixture's object graph is a classic CRM core — Accounts (companies), Contacts (people),
+  Deals (opportunities moving through Pipeline Stages), and Leads (unqualified inbound that
+  convert into an Account + Contact + optional Deal) — with two cross-cutting attachment
+  types, Activities and Notes, that can link to any of the CRM entities, plus Tasks with
+  a configurable Task Status vocabulary and Users as owners/assignees.
+id_convention:
+  style: opaque prefixed string
+  guidance: Treat IDs as opaque. Do not parse or construct them.
+entities:
+- name: Account
+  id_prefix: account_
+  description: A company you work with; the hub for related Deals, Contacts, and Activity.
+  schema: V1AccountDetailPayload
+  key_fields:
+  - id
+  - name
+  - description
+  - industry
+  - employee_count
+  - estimated_revenue
+  - website_url
+  - linkedin_url
+  - phone
+  - headquarters_address
+  - headquarters_city
+  - headquarters_state
+  - headquarters_country
+  - headquarters_postal_code
+  - last_activity_at
+  - created_at
+  - updated_at
+  relationships:
+  - type: has_many
+    target: Contact
+    via: Contact.account_id
+  - type: has_many
+    target: Deal
+    via: Deal.account_id
+  - type: has_one
+    target: User
+    role: owner
+    via: relationships.owner
+  - type: has_many
+    target: Activity
+    via: Activity.entities[].entity_id where entity_type is account
+- name: Contact
+  id_prefix: contact_
+  description: A person on the other side of your work, optionally tied to an Account.
+  schema: V1ContactDetailPayload
+  key_fields:
+  - id
+  - name
+  - email
+  - emails
+  - phone
+  - title
+  - account_id
+  - linkedin_url
+  - twitter_handle
+  - notes
+  - last_activity_at
+  - created_at
+  - updated_at
+  relationships:
+  - type: belongs_to
+    target: Account
+    via: account_id
+  - type: has_many
+    target: Deal
+    via: Deal contact associations (GET/PUT /api/v1/deals/{deal_id}/contacts)
+  - type: has_many
+    target: Activity
+    via: Activity.entities[].entity_id where entity_type is contact
+  lifecycle_note: Merged Contacts return 301 (read) or 410 (write) with a merged_into pointer.
+- name: Deal
+  id_prefix: deal_
+  description: An opportunity you are working to close, moving through a customizable Pipeline.
+  schema: V1DealDetailPayload
+  key_fields:
+  - id
+  - name
+  - value
+  - expected_close_date
+  - account_id
+  - pipeline_id
+  - pipeline_stage_id
+  - stage_name
+  - stage_type
+  - contacts
+  - notes
+  - last_activity_at
+  - created_at
+  - updated_at
+  relationships:
+  - type: belongs_to
+    target: Account
+    via: account_id
+  - type: belongs_to
+    target: Pipeline
+    via: pipeline_id
+  - type: belongs_to
+    target: PipelineStage
+    via: pipeline_stage_id
+  - type: has_many
+    target: Contact
+    via: contacts (managed through updateDealContacts)
+  - type: has_one
+    target: User
+    role: owner
+    via: relationships.owner
+- name: Lead
+  id_prefix: lead_
+  description: Unqualified inbound interest, carrying denormalized company fields until it
+    is converted.
+  schema: V1LeadDetailPayload
+  key_fields:
+  - id
+  - name
+  - email
+  - phone
+  - title
+  - status
+  - source
+  - estimated_value
+  - company_name
+  - company_website
+  - company_industry
+  - company_employee_count
+  - city
+  - state
+  - country
+  - linkedin_url
+  - notes
+  - converted_at
+  - converted_account_id
+  - converted_contact_id
+  - created_at
+  - updated_at
+  relationships:
+  - type: has_one
+    target: Account
+    role: converted_to
+    via: converted_account_id
+  - type: has_one
+    target: Contact
+    role: converted_to
+    via: converted_contact_id
+  - type: has_one
+    target: Deal
+    role: converted_to
+    via: convertLead with create_deal true
+- name: Pipeline
+  description: An ordered set of Stages that Deals move through. Read-only over the API.
+  schema: V1PipelinePayload
+  key_fields:
+  - id
+  - name
+  - stages
+  - created_at
+  - updated_at
+  relationships:
+  - type: has_many
+    target: PipelineStage
+    via: stages (embedded)
+  - type: has_many
+    target: Deal
+    via: Deal.pipeline_id
+- name: PipelineStage
+  description: A named, positioned, typed stage within a Pipeline.
+  schema: V1PipelineStagePayload
+  key_fields:
+  - id
+  - name
+  - position
+  - color
+  - stage_type
+  relationships:
+  - type: belongs_to
+    target: Pipeline
+    via: embedded in Pipeline.stages
+  - type: has_many
+    target: Deal
+    via: Deal.pipeline_stage_id
+- name: Activity
+  id_prefix: activity_
+  description: A single event on the timeline — email, meeting, note, call, or ingested webhook
+    — polymorphically linked to one or more CRM records.
+  schema: V1ActivityDetailPayload
+  key_fields:
+  - id
+  - type
+  - title
+  - content
+  - occurred_at
+  - external_id
+  - actor
+  - entities
+  - created_at
+  - updated_at
+  relationships:
+  - type: has_many
+    target: Account | Contact | Deal
+    via: entities[] with entity_type + entity_id + role (polymorphic)
+  - type: has_one
+    target: User
+    role: actor
+    via: actor
+  idempotency_key: external_id
+- name: Note
+  description: Free text attached to a CRM entity. Create-only over the v1 API.
+  schema: V1CreateNoteRequest
+  relationships:
+  - type: belongs_to
+    target: Account | Contact | Deal
+    via: entity link on create (polymorphic)
+- name: Task
+  id_prefix: task_
+  description: A to-do tied to an Account, Contact, or Deal, held in a configurable Status.
+  schema: V1TaskPayload
+  key_fields:
+  - id
+  - title
+  - description
+  - due_date
+  - completed_at
+  - entity_type
+  - entity_id
+  - assignee_id
+  - created_by_id
+  - task_status
+  - task_status_id
+  - created_at
+  - updated_at
+  relationships:
+  - type: belongs_to
+    target: Account | Contact | Deal
+    via: entity_type + entity_id (polymorphic)
+  - type: belongs_to
+    target: TaskStatus
+    via: task_status_id
+  - type: has_one
+    target: User
+    role: assignee
+    via: assignee_id
+  - type: has_one
+    target: User
+    role: creator
+    via: created_by_id
+- name: TaskStatus
+  description: A workspace-configurable status a Task can hold. Read-only over the API.
+  schema: V1TaskStatusPayload
+  relationships:
+  - type: has_many
+    target: Task
+    via: Task.task_status_id
+- name: User
+  description: A team member who can own Accounts and Deals and be assigned Tasks. Read-only
+    over the API.
+  schema: V1UserPayload
+  key_fields:
+  - id
+  - name
+  - email
+  - role
+  relationships:
+  - type: has_many
+    target: Account | Deal
+    role: owner
+    via: relationships.owner
+  - type: has_many
+    target: Task
+    role: assignee
+    via: Task.assignee_id
+polymorphic_links:
+- name: Activity.entities[]
+  discriminator: entity_type
+  targets:
+  - account
+  - contact
+  - deal
+  extra: role
+- name: Task entity link
+  discriminator: entity_type
+  targets:
+  - account
+  - contact
+  - deal
+- name: Note entity link
+  discriminator: entity_type
+  targets:
+  - account
+  - contact
+  - deal

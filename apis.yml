@@ -1,20 +1,393 @@
 aid: fixture
 name: Fixture
-description: Fixture is a company surfaced as a portfolio company of y-combinator and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: Fixture is an AI-native CRM built for startups, backed by Y Combinator (Winter
+  2026 batch). Fixture aggregates every customer interaction — email, calendar, Slack and
+  Slack Connect, meeting notes from Granola, Notion and Circleback, and Stripe billing events
+  — into a single structured activity graph across Accounts, Contacts, Deals, Leads, Tasks
+  and Notes, then uses agents to surface next actions and keep records current without manual
+  data entry. The whole system is programmable — Fixture publishes a documented REST v1 API
+  with a generated OpenAPI 3.1 description, a hosted remote MCP server with OAuth 2.1 and
+  dynamic client registration, and a first-party agent-oriented CLI, so humans and agents work
+  against the same surface.
 url: https://raw.githubusercontent.com/api-evangelist/fixture/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://fixture.app/logo-for-black.svg
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - y-combinator
-x-tier: stub
+x-tier: lead
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
-apis: []
+- CRM
+- Sales
+- B2B
+- Artificial Intelligence
+- Agents
+- MCP
+- Customer Relationship Management
+apis:
+- aid: fixture:fixture-accounts-api
+  name: Fixture Accounts API
+  description: Create, read, update, and delete company records.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-activities-api
+  name: Fixture Activities API
+  description: List and ingest CRM Activity records.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Activities
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-activities-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-contacts-api
+  name: Fixture Contacts API
+  description: Create, read, update, and delete person records.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-contacts-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-deals-api
+  name: Fixture Deals API
+  description: Create, read, update, and delete Deal records.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Deals
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-deals-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-fixture-api-api
+  name: Fixture Fixture API API
+  description: The Fixture API API from Fixture — 1 operation(s) for fixture api.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Fixture API
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-fixture-api-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-leads-api
+  name: Fixture Leads API
+  description: Create, read, update, and convert Leads.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Leads
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-leads-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-notes-api
+  name: Fixture Notes API
+  description: Create Notes linked to CRM entities.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-notes-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-pipelines-api
+  name: Fixture Pipelines API
+  description: List Pipelines and inspect their nested stages.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-pipelines-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-task-statuses-api
+  name: Fixture Task Statuses API
+  description: List Task status definitions available to the current organization.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Task Statuses
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-task-statuses-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-tasks-api
+  name: Fixture Tasks API
+  description: Create, read, update, and delete Tasks.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-users-api
+  name: Fixture Users API
+  description: The Users API from Fixture — 1 operation(s) for users.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-users-api-openapi.yml
+  - type: Documentation
+    url: https://fixture.app/docs
+  - type: APIReference
+    url: https://fixture.app/docs/api-reference/overview
+  - type: GettingStarted
+    url: https://fixture.app/docs/getting-started/quickstart
+  - type: OpenAPI Source
+    url: https://fixture.app/docs/openapi/fixture-v1.json
+  - type: Authentication
+    url: https://fixture.app/docs/authentication/api-keys
+  - type: Scopes
+    url: https://fixture.app/docs/authentication/scopes
+  - type: ErrorCodes
+    url: https://fixture.app/docs/api-reference/errors
+  - type: RateLimits
+    url: https://fixture.app/docs/api-reference/rate-limiting
+common:
+- type: DomainSecurity
+  url: security/fixture-domain-security.yml
+- type: Website
+  url: https://fixture.app
+- type: DeveloperPortal
+  url: https://fixture.app/docs
+- type: Documentation
+  url: https://fixture.app/docs
+- type: APIReference
+  url: https://fixture.app/docs/api-reference/overview
+- type: GettingStarted
+  url: https://fixture.app/docs/getting-started/quickstart
+- type: Login
+  url: https://beta.fixture.app
+- type: SignUp
+  url: https://fixture.app/beta
+- type: StatusPage
+  url: https://status.fixture.app
+- type: TermsOfService
+  url: https://fixture.app/terms
+- type: PrivacyPolicy
+  url: https://fixture.app/privacy
+- type: RateLimits
+  url: https://fixture.app/docs/api-reference/rate-limiting
+- type: ErrorCodes
+  url: https://fixture.app/docs/api-reference/errors
+- type: Idempotency
+  url: conventions/fixture-conventions.yml
+- type: Conventions
+  url: conventions/fixture-conventions.yml
+- type: ErrorCatalog
+  url: errors/fixture-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/fixture-lifecycle.yml
+- type: Authentication
+  url: authentication/fixture-authentication.yml
+- type: OAuthScopes
+  url: scopes/fixture-scopes.yml
+- type: MCPServer
+  url: mcp/fixture-mcp.yml
+- type: CLI
+  url: cli/fixture-cli.yml
+- type: DataModel
+  url: data-model/fixture-data-model.yml
+- type: Conformance
+  url: conformance/fixture-conformance.yml
+- type: Packages
+  url: packages/fixture-packages.yml
+- type: WellKnown
+  url: well-known/fixture-well-known.yml
+- type: LLMsTxt
+  url: llms/fixture-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
