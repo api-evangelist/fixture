@@ -3,7 +3,8 @@ method: searched
 source: https://fixture.app/docs/guides/agents/fixture-mcp, https://beta-api.fixture.app/.well-known/oauth-protected-resource
 docs: https://fixture.app/docs/guides/agents/fixture-mcp
 name: Fixture MCP
-status: official
+status: published
+status_raw: official
 hosting: remote
 transport: http
 endpoint: https://beta-api.fixture.app/api/mcp
