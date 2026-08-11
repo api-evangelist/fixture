@@ -329,6 +329,8 @@ apis:
   - type: RateLimits
     url: https://fixture.app/docs/api-reference/rate-limiting
 common:
+- type: Overlay
+  url: overlays/fixture-v1-overlay.yaml
 - type: DomainSecurity
   url: security/fixture-domain-security.yml
 - type: Website
