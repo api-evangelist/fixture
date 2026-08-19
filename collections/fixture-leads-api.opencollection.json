@@ -1,0 +1,243 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fixture Accounts Leads API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Leads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Leads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/leads",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by the previous page. Omit for the first page."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by a supported field. Prefix with `-` for descending order."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter Leads by status."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filter Leads by source."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter Leads by a partial, case-insensitive person name match."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Filter by an exact email address."
+              },
+              {
+                "name": "linkedin_url",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "company_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter Leads by company name."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only records created after this ISO 8601 timestamp."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only records created before this ISO 8601 timestamp."
+              },
+              {
+                "name": "updated_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only records updated after this ISO 8601 timestamp."
+              },
+              {
+                "name": "updated_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only records updated before this ISO 8601 timestamp."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Choose which public fields appear in each list record. Omit or pass a blank value for the default list fields, use `*` alone for every public detail field, or pass comma-separated names."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a paginated list of Leads. Supports filtering by `status` (new, contacted, qualified, unqualified, converted), `source`, `name`, `email`, `company_name`, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`. Use `fields` to choose which public Lead fields appear in each record."
+        },
+        {
+          "info": {
+            "name": "Create a Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://beta-api.fixture.app/api/v1/leads",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new Lead for an unqualified prospect. Leads are kept separate from Accounts and Contacts until explicitly converted via `POST /api/v1/leads/{lead_id}/convert`."
+        },
+        {
+          "info": {
+            "name": "Get a Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/leads/:lead_id",
+            "params": [
+              {
+                "name": "lead_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Lead ID with the `lead_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a single Lead by its `lead_` ID with full detail fields."
+        },
+        {
+          "info": {
+            "name": "Update a Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://beta-api.fixture.app/api/v1/leads/:lead_id",
+            "params": [
+              {
+                "name": "lead_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Lead ID with the `lead_` prefix."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Partially update a Lead by ID. Setting `status` to `converted` on its own does not create downstream records — use the convert endpoint to produce an Account, Contact, and optional Deal."
+        },
+        {
+          "info": {
+            "name": "Delete a Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://beta-api.fixture.app/api/v1/leads/:lead_id",
+            "params": [
+              {
+                "name": "lead_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Lead ID with the `lead_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a Lead by ID. Leads that have already been converted can still be deleted; the Account, Contact, and Deal produced by conversion are unaffected."
+        },
+        {
+          "info": {
+            "name": "Convert a Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://beta-api.fixture.app/api/v1/leads/:lead_id/convert",
+            "params": [
+              {
+                "name": "lead_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Lead ID with the `lead_` prefix."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Convert a Lead into an Account and Contact, and optionally create a Deal in a single step. You can target an existing Account via `existing_account_id` or let Fixture create a new one from the Lead's `company_name`. On success the Lead is marked `converted` and linked to the newly created records."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

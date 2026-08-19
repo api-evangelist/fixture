@@ -1,0 +1,1851 @@
+{
+  "item": [
+    {
+      "id": "76d75ab6-2edd-4b60-ac32-06a4c00a30b6",
+      "name": "Accounts",
+      "description": {
+        "content": "Create, read, update, and delete company records.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "547deddd-cb46-4edf-b784-7609e032fc8b",
+          "name": "List Accounts",
+          "request": {
+            "name": "List Accounts",
+            "description": {
+              "content": "Return a paginated list of Account summaries for the authenticated organization. Supports filtering by `name`, `industry`, `headquarters_city`, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`. Use `fields` to choose which public Account fields appear in each record.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of records to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by the previous page. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "-created_at",
+                  "description": "Sort by a supported field. Prefix with `-` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Filter by a partial, case-insensitive name match."
+                },
+                {
+                  "disabled": false,
+                  "key": "industry",
+                  "value": "<string>",
+                  "description": "Filter Accounts by industry."
+                },
+                {
+                  "disabled": false,
+                  "key": "linkedin_url",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "headquarters_city",
+                  "value": "<string>",
+                  "description": "Filter Accounts by headquarters city."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records created after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records created before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "relationship",
+                  "value": "<string>",
+                  "description": "Filter by owner relationship. Use `owner:user_...` for owned records or `owner:none` for unowned records."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Choose which public fields appear in each list record. Omit or pass a blank value for the default list fields, use `*` alone for every public detail field, or pass comma-separated names."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "52314ef6-00fd-4185-92a6-52169929aac4",
+              "name": "Paginated Account list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Acme"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "Software"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "headquarters_city",
+                      "value": "San Francisco"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"created_at\": \"2026-03-10T09:00:00Z\",\n      \"employee_count\": 240,\n      \"estimated_revenue\": 125000000,\n      \"headquarters_city\": \"San Francisco\",\n      \"headquarters_country\": \"US\",\n      \"headquarters_state\": \"CA\",\n      \"id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"industry\": \"Software\",\n      \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n      \"linkedin_url\": \"https://www.linkedin.com/company/acme\",\n      \"name\": \"Acme Corp\",\n      \"relationships\": {\n        \"owner\": {\n          \"users\": [\n            {\n              \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n            }\n          ]\n        }\n      },\n      \"updated_at\": \"2026-03-22T14:00:01Z\",\n      \"website_url\": \"https://acme.example\"\n    }\n  ],\n  \"pagination\": {\n    \"has_more\": false,\n    \"limit\": 50,\n    \"next_cursor\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ed28d72-4c82-4baf-8343-d820c8f5c138",
+              "name": "Invalid filter or pagination parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Acme"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "Software"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "headquarters_city",
+                      "value": "San Francisco"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid cursor\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0d1c659-9074-4771-9de7-d319b84c64ac",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Acme"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "Software"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "headquarters_city",
+                      "value": "San Francisco"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5009667d-bb2d-4b30-b6f1-792e7fa475a2",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Acme"
+                    },
+                    {
+                      "key": "industry",
+                      "value": "Software"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "headquarters_city",
+                      "value": "San Francisco"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: accounts:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4f45971b-4455-4aa1-9839-bdd05e9a8fd5",
+          "name": "Create an Account",
+          "request": {
+            "name": "Create an Account",
+            "description": {
+              "content": "Create a new Account (company) record in the authenticated organization. Returns the full Account detail payload including the generated `acc_` ID. Typically followed by creating Contacts or Deals linked to this Account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "accounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"employee_count\": \"<integer>\",\n  \"estimated_revenue\": \"<integer>\",\n  \"headquarters_address\": \"<string>\",\n  \"headquarters_city\": \"<string>\",\n  \"headquarters_country\": \"<string>\",\n  \"headquarters_postal_code\": \"<string>\",\n  \"headquarters_state\": \"<string>\",\n  \"industry\": \"<string>\",\n  \"linkedin_url\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"<string>\"\n        }\n      ],\n      \"propagate_to_open_deals\": false\n    }\n  },\n  \"website_url\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c82852c4-93b0-48f8-a635-869edc0df9d9",
+              "name": "Account created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"employee_count\": 240,\n  \"estimated_revenue\": 125000000,\n  \"industry\": \"Software\",\n  \"name\": \"Acme Corp\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"website_url\": \"https://acme.example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"created_at\": \"2026-03-10T09:00:00Z\",\n    \"description\": \"Strategic enterprise customer.\",\n    \"employee_count\": 240,\n    \"estimated_revenue\": 125000000,\n    \"headquarters_address\": \"100 Market Street\",\n    \"headquarters_city\": \"San Francisco\",\n    \"headquarters_country\": \"US\",\n    \"headquarters_postal_code\": \"94105\",\n    \"headquarters_state\": \"CA\",\n    \"id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"industry\": \"Software\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"linkedin_url\": \"https://www.linkedin.com/company/acme\",\n    \"name\": \"Acme Corp\",\n    \"phone\": \"+1-415-555-0100\",\n    \"relationships\": {\n      \"owner\": {\n        \"users\": [\n          {\n            \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n          }\n        ]\n      }\n    },\n    \"updated_at\": \"2026-03-22T14:00:01Z\",\n    \"website_url\": \"https://acme.example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65273960-8238-47a5-abf8-43a660052d89",
+              "name": "Request validation failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"employee_count\": 240,\n  \"estimated_revenue\": 125000000,\n  \"industry\": \"Software\",\n  \"name\": \"Acme Corp\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"website_url\": \"https://acme.example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"name is required\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da4ba4bf-769f-4c3a-840d-ae7f469a6393",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"employee_count\": 240,\n  \"estimated_revenue\": 125000000,\n  \"industry\": \"Software\",\n  \"name\": \"Acme Corp\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"website_url\": \"https://acme.example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7fd5613f-9d76-4a58-90c4-361963a0816e",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"employee_count\": 240,\n  \"estimated_revenue\": 125000000,\n  \"industry\": \"Software\",\n  \"name\": \"Acme Corp\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"website_url\": \"https://acme.example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: accounts:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bbe57eaa-01fc-4df5-b5cc-8f1f4bb98819",
+          "name": "Delete an Account",
+          "request": {
+            "name": "Delete an Account",
+            "description": {
+              "content": "Delete an Account by ID. Linked Contacts and Deals are not cascade-deleted — their `account_id` is cleared so the records remain in the organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "accounts",
+                ":account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_id",
+                  "description": "(Required) Opaque Account ID with the `account_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "32a97763-66ed-48e5-8ad7-b1253b9219ec",
+              "name": "Account deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b47d76db-24cf-487d-a29f-e2350c6fc5e8",
+              "name": "Invalid Account ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Account ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2207e370-6c64-41e5-94d0-86dc9af19a26",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e4bb0cf-9d7f-49f7-9fa1-321d2cab76af",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: accounts:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a8e99a4-44e8-4356-bec1-f2ebc00f88ac",
+              "name": "Account not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Account not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b4989549-5811-40d3-9300-db8fd304a162",
+          "name": "Get an Account",
+          "request": {
+            "name": "Get an Account",
+            "description": {
+              "content": "Return a single Account by its `acc_` ID with all detail fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "accounts",
+                ":account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_id",
+                  "description": "(Required) Opaque Account ID with the `account_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0fdde3ef-b7da-4d52-9bca-e7701b3c694b",
+              "name": "Account detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"created_at\": \"2026-03-10T09:00:00Z\",\n    \"description\": \"Strategic enterprise customer.\",\n    \"employee_count\": 240,\n    \"estimated_revenue\": 125000000,\n    \"headquarters_address\": \"100 Market Street\",\n    \"headquarters_city\": \"San Francisco\",\n    \"headquarters_country\": \"US\",\n    \"headquarters_postal_code\": \"94105\",\n    \"headquarters_state\": \"CA\",\n    \"id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"industry\": \"Software\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"linkedin_url\": \"https://www.linkedin.com/company/acme\",\n    \"name\": \"Acme Corp\",\n    \"phone\": \"+1-415-555-0100\",\n    \"relationships\": {\n      \"owner\": {\n        \"users\": [\n          {\n            \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n          }\n        ]\n      }\n    },\n    \"updated_at\": \"2026-03-22T14:00:01Z\",\n    \"website_url\": \"https://acme.example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acf550f9-cf9d-4687-8a66-482365aa9287",
+              "name": "Invalid Account ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Account ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "255a66cf-86f0-4653-ba12-141ee4e44778",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "18ec16be-117e-4d41-aeb5-3d5b918db941",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: accounts:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d086af0-6dbe-4f13-9f94-e389a92c1136",
+              "name": "Account not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Account not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b716b0f3-57db-40e3-82b9-b2b2536811fe",
+          "name": "Update an Account",
+          "request": {
+            "name": "Update an Account",
+            "description": {
+              "content": "Partially update an Account by ID. Only fields present in the request body are modified; omitted fields are left untouched. Pass `null` to clear nullable fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "accounts",
+                ":account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "account_id",
+                  "description": "(Required) Opaque Account ID with the `account_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"employee_count\": \"<integer>\",\n  \"estimated_revenue\": \"<integer>\",\n  \"headquarters_address\": \"<string>\",\n  \"headquarters_city\": \"<string>\",\n  \"headquarters_country\": \"<string>\",\n  \"headquarters_postal_code\": \"<string>\",\n  \"headquarters_state\": \"<string>\",\n  \"industry\": \"<string>\",\n  \"linkedin_url\": \"<string>\",\n  \"name\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"<string>\"\n        }\n      ],\n      \"propagate_to_open_deals\": false\n    }\n  },\n  \"website_url\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "672b4a0f-5356-45db-be3a-149211f6abdf",
+              "name": "Updated Account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Strategic enterprise customer.\",\n  \"phone\": \"+1-415-555-0100\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"created_at\": \"2026-03-10T09:00:00Z\",\n    \"description\": \"Strategic enterprise customer.\",\n    \"employee_count\": 240,\n    \"estimated_revenue\": 125000000,\n    \"headquarters_address\": \"100 Market Street\",\n    \"headquarters_city\": \"San Francisco\",\n    \"headquarters_country\": \"US\",\n    \"headquarters_postal_code\": \"94105\",\n    \"headquarters_state\": \"CA\",\n    \"id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"industry\": \"Software\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"linkedin_url\": \"https://www.linkedin.com/company/acme\",\n    \"name\": \"Acme Corp\",\n    \"phone\": \"+1-415-555-0100\",\n    \"relationships\": {\n      \"owner\": {\n        \"users\": [\n          {\n            \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n          }\n        ]\n      }\n    },\n    \"updated_at\": \"2026-03-22T14:00:01Z\",\n    \"website_url\": \"https://acme.example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2fe2fa86-7795-40b6-ac49-9d844016c176",
+              "name": "Invalid ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Strategic enterprise customer.\",\n  \"phone\": \"+1-415-555-0100\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"website_url must be a valid URL\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a31d361e-046e-4fb3-b926-49bcabfe660c",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Strategic enterprise customer.\",\n  \"phone\": \"+1-415-555-0100\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1dc0585d-c579-4318-9d40-afe50464e28c",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Strategic enterprise customer.\",\n  \"phone\": \"+1-415-555-0100\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: accounts:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4531841e-6405-4df5-ade8-f1cb846d8ebf",
+              "name": "Account not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "accounts",
+                    ":account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "account_id",
+                      "description": "(Required) Opaque Account ID with the `account_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Strategic enterprise customer.\",\n  \"phone\": \"+1-415-555-0100\",\n  \"relationships\": {\n    \"owner\": {\n      \"propagate_to_open_deals\": true,\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Account not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://beta-api.fixture.app",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5cac84a5-90e1-4762-9e17-acb1ebffc984",
+    "name": "Fixture Accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Fixture's public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.",
+      "type": "text/plain"
+    }
+  }
+}

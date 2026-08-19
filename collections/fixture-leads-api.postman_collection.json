@@ -1,0 +1,2256 @@
+{
+  "item": [
+    {
+      "id": "9d9bb575-3609-47f9-8307-94b6dd9df6b9",
+      "name": "Leads",
+      "description": {
+        "content": "Create, read, update, and convert Leads.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f3efbd86-82f1-435e-9d89-597c8948e1dc",
+          "name": "List Leads",
+          "request": {
+            "name": "List Leads",
+            "description": {
+              "content": "Return a paginated list of Leads. Supports filtering by `status` (new, contacted, qualified, unqualified, converted), `source`, `name`, `email`, `company_name`, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`. Use `fields` to choose which public Lead fields appear in each record.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "leads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of records to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by the previous page. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "-created_at",
+                  "description": "Sort by a supported field. Prefix with `-` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter Leads by status."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "Filter Leads by source."
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Filter Leads by a partial, case-insensitive person name match."
+                },
+                {
+                  "disabled": false,
+                  "key": "email",
+                  "value": "<string>",
+                  "description": "Filter by an exact email address."
+                },
+                {
+                  "disabled": false,
+                  "key": "linkedin_url",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "company_name",
+                  "value": "<string>",
+                  "description": "Filter Leads by company name."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records created after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records created before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Choose which public fields appear in each list record. Omit or pass a blank value for the default list fields, use `*` alone for every public detail field, or pass comma-separated names."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "33340a16-5f4d-43e2-aef1-6564feb76d22",
+              "name": "Paginated Lead list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "status",
+                      "value": "qualified"
+                    },
+                    {
+                      "key": "source",
+                      "value": "website"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Taylor"
+                    },
+                    {
+                      "key": "email",
+                      "value": "alex@acme.example"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company_name",
+                      "value": "Prospect Labs"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"company_name\": \"Prospect Labs\",\n      \"created_at\": \"2026-03-20T12:00:00Z\",\n      \"email\": \"taylor@prospect.example\",\n      \"estimated_value\": 50000,\n      \"id\": \"lead_4P2jXRFuLpTQ3nM4PkGvW6\",\n      \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n      \"name\": \"Taylor Reed\",\n      \"phone\": \"+1-415-555-0199\",\n      \"source\": \"website\",\n      \"status\": \"qualified\",\n      \"title\": \"Head of Revenue\",\n      \"updated_at\": \"2026-03-24T18:05:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"has_more\": false,\n    \"limit\": 50,\n    \"next_cursor\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05231dcb-bd77-4061-8e81-98fadc558aba",
+              "name": "Invalid filter or pagination parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "status",
+                      "value": "qualified"
+                    },
+                    {
+                      "key": "source",
+                      "value": "website"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Taylor"
+                    },
+                    {
+                      "key": "email",
+                      "value": "alex@acme.example"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company_name",
+                      "value": "Prospect Labs"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid status: 'unknown'. Allowed: ['new', 'contacted', 'qualified', 'unqualified', 'converted']\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b26152a-6211-4ffb-a243-fced604d942b",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "status",
+                      "value": "qualified"
+                    },
+                    {
+                      "key": "source",
+                      "value": "website"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Taylor"
+                    },
+                    {
+                      "key": "email",
+                      "value": "alex@acme.example"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company_name",
+                      "value": "Prospect Labs"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b4309aa-69c6-4489-8b6e-3bc51a834724",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "status",
+                      "value": "qualified"
+                    },
+                    {
+                      "key": "source",
+                      "value": "website"
+                    },
+                    {
+                      "key": "name",
+                      "value": "Taylor"
+                    },
+                    {
+                      "key": "email",
+                      "value": "alex@acme.example"
+                    },
+                    {
+                      "key": "linkedin_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company_name",
+                      "value": "Prospect Labs"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "id,name,created_at"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: leads:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "89e884bb-31ad-489b-a9c9-f20a6732bce6",
+          "name": "Create a Lead",
+          "request": {
+            "name": "Create a Lead",
+            "description": {
+              "content": "Create a new Lead for an unqualified prospect. Leads are kept separate from Accounts and Contacts until explicitly converted via `POST /api/v1/leads/{lead_id}/convert`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "leads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"<string>\",\n  \"company_employee_count\": \"<integer>\",\n  \"company_industry\": \"<string>\",\n  \"company_name\": \"<string>\",\n  \"company_website\": \"<string>\",\n  \"country\": \"<string>\",\n  \"email\": \"<string>\",\n  \"estimated_value\": \"<integer>\",\n  \"linkedin_url\": \"<string>\",\n  \"name\": \"<string>\",\n  \"notes\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"source\": \"<string>\",\n  \"state\": \"<string>\",\n  \"status\": \"<string>\",\n  \"title\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "df639a08-e235-4135-8338-1f1ab61b5e93",
+              "name": "Lead created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Prospect Labs\",\n  \"email\": \"taylor@prospect.example\",\n  \"estimated_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"source\": \"website\",\n  \"title\": \"Head of Revenue\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"city\": \"New York\",\n    \"company_employee_count\": 85,\n    \"company_industry\": \"Fintech\",\n    \"company_name\": \"Prospect Labs\",\n    \"company_website\": \"https://prospect.example\",\n    \"converted_account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"converted_at\": \"2026-03-24T18:05:00Z\",\n    \"converted_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"country\": \"US\",\n    \"created_at\": \"2026-03-20T12:00:00Z\",\n    \"email\": \"taylor@prospect.example\",\n    \"estimated_value\": 50000,\n    \"id\": \"lead_4P2jXRFuLpTQ3nM4PkGvW6\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"linkedin_url\": \"https://www.linkedin.com/in/taylor-reed\",\n    \"name\": \"Taylor Reed\",\n    \"notes\": \"Requested a demo next week.\",\n    \"phone\": \"+1-415-555-0199\",\n    \"source\": \"website\",\n    \"state\": \"NY\",\n    \"status\": \"qualified\",\n    \"title\": \"Head of Revenue\",\n    \"updated_at\": \"2026-03-24T18:05:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "654b68e3-050d-4b45-a3b8-a0d5aca2324e",
+              "name": "Request validation failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Prospect Labs\",\n  \"email\": \"taylor@prospect.example\",\n  \"estimated_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"source\": \"website\",\n  \"title\": \"Head of Revenue\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"email must be a valid email address\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "befc782b-4039-4091-b4f8-9190f362e77d",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Prospect Labs\",\n  \"email\": \"taylor@prospect.example\",\n  \"estimated_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"source\": \"website\",\n  \"title\": \"Head of Revenue\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "622102df-c70c-48b1-82b2-bd1446793ce9",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Prospect Labs\",\n  \"email\": \"taylor@prospect.example\",\n  \"estimated_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"source\": \"website\",\n  \"title\": \"Head of Revenue\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: leads:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "873dc57d-20c4-4624-bf3d-cfc5067fa1f0",
+          "name": "Delete a Lead",
+          "request": {
+            "name": "Delete a Lead",
+            "description": {
+              "content": "Delete a Lead by ID. Leads that have already been converted can still be deleted; the Account, Contact, and Deal produced by conversion are unaffected.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                ":lead_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lead_id",
+                  "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c38a9d0c-b357-4c4a-8461-7b186070c47c",
+              "name": "Lead deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"lead_4P2jXRFuLpTQ3nM4PkGvW6\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad3473c1-58da-4d25-add1-0011b5f2ec86",
+              "name": "Invalid Lead ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Lead ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc4c869d-9008-4ae6-af55-c559b43856ac",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7036a6ac-eae5-4b79-9b5c-bde34c8a5c07",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: leads:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7aa50e9a-e99c-4f21-ba29-e98b6ce4f285",
+              "name": "Lead not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Lead not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6c6069e8-8a40-402d-af0c-e557421e4457",
+          "name": "Get a Lead",
+          "request": {
+            "name": "Get a Lead",
+            "description": {
+              "content": "Return a single Lead by its `lead_` ID with full detail fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                ":lead_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lead_id",
+                  "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "22a59c5a-ebdb-4c6c-94c2-951af4af08bc",
+              "name": "Lead detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"city\": \"New York\",\n    \"company_employee_count\": 85,\n    \"company_industry\": \"Fintech\",\n    \"company_name\": \"Prospect Labs\",\n    \"company_website\": \"https://prospect.example\",\n    \"converted_account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"converted_at\": \"2026-03-24T18:05:00Z\",\n    \"converted_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"country\": \"US\",\n    \"created_at\": \"2026-03-20T12:00:00Z\",\n    \"email\": \"taylor@prospect.example\",\n    \"estimated_value\": 50000,\n    \"id\": \"lead_4P2jXRFuLpTQ3nM4PkGvW6\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"linkedin_url\": \"https://www.linkedin.com/in/taylor-reed\",\n    \"name\": \"Taylor Reed\",\n    \"notes\": \"Requested a demo next week.\",\n    \"phone\": \"+1-415-555-0199\",\n    \"source\": \"website\",\n    \"state\": \"NY\",\n    \"status\": \"qualified\",\n    \"title\": \"Head of Revenue\",\n    \"updated_at\": \"2026-03-24T18:05:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7aa5018f-68d0-4787-aa52-a11aa23bcc1a",
+              "name": "Invalid Lead ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Lead ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16abb319-1f59-421b-a78a-7d781065d5c3",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69b5b34e-f2a4-4f57-ae1f-5816ffa4c96f",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: leads:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57935384-3044-4548-bb3f-13942e4d11a2",
+              "name": "Lead not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Lead not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5bb6c526-5f72-4d17-b5eb-4153cfe70ebb",
+          "name": "Update a Lead",
+          "request": {
+            "name": "Update a Lead",
+            "description": {
+              "content": "Partially update a Lead by ID. Setting `status` to `converted` on its own does not create downstream records — use the convert endpoint to produce an Account, Contact, and optional Deal.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                ":lead_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lead_id",
+                  "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"<string>\",\n  \"company_employee_count\": \"<integer>\",\n  \"company_industry\": \"<string>\",\n  \"company_name\": \"<string>\",\n  \"company_website\": \"<string>\",\n  \"country\": \"<string>\",\n  \"email\": \"<string>\",\n  \"estimated_value\": \"<integer>\",\n  \"linkedin_url\": \"<string>\",\n  \"name\": \"<string>\",\n  \"notes\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"source\": \"<string>\",\n  \"state\": \"<string>\",\n  \"status\": \"<string>\",\n  \"title\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "44330531-f8cb-4b89-b3db-3c121f33de4e",
+              "name": "Updated Lead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"estimated_value\": 50000,\n  \"notes\": \"Requested a demo next week.\",\n  \"status\": \"qualified\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"city\": \"New York\",\n    \"company_employee_count\": 85,\n    \"company_industry\": \"Fintech\",\n    \"company_name\": \"Prospect Labs\",\n    \"company_website\": \"https://prospect.example\",\n    \"converted_account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"converted_at\": \"2026-03-24T18:05:00Z\",\n    \"converted_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"country\": \"US\",\n    \"created_at\": \"2026-03-20T12:00:00Z\",\n    \"email\": \"taylor@prospect.example\",\n    \"estimated_value\": 50000,\n    \"id\": \"lead_4P2jXRFuLpTQ3nM4PkGvW6\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"linkedin_url\": \"https://www.linkedin.com/in/taylor-reed\",\n    \"name\": \"Taylor Reed\",\n    \"notes\": \"Requested a demo next week.\",\n    \"phone\": \"+1-415-555-0199\",\n    \"source\": \"website\",\n    \"state\": \"NY\",\n    \"status\": \"qualified\",\n    \"title\": \"Head of Revenue\",\n    \"updated_at\": \"2026-03-24T18:05:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bcce82db-6edf-439b-a6e2-d9aa8967567f",
+              "name": "Invalid ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"estimated_value\": 50000,\n  \"notes\": \"Requested a demo next week.\",\n  \"status\": \"qualified\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"status must be one of: new, contacted, qualified, unqualified, converted\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36be70d6-da1d-4938-9d4b-133d5b795207",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"estimated_value\": 50000,\n  \"notes\": \"Requested a demo next week.\",\n  \"status\": \"qualified\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c3f54b7-c625-412f-b500-853ccdc9f45d",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"estimated_value\": 50000,\n  \"notes\": \"Requested a demo next week.\",\n  \"status\": \"qualified\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: leads:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "029e4096-df0f-484f-8a08-0669fe0920a0",
+              "name": "Lead not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"estimated_value\": 50000,\n  \"notes\": \"Requested a demo next week.\",\n  \"status\": \"qualified\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Lead not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fd0ce834-6a17-4ecb-9763-dc9409f094f7",
+          "name": "Convert a Lead",
+          "request": {
+            "name": "Convert a Lead",
+            "description": {
+              "content": "Convert a Lead into an Account and Contact, and optionally create a Deal in a single step. You can target an existing Account via `existing_account_id` or let Fixture create a new one from the Lead's `company_name`. On success the Lead is marked `converted` and linked to the newly created records.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                ":lead_id",
+                "convert"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lead_id",
+                  "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_industry\": \"<string>\",\n  \"company_name\": \"<string>\",\n  \"company_website\": \"<string>\",\n  \"create_account\": true,\n  \"create_deal\": false,\n  \"deal_name\": \"<string>\",\n  \"deal_stage_id\": \"<string>\",\n  \"deal_value\": \"<integer>\",\n  \"email\": \"<string>\",\n  \"existing_account_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"pipeline_id\": \"<string>\",\n  \"title\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d1531b7f-25b0-44f1-a001-3b57efb558cb",
+              "name": "Lead converted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id",
+                    "convert"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"create_account\": true,\n  \"create_deal\": true,\n  \"deal_name\": \"Prospect Labs expansion\",\n  \"deal_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"deal_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"account\": {\n      \"id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"name\": \"Prospect Labs\"\n    },\n    \"contact\": {\n      \"email\": \"taylor@prospect.example\",\n      \"id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n      \"name\": \"Taylor Reed\"\n    },\n    \"deal\": {\n      \"id\": \"deal_5N2jXRFuLpTQ3nM4PkGvW7\",\n      \"name\": \"Prospect Labs expansion\",\n      \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n      \"stage_name\": \"Qualified\",\n      \"stage_type\": \"qualified\",\n      \"value\": 50000\n    },\n    \"lead\": {\n      \"city\": \"New York\",\n      \"company_employee_count\": 85,\n      \"company_industry\": \"Fintech\",\n      \"company_name\": \"Prospect Labs\",\n      \"company_website\": \"https://prospect.example\",\n      \"converted_account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"converted_at\": \"2026-03-24T18:05:00Z\",\n      \"converted_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n      \"country\": \"US\",\n      \"created_at\": \"2026-03-20T12:00:00Z\",\n      \"email\": \"taylor@prospect.example\",\n      \"estimated_value\": 50000,\n      \"id\": \"lead_4P2jXRFuLpTQ3nM4PkGvW6\",\n      \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n      \"linkedin_url\": \"https://www.linkedin.com/in/taylor-reed\",\n      \"name\": \"Taylor Reed\",\n      \"notes\": \"Requested a demo next week.\",\n      \"phone\": \"+1-415-555-0199\",\n      \"source\": \"website\",\n      \"state\": \"NY\",\n      \"status\": \"converted\",\n      \"title\": \"Head of Revenue\",\n      \"updated_at\": \"2026-03-24T18:05:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69c6a6e0-e519-4429-a99d-acb9e85f0de4",
+              "name": "Invalid ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id",
+                    "convert"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"create_account\": true,\n  \"create_deal\": true,\n  \"deal_name\": \"Prospect Labs expansion\",\n  \"deal_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"deal_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"deal_stage_id must refer to a stage in the selected Pipeline\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1edfd9c-47f9-4711-83ac-61d4cc242463",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id",
+                    "convert"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"create_account\": true,\n  \"create_deal\": true,\n  \"deal_name\": \"Prospect Labs expansion\",\n  \"deal_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"deal_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec006414-8b1b-4dd2-93c8-3433493f2f89",
+              "name": "API key is missing a required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id",
+                    "convert"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"create_account\": true,\n  \"create_deal\": true,\n  \"deal_name\": \"Prospect Labs expansion\",\n  \"deal_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"deal_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: accounts:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93832ce3-7448-4742-b05e-542ff49a6409",
+              "name": "Lead or referenced Account, Pipeline, or stage not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "leads",
+                    ":lead_id",
+                    "convert"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lead_id",
+                      "description": "(Required) Opaque Lead ID with the `lead_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"create_account\": true,\n  \"create_deal\": true,\n  \"deal_name\": \"Prospect Labs expansion\",\n  \"deal_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"deal_value\": 50000,\n  \"name\": \"Taylor Reed\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Lead not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://beta-api.fixture.app",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4bc07a2e-df9d-4809-9e66-4a5c529e89d3",
+    "name": "Fixture Accounts Leads API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Fixture's public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.",
+      "type": "text/plain"
+    }
+  }
+}

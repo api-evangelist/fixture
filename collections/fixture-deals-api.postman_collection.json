@@ -1,0 +1,2618 @@
+{
+  "item": [
+    {
+      "id": "5f2d2961-3b20-4ba2-b173-46e071166d76",
+      "name": "Deals",
+      "description": {
+        "content": "Create, read, update, and delete Deal records.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8f1c315d-9e95-4e1c-9f7f-e3e83624ae74",
+          "name": "List Deals",
+          "request": {
+            "name": "List Deals",
+            "description": {
+              "content": "Return a paginated list of Deals. Supports filtering by `pipeline_id`, `pipeline_stage_id`, `account_id`, free-text `search` across Deal names, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of records to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by the previous page. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "-created_at",
+                  "description": "Sort by a supported field. Prefix with `-` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "pipeline_id",
+                  "value": "<string>",
+                  "description": "Opaque Pipeline ID with the `pipeline_` prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "pipeline_stage_id",
+                  "value": "<string>",
+                  "description": "Opaque Pipeline stage ID with the `stage_` prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Search by Deal name."
+                },
+                {
+                  "disabled": false,
+                  "key": "account_id",
+                  "value": "<string>",
+                  "description": "Opaque Account ID with the `account_` prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "contact_id",
+                  "value": "<string>",
+                  "description": "Opaque Contact ID with the `contact_` prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records created after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records created before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "relationship",
+                  "value": "<string>",
+                  "description": "Filter by owner relationship. Use `owner:user_...` for owned records or `owner:none` for unowned records."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "78e5561a-43c1-46d1-9bc3-4da0fe71eaab",
+              "name": "Paginated Deal list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "pipeline_id",
+                      "value": "pipeline_1S6jXRFuLpTQ3nM4PkGvW3"
+                    },
+                    {
+                      "key": "pipeline_stage_id",
+                      "value": "stage_2R7jXRFuLpTQ3nM4PkGvW4"
+                    },
+                    {
+                      "key": "search",
+                      "value": "renewal"
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "account_7B5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"created_at\": \"2026-03-15T10:00:00Z\",\n      \"expected_close_date\": \"2026-06-30\",\n      \"id\": \"deal_5N2jXRFuLpTQ3nM4PkGvW7\",\n      \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n      \"name\": \"Enterprise renewal\",\n      \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n      \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n      \"relationships\": {\n        \"owner\": {\n          \"users\": [\n            {\n              \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n            }\n          ]\n        }\n      },\n      \"stage_name\": \"Qualified\",\n      \"stage_type\": \"qualified\",\n      \"updated_at\": \"2026-03-22T14:00:01Z\",\n      \"value\": 120000\n    }\n  ],\n  \"pagination\": {\n    \"has_more\": false,\n    \"limit\": 50,\n    \"next_cursor\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c10f064a-c099-44df-b00a-ed0ffa4a1c44",
+              "name": "Invalid filter or pagination parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "pipeline_id",
+                      "value": "pipeline_1S6jXRFuLpTQ3nM4PkGvW3"
+                    },
+                    {
+                      "key": "pipeline_stage_id",
+                      "value": "stage_2R7jXRFuLpTQ3nM4PkGvW4"
+                    },
+                    {
+                      "key": "search",
+                      "value": "renewal"
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "account_7B5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid cursor\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68a11b9a-8dc3-4974-877b-3bb37a6adcc4",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "pipeline_id",
+                      "value": "pipeline_1S6jXRFuLpTQ3nM4PkGvW3"
+                    },
+                    {
+                      "key": "pipeline_stage_id",
+                      "value": "stage_2R7jXRFuLpTQ3nM4PkGvW4"
+                    },
+                    {
+                      "key": "search",
+                      "value": "renewal"
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "account_7B5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bce6dfdb-ceb4-48ab-8250-9bf8d864b0dc",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "pipeline_id",
+                      "value": "pipeline_1S6jXRFuLpTQ3nM4PkGvW3"
+                    },
+                    {
+                      "key": "pipeline_stage_id",
+                      "value": "stage_2R7jXRFuLpTQ3nM4PkGvW4"
+                    },
+                    {
+                      "key": "search",
+                      "value": "renewal"
+                    },
+                    {
+                      "key": "account_id",
+                      "value": "account_7B5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "contact_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "relationship",
+                      "value": "owner:user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27725a6f-1824-4a10-bf9e-9f82c8d6966b",
+          "name": "Create a Deal",
+          "request": {
+            "name": "Create a Deal",
+            "description": {
+              "content": "Create a new Deal linked to an Account and a Pipeline stage. If no `pipeline_id` is provided, the organization's default Pipeline is used; if no `pipeline_stage_id` is provided, the Pipeline's first stage is used.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"contact_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"expected_close_date\": \"<date>\",\n  \"notes\": \"<string>\",\n  \"pipeline_id\": \"<string>\",\n  \"pipeline_stage_id\": \"<string>\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"<string>\"\n        }\n      ],\n      \"propagate_to_open_deals\": false\n    }\n  },\n  \"value\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9bccd7be-a642-44cc-b4ac-d4156af2f7ca",
+              "name": "Deal created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\"\n  ],\n  \"expected_close_date\": \"2026-06-30\",\n  \"name\": \"Enterprise renewal\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 120000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"contacts\": [\n      {\n        \"email\": \"alex@acme.example\",\n        \"id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"is_primary\": true,\n        \"name\": \"Alex Morgan\"\n      }\n    ],\n    \"created_at\": \"2026-03-15T10:00:00Z\",\n    \"expected_close_date\": \"2026-06-30\",\n    \"id\": \"deal_5N2jXRFuLpTQ3nM4PkGvW7\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"name\": \"Enterprise renewal\",\n    \"notes\": \"Expansion to two teams.\",\n    \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n    \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n    \"relationships\": {\n      \"owner\": {\n        \"users\": [\n          {\n            \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n          }\n        ]\n      }\n    },\n    \"stage_name\": \"Qualified\",\n    \"stage_type\": \"qualified\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\",\n    \"value\": 120000\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "645dffc2-b2b7-4af8-a178-20e6979dac11",
+              "name": "Request validation failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\"\n  ],\n  \"expected_close_date\": \"2026-06-30\",\n  \"name\": \"Enterprise renewal\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 120000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"name is required\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06ce8635-d3e0-4d03-a06e-62f6b3ab262f",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\"\n  ],\n  \"expected_close_date\": \"2026-06-30\",\n  \"name\": \"Enterprise renewal\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 120000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddf32413-58a5-4166-bf45-ded1b9e6435c",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\"\n  ],\n  \"expected_close_date\": \"2026-06-30\",\n  \"name\": \"Enterprise renewal\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 120000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76e361a4-f01d-419f-a8f9-7f1a7f5d9b0e",
+              "name": "Referenced Account, Pipeline, stage, or Contact not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\"\n  ],\n  \"expected_close_date\": \"2026-06-30\",\n  \"name\": \"Enterprise renewal\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 120000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Account not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5f60d105-4e89-4ca3-845d-9cbd97d8f631",
+          "name": "Delete a Deal",
+          "request": {
+            "name": "Delete a Deal",
+            "description": {
+              "content": "Delete a Deal by ID. Associated Contact links are removed, but the underlying Contacts and Account remain.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals",
+                ":deal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deal_id",
+                  "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9522c4ab-c077-43ac-86c9-1e9312c2c88a",
+              "name": "Deal deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"deal_5N2jXRFuLpTQ3nM4PkGvW7\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40a3aa8c-4622-433d-a999-e517f3981cbb",
+              "name": "Invalid Deal ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Deal ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38fc65dd-310c-4425-bb1b-379eb71a1bc8",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61cedcf1-8a0c-49f5-9382-52d751880ea1",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "612d10be-1180-4cfa-99da-d9206841e1db",
+              "name": "Deal not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Deal not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c8ffe6a8-28b3-4ae4-ad43-99f9712335bd",
+          "name": "Get a Deal",
+          "request": {
+            "name": "Get a Deal",
+            "description": {
+              "content": "Return a single Deal by its `deal_` ID with full detail fields, including the Pipeline, current stage, and primary Contact (when set).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals",
+                ":deal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deal_id",
+                  "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "08bce8d4-2b48-4633-94cc-796fcb3701ff",
+              "name": "Deal detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"contacts\": [\n      {\n        \"email\": \"alex@acme.example\",\n        \"id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"is_primary\": true,\n        \"name\": \"Alex Morgan\"\n      }\n    ],\n    \"created_at\": \"2026-03-15T10:00:00Z\",\n    \"expected_close_date\": \"2026-06-30\",\n    \"id\": \"deal_5N2jXRFuLpTQ3nM4PkGvW7\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"name\": \"Enterprise renewal\",\n    \"notes\": \"Expansion to two teams.\",\n    \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n    \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n    \"relationships\": {\n      \"owner\": {\n        \"users\": [\n          {\n            \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n          }\n        ]\n      }\n    },\n    \"stage_name\": \"Qualified\",\n    \"stage_type\": \"qualified\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\",\n    \"value\": 120000\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83e4effc-7eb4-4666-9ce2-6c14433adc30",
+              "name": "Invalid Deal ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Deal ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41cfe928-43bc-4133-bd57-3aee191408ae",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5b9ac54-0451-47c3-b382-d9d7c596d2e5",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c1393b3-3504-472f-b742-8ac6dc4d09bb",
+              "name": "Deal not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Deal not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "48fdd56d-47f1-4eb9-bd9d-4ccefe07ed0e",
+          "name": "Update a Deal",
+          "request": {
+            "name": "Update a Deal",
+            "description": {
+              "content": "Partially update a Deal by ID. Changing `pipeline_stage_id` must reference a stage in the Deal's current Pipeline; use the Pipelines endpoints to discover valid stage IDs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals",
+                ":deal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deal_id",
+                  "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"expected_close_date\": \"<date>\",\n  \"name\": \"<string>\",\n  \"notes\": \"<string>\",\n  \"pipeline_id\": \"<string>\",\n  \"pipeline_stage_id\": \"<string>\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"<string>\"\n        }\n      ],\n      \"propagate_to_open_deals\": false\n    }\n  },\n  \"value\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b07a7df9-6927-4746-aa20-ab713dc91622",
+              "name": "Updated Deal.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"Expanded to two teams.\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 150000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n    \"contacts\": [\n      {\n        \"email\": \"alex@acme.example\",\n        \"id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"is_primary\": true,\n        \"name\": \"Alex Morgan\"\n      }\n    ],\n    \"created_at\": \"2026-03-15T10:00:00Z\",\n    \"expected_close_date\": \"2026-06-30\",\n    \"id\": \"deal_5N2jXRFuLpTQ3nM4PkGvW7\",\n    \"last_activity_at\": \"2026-03-24T17:30:00Z\",\n    \"name\": \"Enterprise renewal\",\n    \"notes\": \"Expansion to two teams.\",\n    \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n    \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n    \"relationships\": {\n      \"owner\": {\n        \"users\": [\n          {\n            \"id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n          }\n        ]\n      }\n    },\n    \"stage_name\": \"Qualified\",\n    \"stage_type\": \"qualified\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\",\n    \"value\": 120000\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4708b119-8b8b-46e8-aee5-8f35ec20cd33",
+              "name": "Invalid ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"Expanded to two teams.\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 150000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"expected_close_date must be an ISO 8601 date\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d331adba-46ba-478a-9a9f-60ad1799e4e7",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"Expanded to two teams.\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 150000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66055ac0-84b5-4e66-8fff-66e36147b364",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"Expanded to two teams.\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 150000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3914a084-cec7-4815-98de-a43e7b659118",
+              "name": "Deal or referenced Pipeline stage not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"Expanded to two teams.\",\n  \"pipeline_id\": \"pipeline_1S6jXRFuLpTQ3nM4PkGvW3\",\n  \"pipeline_stage_id\": \"stage_2R7jXRFuLpTQ3nM4PkGvW4\",\n  \"relationships\": {\n    \"owner\": {\n      \"set\": [\n        {\n          \"user_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\"\n        }\n      ]\n    }\n  },\n  \"value\": 150000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Deal not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d0e7b99-9444-435b-a8f9-4d4b2dcaf95e",
+          "name": "List Deal Contacts",
+          "request": {
+            "name": "List Deal Contacts",
+            "description": {
+              "content": "Return the set of Contacts currently associated with a Deal, along with which Contact is marked primary. Use `PUT /api/v1/deals/{deal_id}/contacts` to change the set.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals",
+                ":deal_id",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deal_id",
+                  "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e98a404b-8d15-40a1-8c87-a05fa990e728",
+              "name": "Deal Contact associations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"contact\": {\n        \"email\": \"alex@acme.example\",\n        \"id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"name\": \"Alex Morgan\"\n      },\n      \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n      \"is_primary\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "178ad7e8-5eed-48a9-9762-d0a784658379",
+              "name": "Invalid Deal ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Deal ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1e2455c-2a75-4dff-8632-07cb733961d6",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60e98e31-aa3b-44a8-b19c-3a0abe5fc6f6",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57d073ce-3372-496e-bd9d-48031accf535",
+              "name": "Deal not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Deal not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "73833de1-3b66-494e-99f6-6ea4f1235b65",
+          "name": "Replace Deal Contacts",
+          "request": {
+            "name": "Replace Deal Contacts",
+            "description": {
+              "content": "Replace the complete set of Contacts associated with a Deal. The payload is a full replacement — Contacts not listed in `contact_ids` are unlinked from the Deal. `primary_contact_id`, if provided, must appear in `contact_ids`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "deals",
+                ":deal_id",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deal_id",
+                  "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contact_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"primary_contact_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "94662c65-18eb-435a-b17d-02cb826ef943",
+              "name": "Updated Deal Contact associations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n  ],\n  \"primary_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"contact\": {\n        \"email\": \"alex@acme.example\",\n        \"id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"name\": \"Alex Morgan\"\n      },\n      \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n      \"is_primary\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76347047-a8ec-44c2-98d9-1dbd3aa79c6d",
+              "name": "Invalid Deal ID or Contact association payload.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n  ],\n  \"primary_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"primary_contact_id must be included in contact_ids\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e294f58f-729f-4bf7-b536-f71a2a5dc756",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n  ],\n  \"primary_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "579f1304-ee5a-4492-ace2-08a689383fa8",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n  ],\n  \"primary_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: deals:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a744fa6-0918-4100-9065-0944eef7b155",
+              "name": "Deal not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "deals",
+                    ":deal_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deal_id",
+                      "description": "(Required) Opaque Deal ID with the `deal_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contact_ids\": [\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n  ],\n  \"primary_contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW9\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Deal not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://beta-api.fixture.app",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3ea0d9a6-7210-4bcc-8671-3aa850e173fd",
+    "name": "Fixture Accounts Deals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Fixture's public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.",
+      "type": "text/plain"
+    }
+  }
+}

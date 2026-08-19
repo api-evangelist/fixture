@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fixture Accounts Deals API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Deals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/deals",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by the previous page. Omit for the first page."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by a supported field. Prefix with `-` for descending order."
+              },
+              {
+                "name": "pipeline_id",
+                "value": "",
+                "type": "query",
+                "description": "Opaque Pipeline ID with the `pipeline_` prefix."
+              },
+              {
+                "name": "pipeline_stage_id",
+                "value": "",
+                "type": "query",
+                "description": "Opaque Pipeline stage ID with the `stage_` prefix."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search by Deal name."
+              },
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "query",
+                "description": "Opaque Account ID with the `account_` prefix."
+              },
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "query",
+                "description": "Opaque Contact ID with the `contact_` prefix."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only records created after this ISO 8601 timestamp."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only records created before this ISO 8601 timestamp."
+              },
+              {
+                "name": "updated_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only records updated after this ISO 8601 timestamp."
+              },
+              {
+                "name": "updated_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only records updated before this ISO 8601 timestamp."
+              },
+              {
+                "name": "relationship",
+                "value": "",
+                "type": "query",
+                "description": "Filter by owner relationship. Use `owner:user_...` for owned records or `owner:none` for unowned records."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a paginated list of Deals. Supports filtering by `pipeline_id`, `pipeline_stage_id`, `account_id`, free-text `search` across Deal names, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`."
+        },
+        {
+          "info": {
+            "name": "Create a Deal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://beta-api.fixture.app/api/v1/deals",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new Deal linked to an Account and a Pipeline stage. If no `pipeline_id` is provided, the organization's default Pipeline is used; if no `pipeline_stage_id` is provided, the Pipeline's first stage is used."
+        },
+        {
+          "info": {
+            "name": "Get a Deal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/deals/:deal_id",
+            "params": [
+              {
+                "name": "deal_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Deal ID with the `deal_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a single Deal by its `deal_` ID with full detail fields, including the Pipeline, current stage, and primary Contact (when set)."
+        },
+        {
+          "info": {
+            "name": "Update a Deal",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://beta-api.fixture.app/api/v1/deals/:deal_id",
+            "params": [
+              {
+                "name": "deal_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Deal ID with the `deal_` prefix."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Partially update a Deal by ID. Changing `pipeline_stage_id` must reference a stage in the Deal's current Pipeline; use the Pipelines endpoints to discover valid stage IDs."
+        },
+        {
+          "info": {
+            "name": "Delete a Deal",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://beta-api.fixture.app/api/v1/deals/:deal_id",
+            "params": [
+              {
+                "name": "deal_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Deal ID with the `deal_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a Deal by ID. Associated Contact links are removed, but the underlying Contacts and Account remain."
+        },
+        {
+          "info": {
+            "name": "List Deal Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/deals/:deal_id/contacts",
+            "params": [
+              {
+                "name": "deal_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Deal ID with the `deal_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return the set of Contacts currently associated with a Deal, along with which Contact is marked primary. Use `PUT /api/v1/deals/{deal_id}/contacts` to change the set."
+        },
+        {
+          "info": {
+            "name": "Replace Deal Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://beta-api.fixture.app/api/v1/deals/:deal_id/contacts",
+            "params": [
+              {
+                "name": "deal_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Deal ID with the `deal_` prefix."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Replace the complete set of Contacts associated with a Deal. The payload is a full replacement — Contacts not listed in `contact_ids` are unlinked from the Deal. `primary_contact_id`, if provided, must appear in `contact_ids`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

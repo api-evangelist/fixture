@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fixture Accounts Task Statuses API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Task Statuses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Task Statuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/task-statuses",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return the Task status definitions available in the current organization as a compact `{\"data\": [...]}` list in position order (no pagination). Use the returned `taskstatus_` IDs (or names) when creating or updating Tasks."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

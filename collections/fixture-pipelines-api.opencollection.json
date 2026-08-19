@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fixture Accounts Pipelines API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pipelines",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Pipelines",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/pipelines",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by the previous page. Omit for the first page."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by a supported field. Prefix with `-` for descending order."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return every Pipeline in the organization with its ordered stage definitions nested inline. Pipelines are the container for Deal stages — read this first to discover valid `pipeline_id` and `pipeline_stage_id` values for the Deal endpoints. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`."
+        },
+        {
+          "info": {
+            "name": "Get a Pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/pipelines/:pipeline_id",
+            "params": [
+              {
+                "name": "pipeline_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Pipeline ID with the `pipeline_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a single Pipeline by its `pipe_` ID with all nested stage definitions in position order."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

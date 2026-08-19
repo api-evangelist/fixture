@@ -9,10 +9,10 @@ hosting: remote
 transport: http
 endpoint: https://beta-api.fixture.app/api/mcp
 dashboard: https://beta.fixture.app
-notes: Fixture exposes its CRM through the Model Context Protocol so any MCP-aware client
-  can read and update a Workspace the same way the in-app Agent does. The MCP tool set tracks
-  the in-app Agent's tool set. The MCP page inside the Fixture dashboard carries the current
-  per-client setup snippet. An unauthenticated probe of the endpoint returns 401.
+notes: Fixture exposes its CRM through the Model Context Protocol so any MCP-aware client can read and
+  update a Workspace the same way the in-app Agent does. The MCP tool set tracks the in-app Agent's tool
+  set. The MCP page inside the Fixture dashboard carries the current per-client setup snippet. An unauthenticated
+  probe of the endpoint returns 401.
 authentication:
   type: oauth2
   flow: authorization_code
@@ -29,8 +29,8 @@ authentication:
   - tasks:read
   - tasks:write
   - users:read
-  token_binding: Token is scoped to the signed-in user and their active Organization. Clients
-    are prompted to reconnect when a token expires or permissions change.
+  token_binding: Token is scoped to the signed-in user and their active Organization. Clients are prompted
+    to reconnect when a token expires or permissions change.
 clients_documented:
 - Claude Code
 - Claude Desktop
@@ -49,10 +49,16 @@ capabilities:
 - capability: read
   description: Read the full detail of any record, including the Activity timeline.
 - capability: write
-  description: Create or update Accounts, Contacts, Deals, and Leads; add Notes; change Deal
-    Stages; assign and complete Tasks; convert a Lead into an Account, Contact, and Deal.
+  description: Create or update Accounts, Contacts, Deals, and Leads; add Notes; change Deal Stages; assign
+    and complete Tasks; convert a Lead into an Account, Contact, and Deal.
 - capability: plan
   description: Pull Pipelines with deal counts and values; list overdue and upcoming Tasks.
-tools_note: Fixture does not publish a per-tool manifest publicly; the capability list above
-  is taken verbatim from the MCP guide. The underlying REST operations are enumerated in
-  openapi/fixture-v1-openapi.json.
+tools_note: Fixture does not publish a per-tool manifest publicly; the capability list above is taken
+  verbatim from the MCP guide. The underlying REST operations are enumerated in openapi/fixture-v1-openapi.json.
+deployment:
+  mode: remote
+  endpoint: https://beta-api.fixture.app/api/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

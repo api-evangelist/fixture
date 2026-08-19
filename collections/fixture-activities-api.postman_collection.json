@@ -1,0 +1,1200 @@
+{
+  "item": [
+    {
+      "id": "38f13fa2-c74b-4fbe-8fed-590b3f5aa845",
+      "name": "Activities",
+      "description": {
+        "content": "List and ingest CRM Activity records.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c84a2f02-6e5c-44c0-8841-c93aef3dd1a6",
+          "name": "List Activities",
+          "request": {
+            "name": "List Activities",
+            "description": {
+              "content": "Return a paginated list of Activities across all CRM entities. Pass `entity_type` and `entity_id` together to scope results to one Account, Contact, Deal, or Lead. Also supports filtering by `event_type` and `occurred_after`/`occurred_before` windows. Sort supports `occurred_at` or `-occurred_at`; pagination uses `limit` and `cursor`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "activities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of records to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by the previous page. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "-occurred_at",
+                  "description": "Sort by a supported field. Prefix with `-` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "entity_type",
+                  "value": "<string>",
+                  "description": "Filter to a specific related entity type."
+                },
+                {
+                  "disabled": false,
+                  "key": "entity_id",
+                  "value": "<string>",
+                  "description": "Filter to one specific related entity. Requires `entity_type`."
+                },
+                {
+                  "disabled": false,
+                  "key": "event_type",
+                  "value": "<string>",
+                  "description": "Filter Activities by event type."
+                },
+                {
+                  "disabled": false,
+                  "key": "occurred_after",
+                  "value": "<dateTime>",
+                  "description": "Return only Activities that occurred after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "occurred_before",
+                  "value": "<dateTime>",
+                  "description": "Return only Activities that occurred before this ISO 8601 timestamp."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0b5dd785-05ec-425d-a503-fcf89a5b4abf",
+              "name": "Paginated Activity list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-occurred_at"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "custom"
+                    },
+                    {
+                      "key": "occurred_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "occurred_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"actor\": null,\n      \"content\": \"Payment of $4,200 received for Q1 subscription.\",\n      \"created_at\": \"2026-03-22T14:00:01Z\",\n      \"entities\": [\n        {\n          \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n          \"entity_type\": \"contact\",\n          \"role\": \"primary\"\n        },\n        {\n          \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n          \"entity_type\": \"account\",\n          \"role\": \"related\"\n        }\n      ],\n      \"external_id\": \"invoice-1042\",\n      \"id\": \"activity_3Q8jXRFuLpTQ3nM4PkGvW5\",\n      \"occurred_at\": \"2026-03-22T14:00:00Z\",\n      \"title\": \"Invoice #1042 paid\",\n      \"type\": \"billing.invoice_paid\",\n      \"updated_at\": \"2026-03-22T14:00:01Z\"\n    }\n  ],\n  \"pagination\": {\n    \"has_more\": false,\n    \"limit\": 50,\n    \"next_cursor\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c9beecb5-a026-44f0-be65-1a2a7a4de66d",
+              "name": "Invalid filter or pagination parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-occurred_at"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "custom"
+                    },
+                    {
+                      "key": "occurred_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "occurred_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"entity_id requires entity_type to be set\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e466c9b3-bee8-422c-bf2b-b817959c60e4",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-occurred_at"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "custom"
+                    },
+                    {
+                      "key": "occurred_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "occurred_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a64dae73-b737-425c-935e-2688dfaa3633",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-occurred_at"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "custom"
+                    },
+                    {
+                      "key": "occurred_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "occurred_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: activities:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "02b45125-feab-4878-892e-daa1373f246d",
+          "name": "Create a custom Activity",
+          "request": {
+            "name": "Create a custom Activity",
+            "description": {
+              "content": "Ingest a custom Activity attached to one or more CRM records (Contact, Account, or Deal — at least one is required). Pass `external_id` as an idempotency key: replays with the same `external_id` and identical fields return `200` with the existing Activity, while replays with different fields return `409 idempotency_conflict`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "activities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"occurred_at\": \"<dateTime>\",\n  \"title\": \"<string>\",\n  \"type\": \"<string>\",\n  \"account_id\": \"<string>\",\n  \"body\": \"<string>\",\n  \"contact_id\": \"<string>\",\n  \"deal_id\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e71f2a0e-8525-43e3-9731-25bb02542ea0",
+              "name": "Existing Activity returned for an idempotent replay.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"actor\": null,\n    \"content\": \"Payment of $4,200 received for Q1 subscription.\",\n    \"created_at\": \"2026-03-22T14:00:01Z\",\n    \"entities\": [\n      {\n        \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"entity_type\": \"contact\",\n        \"role\": \"primary\"\n      },\n      {\n        \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n        \"entity_type\": \"account\",\n        \"role\": \"related\"\n      }\n    ],\n    \"external_id\": \"invoice-1042\",\n    \"id\": \"activity_3Q8jXRFuLpTQ3nM4PkGvW5\",\n    \"occurred_at\": \"2026-03-22T14:00:00Z\",\n    \"title\": \"Invoice #1042 paid\",\n    \"type\": \"billing.invoice_paid\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "92717933-6c92-4d51-8df0-5afef9c4bd94",
+              "name": "Activity created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"actor\": null,\n    \"content\": \"Payment of $4,200 received for Q1 subscription.\",\n    \"created_at\": \"2026-03-22T14:00:01Z\",\n    \"entities\": [\n      {\n        \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"entity_type\": \"contact\",\n        \"role\": \"primary\"\n      },\n      {\n        \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n        \"entity_type\": \"account\",\n        \"role\": \"related\"\n      }\n    ],\n    \"external_id\": \"invoice-1042\",\n    \"id\": \"activity_3Q8jXRFuLpTQ3nM4PkGvW5\",\n    \"occurred_at\": \"2026-03-22T14:00:00Z\",\n    \"title\": \"Invoice #1042 paid\",\n    \"type\": \"billing.invoice_paid\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9b27953-8a1b-4bc4-bba7-9e8ced77caf1",
+              "name": "Invalid ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"At least one of contact_id, account_id, or deal_id is required\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21980a06-2e08-4b68-a136-c1803a0e5a76",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7856be1f-e168-4a17-a0e5-05fc8b5a0770",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: activities:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecb90b34-7d3d-4319-a3cd-11cafc5e5a52",
+              "name": "Referenced entity not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Contact not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7201e98-f19e-404e-a53b-c8f69227e0a2",
+              "name": "Idempotency key reused with different request fields.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n  \"body\": \"Payment of $4,200 received for Q1 subscription.\",\n  \"contact_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"external_id\": \"invoice-1042\",\n  \"occurred_at\": \"2026-03-22T14:00:00Z\",\n  \"title\": \"Invoice #1042 paid\",\n  \"type\": \"billing.invoice_paid\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"idempotency_conflict\",\n    \"message\": \"Activity with external_id already exists with different fields\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54859185-50cf-421e-a406-951106f22531",
+          "name": "Get an Activity",
+          "request": {
+            "name": "Get an Activity",
+            "description": {
+              "content": "Return a single Activity by its `act_` ID with full detail, including linked entities and any replies.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "activities",
+                ":activity_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "activity_id",
+                  "description": "(Required) Opaque Activity ID with the `activity_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1576bf8d-4af8-489c-b120-d2c5ebd7010c",
+              "name": "Activity detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities",
+                    ":activity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "activity_id",
+                      "description": "(Required) Opaque Activity ID with the `activity_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"actor\": null,\n    \"content\": \"Payment of $4,200 received for Q1 subscription.\",\n    \"created_at\": \"2026-03-22T14:00:01Z\",\n    \"entities\": [\n      {\n        \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"entity_type\": \"contact\",\n        \"role\": \"primary\"\n      },\n      {\n        \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n        \"entity_type\": \"account\",\n        \"role\": \"related\"\n      }\n    ],\n    \"external_id\": \"invoice-1042\",\n    \"id\": \"activity_3Q8jXRFuLpTQ3nM4PkGvW5\",\n    \"occurred_at\": \"2026-03-22T14:00:00Z\",\n    \"title\": \"Invoice #1042 paid\",\n    \"type\": \"billing.invoice_paid\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b125f077-4f86-4e32-8dcf-ab96e5812193",
+              "name": "Invalid Activity ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities",
+                    ":activity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "activity_id",
+                      "description": "(Required) Opaque Activity ID with the `activity_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Activity ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "afa83671-d53b-44e0-bf16-fe7fb825ea45",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities",
+                    ":activity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "activity_id",
+                      "description": "(Required) Opaque Activity ID with the `activity_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5e0c183-d9c3-476b-9cc8-e202f6653554",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities",
+                    ":activity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "activity_id",
+                      "description": "(Required) Opaque Activity ID with the `activity_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: activities:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d9eb32f-a19c-4e3f-b834-4d0b6e310d6a",
+              "name": "Activity not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "activities",
+                    ":activity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "activity_id",
+                      "description": "(Required) Opaque Activity ID with the `activity_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Activity not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://beta-api.fixture.app",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6a100fbb-2905-4eea-8c11-3304063a11f6",
+    "name": "Fixture Accounts Activities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Fixture's public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.",
+      "type": "text/plain"
+    }
+  }
+}

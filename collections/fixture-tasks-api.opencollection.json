@@ -1,0 +1,217 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fixture Accounts Tasks API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/tasks",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by the previous page. Omit for the first page."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by a supported field. Prefix with `-` for descending order."
+              },
+              {
+                "name": "task_status_id",
+                "value": "",
+                "type": "query",
+                "description": "Opaque Task status ID with the `taskstatus_` prefix."
+              },
+              {
+                "name": "assignee_id",
+                "value": "",
+                "type": "query",
+                "description": "Opaque user ID with the `user_` prefix."
+              },
+              {
+                "name": "entity_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific related entity type."
+              },
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one specific related entity. Requires `entity_type`."
+              },
+              {
+                "name": "due_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only Tasks due on or before this ISO 8601 date."
+              },
+              {
+                "name": "due_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only Tasks due on or after this ISO 8601 date."
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only records created after this ISO 8601 timestamp."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only records created before this ISO 8601 timestamp."
+              },
+              {
+                "name": "updated_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only records updated after this ISO 8601 timestamp."
+              },
+              {
+                "name": "updated_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only records updated before this ISO 8601 timestamp."
+              },
+              {
+                "name": "overdue",
+                "value": "",
+                "type": "query",
+                "description": "When true, return only Tasks past their due date and not in a done status."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a paginated list of Tasks. Filter by `task_status_id`, `assignee_id`, and `entity_type` + `entity_id` together (to scope to one CRM record), plus `due_before`/`due_after` and created/updated timestamp windows. Pass `overdue=true` to limit results to Tasks past their due date and not in a completed status. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`."
+        },
+        {
+          "info": {
+            "name": "Create a Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://beta-api.fixture.app/api/v1/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new Task. Resolve the Task status by passing exactly one of `task_status_id` (a `taskstatus_` ID) or `task_status_name` (looked up case-insensitively among the organization's Task Statuses). To link the Task to a CRM record, pass `entity_type` and `entity_id` together."
+        },
+        {
+          "info": {
+            "name": "Get a Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/tasks/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Task ID with the `task_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a single Task by its `task_` ID with full detail, including the assignee, linked entity (when set), and resolved Task status."
+        },
+        {
+          "info": {
+            "name": "Update a Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://beta-api.fixture.app/api/v1/tasks/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Task ID with the `task_` prefix."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Partially update a Task by ID. `title`, `task_status_id`, and `task_status_name` are non-nullable — they cannot be cleared. When changing the status, pass either `task_status_id` or `task_status_name`, not both."
+        },
+        {
+          "info": {
+            "name": "Delete a Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://beta-api.fixture.app/api/v1/tasks/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Task ID with the `task_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a Task by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

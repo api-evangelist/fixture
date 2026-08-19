@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fixture Accounts Activities API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Activities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/activities",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of records to return."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by the previous page. Omit for the first page."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by a supported field. Prefix with `-` for descending order."
+              },
+              {
+                "name": "entity_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific related entity type."
+              },
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one specific related entity. Requires `entity_type`."
+              },
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter Activities by event type."
+              },
+              {
+                "name": "occurred_after",
+                "value": "",
+                "type": "query",
+                "description": "Return only Activities that occurred after this ISO 8601 timestamp."
+              },
+              {
+                "name": "occurred_before",
+                "value": "",
+                "type": "query",
+                "description": "Return only Activities that occurred before this ISO 8601 timestamp."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a paginated list of Activities across all CRM entities. Pass `entity_type` and `entity_id` together to scope results to one Account, Contact, Deal, or Lead. Also supports filtering by `event_type` and `occurred_after`/`occurred_before` windows. Sort supports `occurred_at` or `-occurred_at`; pagination uses `limit` and `cursor`."
+        },
+        {
+          "info": {
+            "name": "Create a custom Activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://beta-api.fixture.app/api/v1/activities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Ingest a custom Activity attached to one or more CRM records (Contact, Account, or Deal — at least one is required). Pass `external_id` as an idempotency key: replays with the same `external_id` and identical fields return `200` with the existing Activity, while replays with different fields return `409 idempotency_conflict`."
+        },
+        {
+          "info": {
+            "name": "Get an Activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://beta-api.fixture.app/api/v1/activities/:activity_id",
+            "params": [
+              {
+                "name": "activity_id",
+                "value": "",
+                "type": "path",
+                "description": "Opaque Activity ID with the `activity_` prefix."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return a single Activity by its `act_` ID with full detail, including linked entities and any replies."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

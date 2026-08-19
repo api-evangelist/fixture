@@ -1,0 +1,1874 @@
+{
+  "item": [
+    {
+      "id": "b89752a0-aeb4-4e7c-9337-2c2a66c0aaea",
+      "name": "Tasks",
+      "description": {
+        "content": "Create, read, update, and delete Tasks.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d973822a-a478-4049-ada0-7acfc55e7bbf",
+          "name": "List Tasks",
+          "request": {
+            "name": "List Tasks",
+            "description": {
+              "content": "Return a paginated list of Tasks. Filter by `task_status_id`, `assignee_id`, and `entity_type` + `entity_id` together (to scope to one CRM record), plus `due_before`/`due_after` and created/updated timestamp windows. Pass `overdue=true` to limit results to Tasks past their due date and not in a completed status. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of records to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by the previous page. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "-created_at",
+                  "description": "Sort by a supported field. Prefix with `-` for descending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "task_status_id",
+                  "value": "<string>",
+                  "description": "Opaque Task status ID with the `taskstatus_` prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "assignee_id",
+                  "value": "<string>",
+                  "description": "Opaque user ID with the `user_` prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "entity_type",
+                  "value": "<string>",
+                  "description": "Filter to a specific related entity type."
+                },
+                {
+                  "disabled": false,
+                  "key": "entity_id",
+                  "value": "<string>",
+                  "description": "Filter to one specific related entity. Requires `entity_type`."
+                },
+                {
+                  "disabled": false,
+                  "key": "due_before",
+                  "value": "<date>",
+                  "description": "Return only Tasks due on or before this ISO 8601 date."
+                },
+                {
+                  "disabled": false,
+                  "key": "due_after",
+                  "value": "<date>",
+                  "description": "Return only Tasks due on or after this ISO 8601 date."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records created after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records created before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_after",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated after this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "updated_before",
+                  "value": "<dateTime>",
+                  "description": "Return only records updated before this ISO 8601 timestamp."
+                },
+                {
+                  "disabled": false,
+                  "key": "overdue",
+                  "value": "false",
+                  "description": "When true, return only Tasks past their due date and not in a done status."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c717d75f-1756-4e32-8ca5-c61ac33ae74a",
+              "name": "Paginated Task list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "task_status_id",
+                      "value": "taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1"
+                    },
+                    {
+                      "key": "assignee_id",
+                      "value": "user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "due_before",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "due_after",
+                      "value": "2026-04-01"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "overdue",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n      \"completed_at\": null,\n      \"created_at\": \"2026-04-19T09:00:00Z\",\n      \"created_by_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n      \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n      \"due_date\": \"2026-04-30\",\n      \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n      \"entity_type\": \"contact\",\n      \"id\": \"task_8W3jXRFuLpTQ3nM4PkGvW0\",\n      \"task_status\": {\n        \"category\": \"todo\",\n        \"color\": \"gray\",\n        \"id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n        \"name\": \"To Do\",\n        \"position\": 0\n      },\n      \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n      \"title\": \"Follow up with Acme\",\n      \"updated_at\": \"2026-04-19T09:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"has_more\": false,\n    \"limit\": 50,\n    \"next_cursor\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6410d55e-b803-4aff-b30d-d0324c3c6849",
+              "name": "Invalid filter, pagination, or sort parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "task_status_id",
+                      "value": "taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1"
+                    },
+                    {
+                      "key": "assignee_id",
+                      "value": "user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "due_before",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "due_after",
+                      "value": "2026-04-01"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "overdue",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"entity_type and entity_id must be provided together\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0498d96c-433e-4c09-86ef-92363d4ee80c",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "task_status_id",
+                      "value": "taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1"
+                    },
+                    {
+                      "key": "assignee_id",
+                      "value": "user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "due_before",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "due_after",
+                      "value": "2026-04-01"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "overdue",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "011dc7d0-e25b-4eab-994d-22c6aebb58d6",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "-created_at"
+                    },
+                    {
+                      "key": "task_status_id",
+                      "value": "taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1"
+                    },
+                    {
+                      "key": "assignee_id",
+                      "value": "user_9T5jXRFuLpTQ3nM4PkGvW2"
+                    },
+                    {
+                      "key": "entity_type",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "entity_id",
+                      "value": "contact_6M4jXRFuLpTQ3nM4PkGvW8"
+                    },
+                    {
+                      "key": "due_before",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "due_after",
+                      "value": "2026-04-01"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "updated_after",
+                      "value": "2026-03-01T00:00:00Z"
+                    },
+                    {
+                      "key": "updated_before",
+                      "value": "2026-03-31T23:59:59Z"
+                    },
+                    {
+                      "key": "overdue",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: tasks:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ecfdd1f4-4041-4eee-b87b-19de632c9b50",
+          "name": "Create a Task",
+          "request": {
+            "name": "Create a Task",
+            "description": {
+              "content": "Create a new Task. Resolve the Task status by passing exactly one of `task_status_id` (a `taskstatus_` ID) or `task_status_name` (looked up case-insensitively among the organization's Task Statuses). To link the Task to a CRM record, pass `entity_type` and `entity_id` together.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"<string>\",\n  \"assignee_id\": \"<string>\",\n  \"description\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"entity_id\": \"<string>\",\n  \"entity_type\": \"<string>\",\n  \"task_status_id\": \"<string>\",\n  \"task_status_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "722fe5f2-60b7-4388-a3a4-3ab095226c57",
+              "name": "Task created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n  \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n  \"due_date\": \"2026-04-30\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\",\n  \"task_status_name\": \"To Do\",\n  \"title\": \"Follow up with Acme\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n    \"completed_at\": null,\n    \"created_at\": \"2026-04-19T09:00:00Z\",\n    \"created_by_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n    \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n    \"due_date\": \"2026-04-30\",\n    \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"entity_type\": \"contact\",\n    \"id\": \"task_8W3jXRFuLpTQ3nM4PkGvW0\",\n    \"task_status\": {\n      \"category\": \"todo\",\n      \"color\": \"gray\",\n      \"id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n      \"name\": \"To Do\",\n      \"position\": 0\n    },\n    \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n    \"title\": \"Follow up with Acme\",\n    \"updated_at\": \"2026-04-19T09:00:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d855f86-7001-4cd2-9fd7-f2633d06b280",
+              "name": "Validation error — includes missing required fields, blank optional strings, unknown references (e.g. a task_status_name with no match or a cross-org task_status_id), mutually-exclusive status inputs, and mismatched entity_type/entity_id pairs.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n  \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n  \"due_date\": \"2026-04-30\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\",\n  \"task_status_name\": \"To Do\",\n  \"title\": \"Follow up with Acme\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"Task status not found: VIP\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "874ac700-507c-4db7-9aca-db43d17bc88a",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n  \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n  \"due_date\": \"2026-04-30\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\",\n  \"task_status_name\": \"To Do\",\n  \"title\": \"Follow up with Acme\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c7fd647-b5e8-4655-b340-a2c28d1c73db",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n  \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n  \"due_date\": \"2026-04-30\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\",\n  \"task_status_name\": \"To Do\",\n  \"title\": \"Follow up with Acme\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: tasks:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b4a1b183-2b36-42e0-be3b-1720a03c9dd4",
+          "name": "Delete a Task",
+          "request": {
+            "name": "Delete a Task",
+            "description": {
+              "content": "Delete a Task by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) Opaque Task ID with the `task_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2d436b1d-3076-4c28-b445-707f1d082e6d",
+              "name": "Task deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true,\n  \"id\": \"task_8W3jXRFuLpTQ3nM4PkGvW0\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e29be81-244c-453e-8d12-c4ec94f10f19",
+              "name": "Invalid Task ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Task ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "310a5257-ebfc-4fca-84f0-a0066350880f",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "185c5f50-72f7-4177-85f3-08edc7bc61b6",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: tasks:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af4a91e2-4e35-4592-b265-30e7efef72ee",
+              "name": "Task not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Task not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc3d0446-1b22-4d76-8a4a-8de3472783b6",
+          "name": "Get a Task",
+          "request": {
+            "name": "Get a Task",
+            "description": {
+              "content": "Return a single Task by its `task_` ID with full detail, including the assignee, linked entity (when set), and resolved Task status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) Opaque Task ID with the `task_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "aea4e561-184f-4ed2-8a47-ac18dcc09765",
+              "name": "Task detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n    \"completed_at\": null,\n    \"created_at\": \"2026-04-19T09:00:00Z\",\n    \"created_by_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n    \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n    \"due_date\": \"2026-04-30\",\n    \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"entity_type\": \"contact\",\n    \"id\": \"task_8W3jXRFuLpTQ3nM4PkGvW0\",\n    \"task_status\": {\n      \"category\": \"todo\",\n      \"color\": \"gray\",\n      \"id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n      \"name\": \"To Do\",\n      \"position\": 0\n    },\n    \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n    \"title\": \"Follow up with Acme\",\n    \"updated_at\": \"2026-04-19T09:00:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "975a6738-8a07-47ef-a76f-0fb7694d507d",
+              "name": "Invalid Task ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"invalid_parameter\",\n    \"message\": \"Invalid Task ID\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f7f8204-05f4-4b72-a5e1-f0a53b9eb601",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2268523-dc69-478c-85bf-e64beab337ed",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: tasks:read\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a6ee787-331c-46c2-b37a-cf3ce2d69f47",
+              "name": "Task not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Task not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bcfc2cde-4008-4748-974a-e5d888943f2e",
+          "name": "Update a Task",
+          "request": {
+            "name": "Update a Task",
+            "description": {
+              "content": "Partially update a Task by ID. `title`, `task_status_id`, and `task_status_name` are non-nullable — they cannot be cleared. When changing the status, pass either `task_status_id` or `task_status_name`, not both.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) Opaque Task ID with the `task_` prefix."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignee_id\": \"<string>\",\n  \"description\": \"<string>\",\n  \"due_date\": \"<date>\",\n  \"entity_id\": \"<string>\",\n  \"entity_type\": \"<string>\",\n  \"task_status_id\": \"<string>\",\n  \"task_status_name\": \"<string>\",\n  \"title\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f77861e9-ad29-4201-b2b1-cefd47d91d09",
+              "name": "Updated Task.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"due_date\": \"2026-05-07\",\n  \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n  \"title\": \"Follow up with Acme — v2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"assignee_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n    \"completed_at\": null,\n    \"created_at\": \"2026-04-19T09:00:00Z\",\n    \"created_by_id\": \"user_9T5jXRFuLpTQ3nM4PkGvW2\",\n    \"description\": \"Confirm the renewal timeline after the quarterly review.\",\n    \"due_date\": \"2026-04-30\",\n    \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n    \"entity_type\": \"contact\",\n    \"id\": \"task_8W3jXRFuLpTQ3nM4PkGvW0\",\n    \"task_status\": {\n      \"category\": \"todo\",\n      \"color\": \"gray\",\n      \"id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n      \"name\": \"To Do\",\n      \"position\": 0\n    },\n    \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n    \"title\": \"Follow up with Acme\",\n    \"updated_at\": \"2026-04-19T09:00:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2dd5f563-ee1d-4b9b-95fe-457c210bae55",
+              "name": "Invalid ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"due_date\": \"2026-05-07\",\n  \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n  \"title\": \"Follow up with Acme — v2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"Task status not found in this organization\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e6db898-e6ad-4c55-b3c8-430f132091f1",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"due_date\": \"2026-05-07\",\n  \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n  \"title\": \"Follow up with Acme — v2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c560506-c9a1-43a7-997b-e1dbf9483b6e",
+              "name": "API key is missing the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"due_date\": \"2026-05-07\",\n  \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n  \"title\": \"Follow up with Acme — v2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: tasks:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "658b1885-0d10-44c7-b721-61329cc627a0",
+              "name": "Task not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Opaque Task ID with the `task_` prefix."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"due_date\": \"2026-05-07\",\n  \"task_status_id\": \"taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1\",\n  \"title\": \"Follow up with Acme — v2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Task not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://beta-api.fixture.app",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d97724e8-cf4b-47f7-9e2f-0d8f99a6a1f6",
+    "name": "Fixture Accounts Tasks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Fixture's public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.",
+      "type": "text/plain"
+    }
+  }
+}

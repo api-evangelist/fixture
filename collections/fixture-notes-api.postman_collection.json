@@ -1,0 +1,364 @@
+{
+  "item": [
+    {
+      "id": "55860516-98df-4f20-8fc5-f1c2747fb9fa",
+      "name": "Notes",
+      "description": {
+        "content": "Create Notes linked to CRM entities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dff25ab5-7710-48b1-85c0-6892f874f4c6",
+          "name": "Create a Note",
+          "request": {
+            "name": "Create a Note",
+            "description": {
+              "content": "Create a Note attached to one primary CRM entity (Account, Contact, Deal, or Lead) and up to several optional related entities. Notes are stored as Activities of event type `note_created`, so they appear in the Activity feed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "notes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\",\n  \"entity_id\": \"<string>\",\n  \"entity_type\": \"<string>\",\n  \"additional_entity_links\": [\n    {\n      \"entity_id\": \"<string>\",\n      \"entity_type\": \"<string>\"\n    },\n    {\n      \"entity_id\": \"<string>\",\n      \"entity_type\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9ec46c93-51ab-4040-8e1f-4b4ee7382aed",
+              "name": "Note created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additional_entity_links\": [\n    {\n      \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"entity_type\": \"account\"\n    }\n  ],\n  \"content\": \"Hello from v1\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"actor\": null,\n    \"content\": \"Hello from v1\",\n    \"created_at\": \"2026-03-22T14:00:01Z\",\n    \"entities\": [\n      {\n        \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n        \"entity_type\": \"contact\",\n        \"role\": \"primary\"\n      },\n      {\n        \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n        \"entity_type\": \"account\",\n        \"role\": \"related\"\n      }\n    ],\n    \"external_id\": null,\n    \"id\": \"activity_3Q8jXRFuLpTQ3nM4PkGvW5\",\n    \"occurred_at\": \"2026-03-22T14:00:00Z\",\n    \"title\": null,\n    \"type\": \"note_added\",\n    \"updated_at\": \"2026-03-22T14:00:01Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b84e395-4568-4320-a872-719f6380870c",
+              "name": "Invalid entity ID or request body.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additional_entity_links\": [\n    {\n      \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"entity_type\": \"account\"\n    }\n  ],\n  \"content\": \"Hello from v1\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"validation_error\",\n    \"message\": \"content must not be empty\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7c0771e-5679-4f37-b9c7-70f5a32b1c8a",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additional_entity_links\": [\n    {\n      \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"entity_type\": \"account\"\n    }\n  ],\n  \"content\": \"Hello from v1\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Invalid or missing API key\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "523338ce-c0a1-44b2-b4f0-3ab8e194c579",
+              "name": "API key is missing the required scope or the caller lacks write access.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additional_entity_links\": [\n    {\n      \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"entity_type\": \"account\"\n    }\n  ],\n  \"content\": \"Hello from v1\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"forbidden\",\n    \"message\": \"Missing required scope: activities:write\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06143b91-ac04-49a9-8c19-e69f6797590d",
+              "name": "One or more referenced entities were not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "notes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additional_entity_links\": [\n    {\n      \"entity_id\": \"account_7B5jXRFuLpTQ3nM4PkGvW2\",\n      \"entity_type\": \"account\"\n    }\n  ],\n  \"content\": \"Hello from v1\",\n  \"entity_id\": \"contact_6M4jXRFuLpTQ3nM4PkGvW8\",\n  \"entity_type\": \"contact\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Referenced entity not found\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://beta-api.fixture.app",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7ba39adf-00e1-408e-83e5-2adc3ebabbd7",
+    "name": "Fixture Accounts Notes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Fixture's public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.",
+      "type": "text/plain"
+    }
+  }
+}
