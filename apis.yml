@@ -10,6 +10,18 @@ description: Fixture is an AI-native CRM built for startups, backed by Y Combina
   dynamic client registration, and a first-party agent-oriented CLI, so humans and agents work
   against the same surface.
 url: https://raw.githubusercontent.com/api-evangelist/fixture/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
