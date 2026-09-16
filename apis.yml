@@ -1,13 +1,12 @@
 aid: fixture
 name: Fixture
-description: Fixture is an AI-native CRM built for startups, backed by Y Combinator (Winter
-  2026 batch). Fixture aggregates every customer interaction — email, calendar, Slack and
-  Slack Connect, meeting notes from Granola, Notion and Circleback, and Stripe billing events
-  — into a single structured activity graph across Accounts, Contacts, Deals, Leads, Tasks
-  and Notes, then uses agents to surface next actions and keep records current without manual
-  data entry. The whole system is programmable — Fixture publishes a documented REST v1 API
-  with a generated OpenAPI 3.1 description, a hosted remote MCP server with OAuth 2.1 and
-  dynamic client registration, and a first-party agent-oriented CLI, so humans and agents work
+description: Fixture is an AI-native CRM built for startups, backed by Y Combinator (Winter 2026 batch).
+  Fixture aggregates every customer interaction — email, calendar, Slack and Slack Connect, meeting notes
+  from Granola, Notion and Circleback, and Stripe billing events — into a single structured activity graph
+  across Accounts, Contacts, Deals, Leads, Tasks and Notes, then uses agents to surface next actions and
+  keep records current without manual data entry. The whole system is programmable — Fixture publishes
+  a documented REST v1 API with a generated OpenAPI 3.1 description, a hosted remote MCP server with OAuth
+  2.1 and dynamic client registration, and a first-party agent-oriented CLI, so humans and agents work
   against the same surface.
 url: https://raw.githubusercontent.com/api-evangelist/fixture/refs/heads/main/apis.yml
 deliveryModel:
@@ -43,7 +42,7 @@ x-tier: lead
 x-tier-reason: portfolio-lead
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-09-16'
 tags:
 - Company
 - CRM
@@ -169,7 +168,7 @@ apis:
   - type: RateLimits
     url: https://fixture.app/docs/api-reference/rate-limiting
 - aid: fixture:fixture-fixture-api-api
-  name: Fixture Fixture API API
+  name: Fixture API
   description: The Fixture API API from Fixture — 1 operation(s) for fixture api.
   humanURL: https://fixture.app/docs/api-reference/overview
   baseURL: https://beta-api.fixture.app/api/v1
