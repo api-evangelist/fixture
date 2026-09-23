@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
   title: Fixture Accounts API
@@ -563,21 +563,172 @@ paths:
       - Accounts
 components:
   schemas:
-    V1OwnerRelationshipWritePayload:
-      description: Owner relationship update payload.
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
       properties:
-        propagate_to_open_deals:
-          default: false
-          description: For Account owner updates, also update open child Deals.
+        has_more:
+          description: Whether another page is available.
+          example: false
           type: boolean
-        set:
-          description: Set to one User to assign an owner, or an empty list to clear the owner.
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1OwnerRelationshipPayload:
+      description: Owner relationship state for an Account or Deal.
+      properties:
+        users:
+          description: Current owner Users. This list has zero or one item.
           items:
-            $ref: '#/components/schemas/V1OwnerRelationshipSetUserPayload'
-          maxItems: 1
+            $ref: '#/components/schemas/V1OwnerUserPayload'
           type: array
       required:
-      - set
+      - users
+      type: object
+    V1OwnerRelationshipSetUserPayload:
+      description: User assignment entry for an owner relationship update.
+      properties:
+        user_id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - user_id
+      type: object
+    V1AccountDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1AccountDeletePayload
+      type: object
+    V1AccountListPayload:
+      description: Paginated list response for Accounts.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1AccountSelectedFieldsPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1AccountListPayload
+      type: object
+    V1RelationshipsPayload:
+      description: Relationships attached to an Account or Deal.
+      properties:
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
+      required:
+      - owner
+      type: object
+    CreateAccountRequest:
+      description: Request body for creating an Account.
+      properties:
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        estimated_revenue:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        headquarters_address:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_postal_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          type: string
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsWritePayload'
+        website_url:
+          example: https://acme.example
+          oneOf:
+          - example: https://acme.example
+            type: string
+          - example: https://acme.example
+            type: 'null'
+      required:
+      - name
+      title: CreateAccountRequest
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
       type: object
     V1AccountSelectedFieldsPayload:
       properties:
@@ -665,38 +816,11 @@ components:
       required: []
       title: V1AccountSelectedFieldsPayload
       type: object
-    V1OwnerRelationshipPayload:
-      description: Owner relationship state for an Account or Deal.
+    V1RelationshipsWritePayload:
+      description: Relationship updates accepted on Account and Deal writes.
       properties:
-        users:
-          description: Current owner Users. This list has zero or one item.
-          items:
-            $ref: '#/components/schemas/V1OwnerUserPayload'
-          type: array
-      required:
-      - users
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
       type: object
     V1AccountDetailResponsePayload:
       description: Single-Account response envelope.
@@ -707,63 +831,31 @@ components:
       - data
       title: V1AccountDetailResponsePayload
       type: object
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
+    V1OwnerRelationshipWritePayload:
+      description: Owner relationship update payload.
       properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
-      required:
-      - error
-      type: object
-    V1AccountListPayload:
-      description: Paginated list response for Accounts.
-      properties:
-        data:
+        propagate_to_open_deals:
+          default: false
+          description: For Account owner updates, also update open child Deals.
+          type: boolean
+        set:
+          description: Set to one User to assign an owner, or an empty list to clear the owner.
           items:
-            $ref: '#/components/schemas/V1AccountSelectedFieldsPayload'
+            $ref: '#/components/schemas/V1OwnerRelationshipSetUserPayload'
+          maxItems: 1
           type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
       required:
-      - data
-      - pagination
-      title: V1AccountListPayload
+      - set
       type: object
-    V1RelationshipsWritePayload:
-      description: Relationship updates accepted on Account and Deal writes.
+    V1OwnerUserPayload:
+      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
       properties:
-        owner:
-          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
-      type: object
-    V1OwnerRelationshipSetUserPayload:
-      description: User assignment entry for an owner relationship update.
-      properties:
-        user_id:
+        id:
           description: Opaque `user_` identifier.
           example: user_9T5jXRFuLpTQ3nM4PkGvW2
           type: string
       required:
-      - user_id
-      type: object
-    V1RelationshipsPayload:
-      description: Relationships attached to an Account or Deal.
-      properties:
-        owner:
-          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
-      required:
-      - owner
+      - id
       type: object
     UpdateAccountRequest:
       description: Request body for partially updating an Account.
@@ -937,98 +1029,6 @@ components:
       - updated_at
       - website_url
       title: V1AccountDetailPayload
-      type: object
-    V1AccountDeletePayload:
-      properties:
-        deleted:
-          const: true
-          type: boolean
-        id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          type: string
-      required:
-      - deleted
-      - id
-      title: V1AccountDeletePayload
-      type: object
-    V1OwnerUserPayload:
-      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
-      properties:
-        id:
-          description: Opaque `user_` identifier.
-          example: user_9T5jXRFuLpTQ3nM4PkGvW2
-          type: string
-      required:
-      - id
-      type: object
-    CreateAccountRequest:
-      description: Request body for creating an Account.
-      properties:
-        description:
-          oneOf:
-          - type: string
-          - type: 'null'
-        employee_count:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        estimated_revenue:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        headquarters_address:
-          oneOf:
-          - type: string
-          - type: 'null'
-        headquarters_city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        headquarters_country:
-          oneOf:
-          - type: string
-          - type: 'null'
-        headquarters_postal_code:
-          oneOf:
-          - type: string
-          - type: 'null'
-        headquarters_state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          type: string
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        relationships:
-          $ref: '#/components/schemas/V1RelationshipsWritePayload'
-        website_url:
-          example: https://acme.example
-          oneOf:
-          - example: https://acme.example
-            type: string
-          - example: https://acme.example
-            type: 'null'
-      required:
-      - name
-      title: CreateAccountRequest
       type: object
   securitySchemes:
     bearerAuth:

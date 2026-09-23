@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
-  title: Fixture Accounts Notes API
+  title: Fixture Notes API
   version: v1
 servers:
 - url: https://beta-api.fixture.app
@@ -101,51 +101,6 @@ paths:
       - Notes
 components:
   schemas:
-    V1ActivityEntityPayload:
-      properties:
-        entity_id:
-          type: string
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          type: string
-        role:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - entity_id
-      - entity_type
-      - role
-      title: V1ActivityEntityPayload
-      type: object
-    V1CreateNoteRequest:
-      description: Request body for creating a Note attached to one primary CRM entity.
-      properties:
-        additional_entity_links:
-          items:
-            $ref: '#/components/schemas/V1CreateNoteEntityLinkRequest'
-          type: array
-        content:
-          type: string
-        entity_id:
-          type: string
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          type: string
-      required:
-      - content
-      - entity_id
-      - entity_type
-      title: V1CreateNoteRequest
-      type: object
     V1ActivityDetailPayload:
       properties:
         actor:
@@ -217,6 +172,30 @@ components:
       - updated_at
       title: V1ActivityDetailPayload
       type: object
+    V1CreateNoteRequest:
+      description: Request body for creating a Note attached to one primary CRM entity.
+      properties:
+        additional_entity_links:
+          items:
+            $ref: '#/components/schemas/V1CreateNoteEntityLinkRequest'
+          type: array
+        content:
+          type: string
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+      required:
+      - content
+      - entity_id
+      - entity_type
+      title: V1CreateNoteRequest
+      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -237,6 +216,27 @@ components:
       required:
       - error
       type: object
+    V1ActivityEntityPayload:
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+        role:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - entity_id
+      - entity_type
+      - role
+      title: V1ActivityEntityPayload
+      type: object
     V1NoteCreateResponsePayload:
       description: Created-Note response envelope.
       properties:
@@ -245,6 +245,16 @@ components:
       required:
       - data
       title: V1NoteCreateResponsePayload
+      type: object
+    V1ActivityActorPayload:
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - name
+      title: V1ActivityActorPayload
       type: object
     V1CreateNoteEntityLinkRequest:
       properties:
@@ -261,16 +271,6 @@ components:
       - entity_id
       - entity_type
       title: V1CreateNoteEntityLinkRequest
-      type: object
-    V1ActivityActorPayload:
-      properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - name
-      title: V1ActivityActorPayload
       type: object
   securitySchemes:
     bearerAuth:

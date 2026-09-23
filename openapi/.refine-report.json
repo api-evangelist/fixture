@@ -1,17 +1,7 @@
 {
   "provider": "fixture",
   "sources": [
-    "fixture-accounts-api-openapi.yml",
-    "fixture-activities-api-openapi.yml",
-    "fixture-contacts-api-openapi.yml",
-    "fixture-deals-api-openapi.yml",
-    "fixture-fixture-api-api-openapi.yml",
-    "fixture-leads-api-openapi.yml",
-    "fixture-notes-api-openapi.yml",
-    "fixture-pipelines-api-openapi.yml",
-    "fixture-task-statuses-api-openapi.yml",
-    "fixture-tasks-api-openapi.yml",
-    "fixture-users-api-openapi.yml"
+    "_original/fixture-v1-openapi.json"
   ],
   "outputs": [
     "fixture-accounts-api-openapi.yml",
@@ -29,6 +19,25 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "fixture-v1-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "fixture-v1-openapi.json: tagged paths GET /api/v1 -> Fixture API",
+    "fixture-v1-openapi.json: declared missing tag: Fixture API",
+    "fixture-v1-openapi.json: declared missing tag: Users",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "fixture-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-activities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-contacts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-deals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-fixture-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-leads-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-notes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-pipelines-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-task-statuses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-tasks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "fixture-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

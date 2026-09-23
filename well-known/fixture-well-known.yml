@@ -1,10 +1,10 @@
-generated: '2026-07-20'
+generated: '2026-09-19'
 method: searched
 source: live HTTP probes of fixture.app and beta-api.fixture.app
-summary: Fixture publishes no security.txt, OpenID Connect discovery document, api-catalog,
-  or ai-plugin.json. It does publish both OAuth 2.0 Authorization Server Metadata (RFC 8414)
-  and OAuth 2.0 Protected Resource Metadata (RFC 9728) on the API host, which is what makes
-  the remote MCP endpoint discoverable and auto-authorizable by MCP clients.
+summary: Fixture publishes no security.txt, OpenID Connect discovery document, api-catalog, or ai-plugin.json.
+  It does publish both OAuth 2.0 Authorization Server Metadata (RFC 8414) and OAuth 2.0 Protected Resource
+  Metadata (RFC 9728) on the API host, which is what makes the remote MCP endpoint discoverable and auto-authorizable
+  by MCP clients.
 hosts:
 - host: fixture.app
   probes:
@@ -34,3 +34,29 @@ hosts:
     status: 404
   - path: /.well-known/api-catalog
     status: 404
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: fixture-beta-api-oauth-protected-resource.json
+    bytes: 259
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: fixture-beta-api-oauth-authorization-server.json
+    bytes: 630
+  path_echo_control: passed
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://beta-api.fixture.app
+    path: /.well-known/oauth-protected-resource
+    file: fixture-beta-api-oauth-protected-resource.json
+  - host: https://beta-api.fixture.app
+    path: /.well-known/oauth-authorization-server
+    file: fixture-beta-api-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
-  title: Fixture Accounts Pipelines API
+  title: Fixture Pipelines API
   version: v1
 servers:
 - url: https://beta-api.fixture.app
@@ -197,27 +197,34 @@ paths:
       - Pipelines
 components:
   schemas:
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
+    V1PipelinePayload:
+      description: Pipeline payload with nested stage definitions.
       properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          type: string
+        name:
+          type: string
+        stages:
+          items:
+            $ref: '#/components/schemas/V1PipelineStagePayload'
+          type: array
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
       required:
-      - limit
-      - next_cursor
-      - has_more
+      - created_at
+      - id
+      - name
+      - stages
+      - updated_at
+      title: V1PipelinePayload
       type: object
     V1PipelineStagePayload:
       description: Nested Pipeline stage payload.
@@ -264,35 +271,6 @@ components:
       required:
       - error
       type: object
-    V1PipelinePayload:
-      description: Pipeline payload with nested stage definitions.
-      properties:
-        created_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-        id:
-          description: Opaque `pipeline_` identifier.
-          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-          type: string
-        name:
-          type: string
-        stages:
-          items:
-            $ref: '#/components/schemas/V1PipelineStagePayload'
-          type: array
-        updated_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-      required:
-      - created_at
-      - id
-      - name
-      - stages
-      - updated_at
-      title: V1PipelinePayload
-      type: object
     V1PipelineDetailResponsePayload:
       description: Single-Pipeline response envelope.
       properties:
@@ -315,6 +293,28 @@ components:
       - data
       - pagination
       title: V1PipelineListPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
       type: object
   securitySchemes:
     bearerAuth:
