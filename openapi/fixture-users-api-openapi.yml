@@ -69,42 +69,6 @@ paths:
       - Users
 components:
   schemas:
-    V1UserListPayload:
-      description: Paginated list response for Users.
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1UserPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
-      required:
-      - data
-      - pagination
-      title: V1UserListPayload
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -124,6 +88,20 @@ components:
           type: object
       required:
       - error
+      type: object
+    V1UserListPayload:
+      description: Paginated list response for Users.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1UserPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1UserListPayload
       type: object
     V1UserPayload:
       description: Organization User that can be assigned as an Account or Deal owner.
@@ -148,6 +126,28 @@ components:
       - name
       - role
       title: V1UserPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
       type: object
   securitySchemes:
     bearerAuth:

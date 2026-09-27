@@ -700,6 +700,257 @@ paths:
       - Leads
 components:
   schemas:
+    V1LeadDetailResponsePayload:
+      description: Single-Lead response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
+      required:
+      - data
+      title: V1LeadDetailResponsePayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1LeadDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `lead_` identifier.
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1LeadDeletePayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1LeadRelatedAccountPayload:
+      properties:
+        id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+      title: V1LeadRelatedAccountPayload
+      type: object
+    V1LeadListPayload:
+      description: Paginated list response for Leads.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1LeadSelectedFieldsPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1LeadListPayload
+      type: object
+    V1CreateLeadRequest:
+      description: Request body for creating a Lead.
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          oneOf:
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: string
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1CreateLeadRequest
+      type: object
+    V1LeadConversionResponsePayload:
+      description: Lead conversion response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadConversionResultPayload'
+      required:
+      - data
+      title: V1LeadConversionResponsePayload
+      type: object
+    V1LeadRelatedContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - name
+      title: V1LeadRelatedContactPayload
+      type: object
     V1ConvertLeadRequest:
       description: Request body for converting a Lead into an Account and Contact.
       properties:
@@ -787,61 +1038,235 @@ components:
       required: []
       title: V1ConvertLeadRequest
       type: object
-    V1LeadConversionResponsePayload:
-      description: Lead conversion response envelope.
+    V1LeadDetailPayload:
       properties:
-        data:
-          $ref: '#/components/schemas/V1LeadConversionResultPayload'
-      required:
-      - data
-      title: V1LeadConversionResponsePayload
-      type: object
-    V1LeadRelatedAccountPayload:
-      properties:
-        id:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        converted_account_id:
           description: Opaque `account_` identifier.
           example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        converted_at:
+          example: '2026-03-24T18:05:00Z'
+          oneOf:
+          - example: '2026-03-24T18:05:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T18:05:00Z'
+            type: 'null'
+        converted_contact_id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          oneOf:
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: string
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
           type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
-      title: V1LeadRelatedAccountPayload
-      type: object
-    V1LeadDeletePayload:
-      properties:
-        deleted:
-          const: true
-          type: boolean
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
         id:
           description: Opaque `lead_` identifier.
           example: lead_4P2jXRFuLpTQ3nM4PkGvW6
           type: string
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          type: string
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
       required:
-      - deleted
+      - city
+      - company_employee_count
+      - company_industry
+      - company_name
+      - company_website
+      - converted_account_id
+      - converted_at
+      - converted_contact_id
+      - country
+      - created_at
+      - email
+      - estimated_value
       - id
-      title: V1LeadDeletePayload
+      - last_activity_at
+      - linkedin_url
+      - name
+      - notes
+      - phone
+      - source
+      - state
+      - status
+      - title
+      - updated_at
+      title: V1LeadDetailPayload
       type: object
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
+    V1LeadRelatedDealPayload:
       properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
+        id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+        name:
+          type: string
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        stage_name:
+          type: string
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
       required:
-      - error
+      - id
+      - name
+      - pipeline_stage_id
+      - stage_name
+      - stage_type
+      - value
+      title: V1LeadRelatedDealPayload
+      type: object
+    V1LeadConversionResultPayload:
+      properties:
+        account:
+          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
+        contact:
+          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
+        deal:
+          oneOf:
+          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
+          - type: 'null'
+        lead:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
+      required:
+      - account
+      - contact
+      - deal
+      - lead
+      title: V1LeadConversionResultPayload
       type: object
     V1LeadSelectedFieldsPayload:
       properties:
@@ -1123,431 +1548,6 @@ components:
           - type: 'null'
       required: []
       title: V1UpdateLeadRequest
-      type: object
-    V1LeadDetailResponsePayload:
-      description: Single-Lead response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1LeadDetailPayload'
-      required:
-      - data
-      title: V1LeadDetailResponsePayload
-      type: object
-    V1CreateLeadRequest:
-      description: Request body for creating a Lead.
-      properties:
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_employee_count:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        company_industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_website:
-          oneOf:
-          - type: string
-          - type: 'null'
-        country:
-          oneOf:
-          - type: string
-          - type: 'null'
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        estimated_value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        source:
-          enum:
-          - website
-          - referral
-          - linkedin
-          - cold_outreach
-          - event
-          - form
-          - other
-          oneOf:
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: string
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        status:
-          enum:
-          - new
-          - contacted
-          - qualified
-          - unqualified
-          - converted
-          oneOf:
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: string
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required: []
-      title: V1CreateLeadRequest
-      type: object
-    V1LeadRelatedContactPayload:
-      properties:
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          type: string
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - email
-      - id
-      - name
-      title: V1LeadRelatedContactPayload
-      type: object
-    V1LeadListPayload:
-      description: Paginated list response for Leads.
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1LeadSelectedFieldsPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
-      required:
-      - data
-      - pagination
-      title: V1LeadListPayload
-      type: object
-    V1LeadRelatedDealPayload:
-      properties:
-        id:
-          description: Opaque `deal_` identifier.
-          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
-          type: string
-        name:
-          type: string
-        pipeline_stage_id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-          type: string
-        stage_name:
-          type: string
-        stage_type:
-          oneOf:
-          - type: string
-          - type: 'null'
-        value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-      required:
-      - id
-      - name
-      - pipeline_stage_id
-      - stage_name
-      - stage_type
-      - value
-      title: V1LeadRelatedDealPayload
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
-    V1LeadConversionResultPayload:
-      properties:
-        account:
-          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
-        contact:
-          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
-        deal:
-          oneOf:
-          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
-          - type: 'null'
-        lead:
-          $ref: '#/components/schemas/V1LeadDetailPayload'
-      required:
-      - account
-      - contact
-      - deal
-      - lead
-      title: V1LeadConversionResultPayload
-      type: object
-    V1LeadDetailPayload:
-      properties:
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_employee_count:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        company_industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_website:
-          oneOf:
-          - type: string
-          - type: 'null'
-        converted_account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        converted_at:
-          example: '2026-03-24T18:05:00Z'
-          oneOf:
-          - example: '2026-03-24T18:05:00Z'
-            format: date-time
-            type: string
-          - example: '2026-03-24T18:05:00Z'
-            type: 'null'
-        converted_contact_id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          oneOf:
-          - description: Opaque `contact_` identifier.
-            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-            type: string
-          - description: Opaque `contact_` identifier.
-            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-            type: 'null'
-        country:
-          oneOf:
-          - type: string
-          - type: 'null'
-        created_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        estimated_value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        id:
-          description: Opaque `lead_` identifier.
-          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
-          type: string
-        last_activity_at:
-          example: '2026-03-24T17:30:00Z'
-          oneOf:
-          - example: '2026-03-24T17:30:00Z'
-            format: date-time
-            type: string
-          - example: '2026-03-24T17:30:00Z'
-            type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        source:
-          enum:
-          - website
-          - referral
-          - linkedin
-          - cold_outreach
-          - event
-          - form
-          - other
-          oneOf:
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: string
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        status:
-          enum:
-          - new
-          - contacted
-          - qualified
-          - unqualified
-          - converted
-          type: string
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-        updated_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-      required:
-      - city
-      - company_employee_count
-      - company_industry
-      - company_name
-      - company_website
-      - converted_account_id
-      - converted_at
-      - converted_contact_id
-      - country
-      - created_at
-      - email
-      - estimated_value
-      - id
-      - last_activity_at
-      - linkedin_url
-      - name
-      - notes
-      - phone
-      - source
-      - state
-      - status
-      - title
-      - updated_at
-      title: V1LeadDetailPayload
       type: object
   securitySchemes:
     bearerAuth:

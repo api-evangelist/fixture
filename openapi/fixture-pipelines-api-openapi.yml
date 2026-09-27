@@ -197,6 +197,96 @@ paths:
       - Pipelines
 components:
   schemas:
+    V1PipelineListPayload:
+      description: Paginated list response for Pipelines.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1PipelinePayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1PipelineListPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1PipelineStagePayload:
+      description: Nested Pipeline stage payload.
+      properties:
+        color:
+          type: string
+        id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - color
+      - id
+      - name
+      - position
+      - stage_type
+      title: V1PipelineStagePayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1PipelineDetailResponsePayload:
+      description: Single-Pipeline response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1PipelinePayload'
+      required:
+      - data
+      title: V1PipelineDetailResponsePayload
+      type: object
     V1PipelinePayload:
       description: Pipeline payload with nested stage definitions.
       properties:
@@ -225,96 +315,6 @@ components:
       - stages
       - updated_at
       title: V1PipelinePayload
-      type: object
-    V1PipelineStagePayload:
-      description: Nested Pipeline stage payload.
-      properties:
-        color:
-          type: string
-        id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-          type: string
-        name:
-          type: string
-        position:
-          type: integer
-        stage_type:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - color
-      - id
-      - name
-      - position
-      - stage_type
-      title: V1PipelineStagePayload
-      type: object
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
-      properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
-      required:
-      - error
-      type: object
-    V1PipelineDetailResponsePayload:
-      description: Single-Pipeline response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1PipelinePayload'
-      required:
-      - data
-      title: V1PipelineDetailResponsePayload
-      type: object
-    V1PipelineListPayload:
-      description: Paginated list response for Pipelines.
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1PipelinePayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
-      required:
-      - data
-      - pagination
-      title: V1PipelineListPayload
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
       type: object
   securitySchemes:
     bearerAuth:
