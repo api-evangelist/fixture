@@ -197,6 +197,40 @@ paths:
       - Pipelines
 components:
   schemas:
+    V1PipelineStagePayload:
+      description: Nested Pipeline stage payload.
+      properties:
+        color:
+          type: string
+        id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+        stage_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - color
+      - id
+      - name
+      - position
+      - stage_type
+      title: V1PipelineStagePayload
+      type: object
+    V1PipelineDetailResponsePayload:
+      description: Single-Pipeline response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1PipelinePayload'
+      required:
+      - data
+      title: V1PipelineDetailResponsePayload
+      type: object
     V1PipelineListPayload:
       description: Paginated list response for Pipelines.
       properties:
@@ -231,31 +265,6 @@ components:
       required:
       - error
       type: object
-    V1PipelineStagePayload:
-      description: Nested Pipeline stage payload.
-      properties:
-        color:
-          type: string
-        id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-          type: string
-        name:
-          type: string
-        position:
-          type: integer
-        stage_type:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - color
-      - id
-      - name
-      - position
-      - stage_type
-      title: V1PipelineStagePayload
-      type: object
     V1PaginationPayload:
       description: Cursor pagination block for public list responses.
       properties:
@@ -277,15 +286,6 @@ components:
       - limit
       - next_cursor
       - has_more
-      type: object
-    V1PipelineDetailResponsePayload:
-      description: Single-Pipeline response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1PipelinePayload'
-      required:
-      - data
-      title: V1PipelineDetailResponsePayload
       type: object
     V1PipelinePayload:
       description: Pipeline payload with nested stage definitions.

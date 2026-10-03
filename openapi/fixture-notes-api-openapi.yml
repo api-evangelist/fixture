@@ -101,6 +101,36 @@ paths:
       - Notes
 components:
   schemas:
+    V1NoteCreateResponsePayload:
+      description: Created-Note response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1ActivityDetailPayload'
+      required:
+      - data
+      title: V1NoteCreateResponsePayload
+      type: object
+    V1ActivityEntityPayload:
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+        role:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - entity_id
+      - entity_type
+      - role
+      title: V1ActivityEntityPayload
+      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -144,62 +174,6 @@ components:
       - entity_id
       - entity_type
       title: V1CreateNoteRequest
-      type: object
-    V1ActivityActorPayload:
-      properties:
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - name
-      title: V1ActivityActorPayload
-      type: object
-    V1NoteCreateResponsePayload:
-      description: Created-Note response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1ActivityDetailPayload'
-      required:
-      - data
-      title: V1NoteCreateResponsePayload
-      type: object
-    V1CreateNoteEntityLinkRequest:
-      properties:
-        entity_id:
-          type: string
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          type: string
-      required:
-      - entity_id
-      - entity_type
-      title: V1CreateNoteEntityLinkRequest
-      type: object
-    V1ActivityEntityPayload:
-      properties:
-        entity_id:
-          type: string
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          type: string
-        role:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - entity_id
-      - entity_type
-      - role
-      title: V1ActivityEntityPayload
       type: object
     V1ActivityDetailPayload:
       properties:
@@ -271,6 +245,32 @@ components:
       - type
       - updated_at
       title: V1ActivityDetailPayload
+      type: object
+    V1CreateNoteEntityLinkRequest:
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+      required:
+      - entity_id
+      - entity_type
+      title: V1CreateNoteEntityLinkRequest
+      type: object
+    V1ActivityActorPayload:
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - name
+      title: V1ActivityActorPayload
       type: object
   securitySchemes:
     bearerAuth:

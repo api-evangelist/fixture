@@ -69,25 +69,27 @@ paths:
       - Users
 components:
   schemas:
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
       properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
       required:
-      - error
+      - limit
+      - next_cursor
+      - has_more
       type: object
     V1UserListPayload:
       description: Paginated list response for Users.
@@ -127,27 +129,25 @@ components:
       - role
       title: V1UserPayload
       type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
       properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
       required:
-      - limit
-      - next_cursor
-      - has_more
+      - error
       type: object
   securitySchemes:
     bearerAuth:
