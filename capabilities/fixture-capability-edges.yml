@@ -1,0 +1,61 @@
+slug: fixture
+provider: Fixture
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Deals
+  spec_file: fixture-deals-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.9
+  evidence: POST /api/v1/deals  createDeal  Create a Deal; V1DealContactAssociationPayload
+  reason: Deal records with owners, stages and associated contacts are the opportunity/deal lifecycle
+    object of a CRM sales pipeline.
+- tag: Leads
+  spec_file: fixture-leads-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.9
+  evidence: POST /api/v1/leads/{lead_id}/convert  convertLead  Convert a Lead; V1LeadConversionResultPayload
+  reason: Lead creation, qualification and conversion into account/contact/deal is squarely the lead-to-opportunity
+    lifecycle.
+- tag: Pipelines
+  spec_file: fixture-pipelines-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.85
+  evidence: GET /api/v1/pipelines  listPipelines  List Pipelines; V1PipelineStagePayload
+  reason: Sales pipelines and their stages are the structural definition of the opportunity/deal pipeline
+    in this CRM.
+- tag: Contacts
+  spec_file: fixture-contacts-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.8
+  evidence: POST /api/v1/contacts  createContact  Create a Contact; V1MergedContactRedirectResponse
+  reason: CRUD over person-level customer records including merge/identity-resolution semantics (merged
+    contact redirect), which is customer data / golden-record management.
+- tag: Accounts
+  spec_file: fixture-accounts-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.75
+  evidence: POST /api/v1/accounts  createAccount  Create an Account; schemas V1AccountDetailPayload, V1OwnerRelationshipPayload
+  reason: CRUD over CRM company/customer records with ownership and relationship payloads — maintenance
+    of the customer master record. Could alternatively be read as key-account management, hence not maximal
+    confidence on the L2.

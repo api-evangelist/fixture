@@ -354,6 +354,9 @@ apis:
   - type: RateLimits
     url: https://fixture.app/docs/api-reference/rate-limiting
 common:
+- type: CapabilityMap
+  url: capabilities/fixture-capability-edges.yml
+  name: Fixture Business Capability Map
 - type: Overlay
   url: overlays/fixture-v1-overlay.yaml
 - type: DomainSecurity
