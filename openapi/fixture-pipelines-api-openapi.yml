@@ -222,6 +222,28 @@ components:
       - stage_type
       title: V1PipelineStagePayload
       type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
     V1PipelineDetailResponsePayload:
       description: Single-Pipeline response envelope.
       properties:
@@ -264,28 +286,6 @@ components:
           type: object
       required:
       - error
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
       type: object
     V1PipelinePayload:
       description: Pipeline payload with nested stage definitions.

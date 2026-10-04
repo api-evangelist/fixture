@@ -803,95 +803,53 @@ components:
       - name
       title: V1CreateDealRequest
       type: object
-    V1DealAssociationContactPayload:
+    V1UpdateDealRequest:
+      description: Request body for partially updating a Deal.
       properties:
-        email:
-          description: Primary email address.
-          example: alex@acme.example
+        expected_close_date:
+          example: '2026-06-30'
           oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
+          - example: '2026-06-30'
+            format: date
             type: string
-          - description: Primary email address.
-            example: alex@acme.example
+          - example: '2026-06-30'
             type: 'null'
-        id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          type: string
         name:
           oneOf:
           - type: string
           - type: 'null'
-      required:
-      - email
-      - id
-      - name
-      title: V1DealAssociationContactPayload
-      type: object
-    V1DealContactPayload:
-      properties:
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          type: string
-        is_primary:
-          type: boolean
-        name:
+        notes:
           oneOf:
           - type: string
           - type: 'null'
-      required:
-      - email
-      - id
-      - is_primary
-      - name
-      title: V1DealContactPayload
-      type: object
-    V1OwnerRelationshipSetUserPayload:
-      description: User assignment entry for an owner relationship update.
-      properties:
-        user_id:
-          description: Opaque `user_` identifier.
-          example: user_9T5jXRFuLpTQ3nM4PkGvW2
-          type: string
-      required:
-      - user_id
-      type: object
-    V1OwnerRelationshipPayload:
-      description: Owner relationship state for an Account or Deal.
-      properties:
-        users:
-          description: Current owner Users. This list has zero or one item.
-          items:
-            $ref: '#/components/schemas/V1OwnerUserPayload'
-          type: array
-      required:
-      - users
-      type: object
-    V1DealDeletePayload:
-      properties:
-        deleted:
-          const: true
-          type: boolean
-        id:
-          description: Opaque `deal_` identifier.
-          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
-          type: string
-      required:
-      - deleted
-      - id
-      title: V1DealDeletePayload
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          oneOf:
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: string
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: 'null'
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          oneOf:
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: string
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: 'null'
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsWritePayload'
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required: []
+      title: V1UpdateDealRequest
       type: object
     V1DealListItemPayload:
       properties:
@@ -965,13 +923,15 @@ components:
       - value
       title: V1DealListItemPayload
       type: object
-    V1RelationshipsPayload:
-      description: Relationships attached to an Account or Deal.
+    V1OwnerUserPayload:
+      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
       properties:
-        owner:
-          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
       required:
-      - owner
+      - id
       type: object
     V1DealDetailPayload:
       properties:
@@ -1055,19 +1015,15 @@ components:
       - value
       title: V1DealDetailPayload
       type: object
-    V1DealListPayload:
-      description: Paginated list response for Deals.
+    V1OwnerRelationshipSetUserPayload:
+      description: User assignment entry for an owner relationship update.
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1DealListItemPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
+        user_id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
       required:
-      - data
-      - pagination
-      title: V1DealListPayload
+      - user_id
       type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
@@ -1089,15 +1045,6 @@ components:
       required:
       - error
       type: object
-    V1DealDetailResponsePayload:
-      description: Single-Deal response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1DealDetailPayload'
-      required:
-      - data
-      title: V1DealDetailResponsePayload
-      type: object
     V1DealContactAssociationPayload:
       properties:
         contact:
@@ -1113,6 +1060,156 @@ components:
       - contact_id
       - is_primary
       title: V1DealContactAssociationPayload
+      type: object
+    V1DealDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1DealDeletePayload
+      type: object
+    V1DealDetailResponsePayload:
+      description: Single-Deal response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1DealDetailPayload'
+      required:
+      - data
+      title: V1DealDetailResponsePayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1OwnerRelationshipPayload:
+      description: Owner relationship state for an Account or Deal.
+      properties:
+        users:
+          description: Current owner Users. This list has zero or one item.
+          items:
+            $ref: '#/components/schemas/V1OwnerUserPayload'
+          type: array
+      required:
+      - users
+      type: object
+    V1RelationshipsWritePayload:
+      description: Relationship updates accepted on Account and Deal writes.
+      properties:
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
+      type: object
+    V1DealListPayload:
+      description: Paginated list response for Deals.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1DealListItemPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1DealListPayload
+      type: object
+    V1RelationshipsPayload:
+      description: Relationships attached to an Account or Deal.
+      properties:
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
+      required:
+      - owner
+      type: object
+    V1DealContactAssociationsResponsePayload:
+      description: Deal-Contact association response envelope.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1DealContactAssociationPayload'
+          type: array
+      required:
+      - data
+      title: V1DealContactAssociationsResponsePayload
+      type: object
+    V1DealAssociationContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - name
+      title: V1DealAssociationContactPayload
+      type: object
+    V1DealContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        is_primary:
+          type: boolean
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - is_primary
+      - name
+      title: V1DealContactPayload
       type: object
     UpdateDealContactsRequest:
       description: Request body for replacing the Contacts associated with a Deal.
@@ -1140,70 +1237,6 @@ components:
       - contact_ids
       title: UpdateDealContactsRequest
       type: object
-    V1UpdateDealRequest:
-      description: Request body for partially updating a Deal.
-      properties:
-        expected_close_date:
-          example: '2026-06-30'
-          oneOf:
-          - example: '2026-06-30'
-            format: date
-            type: string
-          - example: '2026-06-30'
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        pipeline_id:
-          description: Opaque `pipeline_` identifier.
-          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-          oneOf:
-          - description: Opaque `pipeline_` identifier.
-            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-            type: string
-          - description: Opaque `pipeline_` identifier.
-            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-            type: 'null'
-        pipeline_stage_id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-          oneOf:
-          - description: Opaque `stage_` identifier.
-            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-            type: string
-          - description: Opaque `stage_` identifier.
-            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-            type: 'null'
-        relationships:
-          $ref: '#/components/schemas/V1RelationshipsWritePayload'
-        value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-      required: []
-      title: V1UpdateDealRequest
-      type: object
-    V1OwnerUserPayload:
-      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
-      properties:
-        id:
-          description: Opaque `user_` identifier.
-          example: user_9T5jXRFuLpTQ3nM4PkGvW2
-          type: string
-      required:
-      - id
-      type: object
-    V1RelationshipsWritePayload:
-      description: Relationship updates accepted on Account and Deal writes.
-      properties:
-        owner:
-          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
-      type: object
     V1OwnerRelationshipWritePayload:
       description: Owner relationship update payload.
       properties:
@@ -1219,39 +1252,6 @@ components:
           type: array
       required:
       - set
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
-    V1DealContactAssociationsResponsePayload:
-      description: Deal-Contact association response envelope.
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1DealContactAssociationPayload'
-          type: array
-      required:
-      - data
-      title: V1DealContactAssociationsResponsePayload
       type: object
   securitySchemes:
     bearerAuth:

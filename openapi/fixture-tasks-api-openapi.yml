@@ -568,21 +568,6 @@ paths:
       - Tasks
 components:
   schemas:
-    V1TaskDeletePayload:
-      description: Envelope returned when a Task is deleted.
-      properties:
-        deleted:
-          const: true
-          type: boolean
-        id:
-          description: Opaque `task_` identifier.
-          example: task_8W3jXRFuLpTQ3nM4PkGvW0
-          type: string
-      required:
-      - deleted
-      - id
-      title: V1TaskDeletePayload
-      type: object
     V1PaginationPayload:
       description: Cursor pagination block for public list responses.
       properties:
@@ -604,6 +589,72 @@ components:
       - limit
       - next_cursor
       - has_more
+      type: object
+    V1TaskDetailResponsePayload:
+      description: Single-Task response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1TaskPayload'
+      required:
+      - data
+      title: V1TaskDetailResponsePayload
+      type: object
+    V1UpdateTaskRequest:
+      description: Request body for partially updating a Task. Explicit JSON `null` on `description`, `assignee_id`, `due_date`, or the entity link clears the field; omitting the field leaves it untouched; empty strings are rejected. `task_status_id` and `task_status_name` are mutually exclusive on a single request.
+      properties:
+        assignee_id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `user_` identifier.
+            example: user_9T5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `user_` identifier.
+            example: user_9T5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        due_date:
+          example: '2026-04-30'
+          oneOf:
+          - example: '2026-04-30'
+            format: date
+            type: string
+          - example: '2026-04-30'
+            type: 'null'
+        entity_id:
+          oneOf:
+          - type: string
+          - type: 'null'
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          oneOf:
+          - enum:
+            - account
+            - contact
+            - deal
+            - lead
+            type: string
+          - enum:
+            - account
+            - contact
+            - deal
+            - lead
+            type: 'null'
+        task_status_id:
+          type: string
+        task_status_name:
+          type: string
+        title:
+          type: string
+      required: []
+      title: V1UpdateTaskRequest
       type: object
     V1TaskPayload:
       description: Task payload (shared by list and detail responses).
@@ -704,19 +755,20 @@ components:
       - updated_at
       title: V1TaskPayload
       type: object
-    V1TaskListPayload:
-      description: Paginated list response for Tasks.
+    V1TaskDeletePayload:
+      description: Envelope returned when a Task is deleted.
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1TaskPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `task_` identifier.
+          example: task_8W3jXRFuLpTQ3nM4PkGvW0
+          type: string
       required:
-      - data
-      - pagination
-      title: V1TaskListPayload
+      - deleted
+      - id
+      title: V1TaskDeletePayload
       type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
@@ -737,29 +789,6 @@ components:
           type: object
       required:
       - error
-      type: object
-    V1TaskStatusPayload:
-      description: Task status definition payload.
-      properties:
-        category:
-          type: string
-        color:
-          type: string
-        id:
-          description: Opaque `taskstatus_` identifier.
-          example: taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1
-          type: string
-        name:
-          type: string
-        position:
-          type: integer
-      required:
-      - category
-      - color
-      - id
-      - name
-      - position
-      title: V1TaskStatusPayload
       type: object
     V1CreateTaskRequest:
       description: Request body for creating a Task. `description` is plain text only; sending it clears any rich-text state the UI may have previously stored.
@@ -829,71 +858,42 @@ components:
       - title
       title: V1CreateTaskRequest
       type: object
-    V1UpdateTaskRequest:
-      description: Request body for partially updating a Task. Explicit JSON `null` on `description`, `assignee_id`, `due_date`, or the entity link clears the field; omitting the field leaves it untouched; empty strings are rejected. `task_status_id` and `task_status_name` are mutually exclusive on a single request.
+    V1TaskStatusPayload:
+      description: Task status definition payload.
       properties:
-        assignee_id:
-          description: Opaque `user_` identifier.
-          example: user_9T5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `user_` identifier.
-            example: user_9T5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `user_` identifier.
-            example: user_9T5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        description:
-          oneOf:
-          - type: string
-          - type: 'null'
-        due_date:
-          example: '2026-04-30'
-          oneOf:
-          - example: '2026-04-30'
-            format: date
-            type: string
-          - example: '2026-04-30'
-            type: 'null'
-        entity_id:
-          oneOf:
-          - type: string
-          - type: 'null'
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          oneOf:
-          - enum:
-            - account
-            - contact
-            - deal
-            - lead
-            type: string
-          - enum:
-            - account
-            - contact
-            - deal
-            - lead
-            type: 'null'
-        task_status_id:
+        category:
           type: string
-        task_status_name:
+        color:
           type: string
-        title:
+        id:
+          description: Opaque `taskstatus_` identifier.
+          example: taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1
           type: string
-      required: []
-      title: V1UpdateTaskRequest
+        name:
+          type: string
+        position:
+          type: integer
+      required:
+      - category
+      - color
+      - id
+      - name
+      - position
+      title: V1TaskStatusPayload
       type: object
-    V1TaskDetailResponsePayload:
-      description: Single-Task response envelope.
+    V1TaskListPayload:
+      description: Paginated list response for Tasks.
       properties:
         data:
-          $ref: '#/components/schemas/V1TaskPayload'
+          items:
+            $ref: '#/components/schemas/V1TaskPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
       required:
       - data
-      title: V1TaskDetailResponsePayload
+      - pagination
+      title: V1TaskListPayload
       type: object
   securitySchemes:
     bearerAuth:

@@ -378,110 +378,6 @@ paths:
       - Activities
 components:
   schemas:
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
-    V1ActivityEntityPayload:
-      properties:
-        entity_id:
-          type: string
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          type: string
-        role:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required:
-      - entity_id
-      - entity_type
-      - role
-      title: V1ActivityEntityPayload
-      type: object
-    V1CreateActivityRequest:
-      description: Request body for creating a custom Activity.
-      properties:
-        account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        body:
-          oneOf:
-          - type: string
-          - type: 'null'
-        contact_id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          oneOf:
-          - description: Opaque `contact_` identifier.
-            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-            type: string
-          - description: Opaque `contact_` identifier.
-            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-            type: 'null'
-        deal_id:
-          description: Opaque `deal_` identifier.
-          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
-          oneOf:
-          - description: Opaque `deal_` identifier.
-            example: deal_5N2jXRFuLpTQ3nM4PkGvW7
-            type: string
-          - description: Opaque `deal_` identifier.
-            example: deal_5N2jXRFuLpTQ3nM4PkGvW7
-            type: 'null'
-        external_id:
-          description: Client-supplied idempotency key for custom Activities.
-          example: invoice-1042
-          oneOf:
-          - description: Client-supplied idempotency key for custom Activities.
-            example: invoice-1042
-            type: string
-          - description: Client-supplied idempotency key for custom Activities.
-            example: invoice-1042
-            type: 'null'
-        occurred_at:
-          example: '2026-03-22T14:00:00Z'
-          format: date-time
-          type: string
-        title:
-          type: string
-        type:
-          type: string
-      required:
-      - occurred_at
-      - title
-      - type
-      title: V1CreateActivityRequest
-      type: object
     V1ActivityListItemPayload:
       properties:
         actor:
@@ -553,6 +449,47 @@ components:
       - updated_at
       title: V1ActivityListItemPayload
       type: object
+    V1ActivityActorPayload:
+      properties:
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - name
+      title: V1ActivityActorPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1ActivityDetailResponsePayload:
+      description: Single-Activity response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1ActivityDetailPayload'
+      required:
+      - data
+      title: V1ActivityDetailResponsePayload
+      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -572,29 +509,6 @@ components:
           type: object
       required:
       - error
-      type: object
-    V1ActivityListPayload:
-      description: Paginated list response for Activities.
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1ActivityListItemPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
-      required:
-      - data
-      - pagination
-      title: V1ActivityListPayload
-      type: object
-    V1ActivityDetailResponsePayload:
-      description: Single-Activity response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1ActivityDetailPayload'
-      required:
-      - data
-      title: V1ActivityDetailResponsePayload
       type: object
     V1ActivityDetailPayload:
       properties:
@@ -667,15 +581,101 @@ components:
       - updated_at
       title: V1ActivityDetailPayload
       type: object
-    V1ActivityActorPayload:
+    V1CreateActivityRequest:
+      description: Request body for creating a custom Activity.
       properties:
-        name:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        body:
+          oneOf:
+          - type: string
+          - type: 'null'
+        contact_id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          oneOf:
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: string
+          - description: Opaque `contact_` identifier.
+            example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+            type: 'null'
+        deal_id:
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+          oneOf:
+          - description: Opaque `deal_` identifier.
+            example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+            type: string
+          - description: Opaque `deal_` identifier.
+            example: deal_5N2jXRFuLpTQ3nM4PkGvW7
+            type: 'null'
+        external_id:
+          description: Client-supplied idempotency key for custom Activities.
+          example: invoice-1042
+          oneOf:
+          - description: Client-supplied idempotency key for custom Activities.
+            example: invoice-1042
+            type: string
+          - description: Client-supplied idempotency key for custom Activities.
+            example: invoice-1042
+            type: 'null'
+        occurred_at:
+          example: '2026-03-22T14:00:00Z'
+          format: date-time
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+      required:
+      - occurred_at
+      - title
+      - type
+      title: V1CreateActivityRequest
+      type: object
+    V1ActivityListPayload:
+      description: Paginated list response for Activities.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1ActivityListItemPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1ActivityListPayload
+      type: object
+    V1ActivityEntityPayload:
+      properties:
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+        role:
           oneOf:
           - type: string
           - type: 'null'
       required:
-      - name
-      title: V1ActivityActorPayload
+      - entity_id
+      - entity_type
+      - role
+      title: V1ActivityEntityPayload
       type: object
   securitySchemes:
     bearerAuth:

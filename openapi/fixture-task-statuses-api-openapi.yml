@@ -57,26 +57,6 @@ paths:
       - Task Statuses
 components:
   schemas:
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
-      properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
-      required:
-      - error
-      type: object
     V1TaskStatusPayload:
       description: Task status definition payload.
       properties:
@@ -110,6 +90,26 @@ components:
       required:
       - data
       title: V1TaskStatusListPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
       type: object
   securitySchemes:
     bearerAuth:
