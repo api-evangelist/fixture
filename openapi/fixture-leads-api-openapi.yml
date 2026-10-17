@@ -700,155 +700,36 @@ paths:
       - Leads
 components:
   schemas:
-    V1UpdateLeadRequest:
-      description: Request body for partially updating a Lead.
+    V1LeadRelatedDealPayload:
       properties:
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_employee_count:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        company_industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_website:
-          oneOf:
-          - type: string
-          - type: 'null'
-        country:
-          oneOf:
-          - type: string
-          - type: 'null'
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        estimated_value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        source:
-          enum:
-          - website
-          - referral
-          - linkedin
-          - cold_outreach
-          - event
-          - form
-          - other
-          oneOf:
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: string
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        status:
-          enum:
-          - new
-          - contacted
-          - qualified
-          - unqualified
-          - converted
-          oneOf:
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: string
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required: []
-      title: V1UpdateLeadRequest
-      type: object
-    V1LeadRelatedContactPayload:
-      properties:
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
         id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          description: Opaque `deal_` identifier.
+          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
           type: string
         name:
+          type: string
+        pipeline_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          type: string
+        stage_name:
+          type: string
+        stage_type:
           oneOf:
           - type: string
           - type: 'null'
+        value:
+          oneOf:
+          - type: integer
+          - type: 'null'
       required:
-      - email
       - id
       - name
-      title: V1LeadRelatedContactPayload
+      - pipeline_stage_id
+      - stage_name
+      - stage_type
+      - value
+      title: V1LeadRelatedDealPayload
       type: object
     V1LeadDetailResponsePayload:
       description: Single-Lead response envelope.
@@ -858,6 +739,29 @@ components:
       required:
       - data
       title: V1LeadDetailResponsePayload
+      type: object
+    V1LeadConversionResponsePayload:
+      description: Lead conversion response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadConversionResultPayload'
+      required:
+      - data
+      title: V1LeadConversionResponsePayload
+      type: object
+    V1LeadDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `lead_` identifier.
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1LeadDeletePayload
       type: object
     V1LeadListPayload:
       description: Paginated list response for Leads.
@@ -872,6 +776,19 @@ components:
       - data
       - pagination
       title: V1LeadListPayload
+      type: object
+    V1LeadRelatedAccountPayload:
+      properties:
+        id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+      title: V1LeadRelatedAccountPayload
       type: object
     V1PaginationPayload:
       description: Cursor pagination block for public list responses.
@@ -895,19 +812,44 @@ components:
       - next_cursor
       - has_more
       type: object
-    V1LeadDeletePayload:
+    V1LeadConversionResultPayload:
       properties:
-        deleted:
-          const: true
-          type: boolean
-        id:
-          description: Opaque `lead_` identifier.
-          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
-          type: string
+        account:
+          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
+        contact:
+          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
+        deal:
+          oneOf:
+          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
+          - type: 'null'
+        lead:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
       required:
-      - deleted
-      - id
-      title: V1LeadDeletePayload
+      - account
+      - contact
+      - deal
+      - lead
+      title: V1LeadConversionResultPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
       type: object
     V1LeadDetailPayload:
       properties:
@@ -1089,66 +1031,216 @@ components:
       - updated_at
       title: V1LeadDetailPayload
       type: object
-    V1LeadConversionResultPayload:
+    V1ConvertLeadRequest:
+      description: Request body for converting a Lead into an Account and Contact.
       properties:
-        account:
-          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
-        contact:
-          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
-        deal:
+        company_industry:
           oneOf:
-          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
+          - type: string
           - type: 'null'
-        lead:
-          $ref: '#/components/schemas/V1LeadDetailPayload'
-      required:
-      - account
-      - contact
-      - deal
-      - lead
-      title: V1LeadConversionResultPayload
-      type: object
-    V1LeadConversionResponsePayload:
-      description: Lead conversion response envelope.
-      properties:
-        data:
-          $ref: '#/components/schemas/V1LeadConversionResultPayload'
-      required:
-      - data
-      title: V1LeadConversionResponsePayload
-      type: object
-    V1LeadRelatedAccountPayload:
-      properties:
-        id:
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        create_account:
+          default: true
+          type: boolean
+        create_deal:
+          default: false
+          type: boolean
+        deal_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        deal_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          oneOf:
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: string
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: 'null'
+        deal_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        existing_account_id:
           description: Opaque `account_` identifier.
           example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          type: string
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
         name:
-          type: string
-      required:
-      - id
-      - name
-      title: V1LeadRelatedAccountPayload
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+          oneOf:
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: string
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1ConvertLeadRequest
       type: object
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
+    V1UpdateLeadRequest:
+      description: Request body for partially updating a Lead.
       properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
-      required:
-      - error
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          oneOf:
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: string
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1UpdateLeadRequest
       type: object
     V1LeadSelectedFieldsPayload:
       properties:
@@ -1307,76 +1399,8 @@ components:
       required: []
       title: V1LeadSelectedFieldsPayload
       type: object
-    V1LeadRelatedDealPayload:
+    V1LeadRelatedContactPayload:
       properties:
-        id:
-          description: Opaque `deal_` identifier.
-          example: deal_5N2jXRFuLpTQ3nM4PkGvW7
-          type: string
-        name:
-          type: string
-        pipeline_stage_id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-          type: string
-        stage_name:
-          type: string
-        stage_type:
-          oneOf:
-          - type: string
-          - type: 'null'
-        value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-      required:
-      - id
-      - name
-      - pipeline_stage_id
-      - stage_name
-      - stage_type
-      - value
-      title: V1LeadRelatedDealPayload
-      type: object
-    V1ConvertLeadRequest:
-      description: Request body for converting a Lead into an Account and Contact.
-      properties:
-        company_industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_website:
-          oneOf:
-          - type: string
-          - type: 'null'
-        create_account:
-          default: true
-          type: boolean
-        create_deal:
-          default: false
-          type: boolean
-        deal_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        deal_stage_id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-          oneOf:
-          - description: Opaque `stage_` identifier.
-            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-            type: string
-          - description: Opaque `stage_` identifier.
-            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-            type: 'null'
-        deal_value:
-          oneOf:
-          - type: integer
-          - type: 'null'
         email:
           description: Primary email address.
           example: alex@acme.example
@@ -1387,43 +1411,19 @@ components:
           - description: Primary email address.
             example: alex@acme.example
             type: 'null'
-        existing_account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
         name:
           oneOf:
           - type: string
           - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        pipeline_id:
-          description: Opaque `pipeline_` identifier.
-          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-          oneOf:
-          - description: Opaque `pipeline_` identifier.
-            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-            type: string
-          - description: Opaque `pipeline_` identifier.
-            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required: []
-      title: V1ConvertLeadRequest
+      required:
+      - email
+      - id
+      - name
+      title: V1LeadRelatedContactPayload
       type: object
     V1CreateLeadRequest:
       description: Request body for creating a Lead.

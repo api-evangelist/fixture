@@ -57,29 +57,6 @@ paths:
       - Task Statuses
 components:
   schemas:
-    V1TaskStatusPayload:
-      description: Task status definition payload.
-      properties:
-        category:
-          type: string
-        color:
-          type: string
-        id:
-          description: Opaque `taskstatus_` identifier.
-          example: taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1
-          type: string
-        name:
-          type: string
-        position:
-          type: integer
-      required:
-      - category
-      - color
-      - id
-      - name
-      - position
-      title: V1TaskStatusPayload
-      type: object
     V1TaskStatusListPayload:
       description: Task status list response envelope.
       properties:
@@ -110,6 +87,29 @@ components:
           type: object
       required:
       - error
+      type: object
+    V1TaskStatusPayload:
+      description: Task status definition payload.
+      properties:
+        category:
+          type: string
+        color:
+          type: string
+        id:
+          description: Opaque `taskstatus_` identifier.
+          example: taskstatus_9Y4jXRFuLpTQ3nM4PkGvW1
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+      required:
+      - category
+      - color
+      - id
+      - name
+      - position
+      title: V1TaskStatusPayload
       type: object
   securitySchemes:
     bearerAuth:
