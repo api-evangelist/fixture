@@ -353,6 +353,36 @@ apis:
     url: https://fixture.app/docs/api-reference/errors
   - type: RateLimits
     url: https://fixture.app/docs/api-reference/rate-limiting
+- aid: fixture:fixture-custom-fields-api
+  name: Fixture Custom Fields API
+  description: The Custom Fields API from Fixture — 8 operation(s) for custom fields.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Custom Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-custom-fields-api-openapi.yml
+- aid: fixture:fixture-lead-lists-api
+  name: Fixture Lead Lists API
+  description: The Lead Lists API from Fixture — 3 operation(s) for lead lists.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Lead Lists
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-lead-lists-api-openapi.yml
+- aid: fixture:fixture-reporting-api
+  name: Fixture Reporting API
+  description: Describe and synchronously query authorized Semantic Query datasets.
+  humanURL: https://fixture.app/docs/api-reference/overview
+  baseURL: https://beta-api.fixture.app/api/v1
+  tags:
+  - Reporting
+  properties:
+  - type: OpenAPI
+    url: openapi/fixture-reporting-api-openapi.yml
 common:
 - type: CapabilityMap
   url: capabilities/fixture-capability-edges.yml

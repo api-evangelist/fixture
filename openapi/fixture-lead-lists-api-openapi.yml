@@ -1,0 +1,772 @@
+openapi: 3.2.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Lead Lists API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- name: Lead Lists
+paths:
+  /api/v1/lead-lists:
+    get:
+      deprecated: false
+      description: Discover saved Lead Lists using limit, cursor, and created_at sorting. Archived Lists are excluded unless include_archived=true. Requires leads:read. The virtual All Leads List is not returned.
+      operationId: listLeadLists
+      parameters:
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Include archived records. Defaults to false.
+        in: query
+        name: include_archived
+        required: false
+        schema:
+          default: false
+          example: false
+          type: boolean
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Maximum number of records to return.
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          example: 50
+          type: integer
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Opaque cursor returned by the previous page. Omit for the first page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          example: eyJ2IjoxLCJzb3J0IjoiLWNyZWF0ZWRfYXQiLCJ2YWx1ZSI6IjIwMjYtMDMtMjJUMTQ6MDA6MDFaIiwiaWQiOiI2NjAxZDYxZC0xMTI5LTQyN2MtODI1NS0wOGI1ZjEyZGRhYjUifQ
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Sort by a supported field. Prefix with `-` for descending order.
+        in: query
+        name: sort
+        required: false
+        schema:
+          default: -created_at
+          example: -created_at
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - archived_at: null
+                  created_at: '2026-03-22T14:00:01Z'
+                  entry_count: 12
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+                  updated_at: '2026-03-22T14:00:01Z'
+                pagination:
+                  has_more: false
+                  limit: 50
+                  next_cursor: null
+              schema:
+                $ref: '#/components/schemas/V1ProspectListCollectionPayload'
+          description: Saved Lead Lists.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid cursor
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid pagination parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: List Lead Lists
+      tags:
+      - Lead Lists
+    post:
+      deprecated: false
+      description: Create one empty saved List. Add Leads with the List's leads endpoint. Requires leads:write.
+      operationId: createLeadList
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Conference Leads
+            schema:
+              $ref: '#/components/schemas/V1CreateLeadListRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  archived_at: null
+                  created_at: '2026-03-22T14:00:01Z'
+                  entry_count: 12
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1ProspectListDetailResponsePayload'
+          description: The created List.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: name is required
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or blank name.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: List unavailable in this Organization.
+      security:
+      - bearerAuth: []
+      summary: Create a Lead List
+      tags:
+      - Lead Lists
+  /api/v1/lead-lists/{list_id}:
+    delete:
+      deprecated: false
+      description: Delete one saved List and its memberships. Its Leads are never deleted. Requires leads:write.
+      operationId: deleteLeadList
+      parameters:
+      - deprecated: false
+        description: Opaque saved Lead List ID with the `list_` prefix.
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                deleted: true
+                id: list_7B5jXRFuLpTQ3nM4PkGvW2
+              schema:
+                $ref: '#/components/schemas/V1ProspectListDeletePayload'
+          description: List deleted.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid ProspectList ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Malformed List ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: List unavailable in this Organization.
+      security:
+      - bearerAuth: []
+      summary: Delete a Lead List
+      tags:
+      - Lead Lists
+    get:
+      deprecated: false
+      description: Read one saved List by its list_ ID, including archived Lists. Requires leads:read.
+      operationId: getLeadList
+      parameters:
+      - deprecated: false
+        description: Opaque saved Lead List ID with the `list_` prefix.
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived_at: null
+                  created_at: '2026-03-22T14:00:01Z'
+                  entry_count: 12
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1ProspectListDetailResponsePayload'
+          description: Saved List metadata.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid ProspectList ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid List ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: List unavailable in this Organization.
+      security:
+      - bearerAuth: []
+      summary: Get a Lead List
+      tags:
+      - Lead Lists
+    patch:
+      deprecated: false
+      description: Rename a List, archive it with archived=true, or restore it with archived=false. Both changes apply together. Archived Lists keep their memberships but reject membership changes. Requires leads:write.
+      operationId: updateLeadList
+      parameters:
+      - deprecated: false
+        description: Opaque saved Lead List ID with the `list_` prefix.
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              archived: false
+              name: Conference Leads 2026
+            schema:
+              $ref: '#/components/schemas/V1UpdateLeadListRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived_at: null
+                  created_at: '2026-03-22T14:00:01Z'
+                  entry_count: 12
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1ProspectListDetailResponsePayload'
+          description: The updated List.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: name cannot be blank
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Malformed List ID or invalid body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: List unavailable in this Organization.
+      security:
+      - bearerAuth: []
+      summary: Update a Lead List
+      tags:
+      - Lead Lists
+  /api/v1/lead-lists/{list_id}/leads:
+    delete:
+      deprecated: false
+      description: Add or remove only the Leads named in lead_ids. Provide 1 to 100 lead_ IDs. All Leads are validated before any change; an unavailable Lead returns 400. Archived Lists return 409. Requires leads:write. Retries are idempotent; changed_count reports how many memberships actually changed.
+      operationId: removeLeadListLeads
+      parameters:
+      - deprecated: false
+        description: Opaque saved Lead List ID with the `list_` prefix.
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              lead_ids:
+              - lead_4P2jXRFuLpTQ3nM4PkGvW6
+            schema:
+              $ref: '#/components/schemas/V1LeadListLeadsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                changed_count: 1
+                data:
+                  archived_at: null
+                  created_at: '2026-03-22T14:00:01Z'
+                  entry_count: 12
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1ProspectListLeadsMutationPayload'
+          description: The List after the change.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide at most 100 Lead IDs
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Malformed ID or invalid lead_ids body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: List or Lead unavailable in this Organization.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: Restore this List before changing its Leads
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: An archived List cannot be changed.
+      security:
+      - bearerAuth: []
+      summary: Remove Leads from a List
+      tags:
+      - Lead Lists
+    post:
+      deprecated: false
+      description: Add or remove only the Leads named in lead_ids. Provide 1 to 100 lead_ IDs. All Leads are validated before any change; an unavailable Lead returns 400. Archived Lists return 409. Requires leads:write. Retries are idempotent; changed_count reports how many memberships actually changed.
+      operationId: addLeadListLeads
+      parameters:
+      - deprecated: false
+        description: Opaque saved Lead List ID with the `list_` prefix.
+        in: path
+        name: list_id
+        required: true
+        schema:
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              lead_ids:
+              - lead_4P2jXRFuLpTQ3nM4PkGvW6
+            schema:
+              $ref: '#/components/schemas/V1LeadListLeadsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                changed_count: 1
+                data:
+                  archived_at: null
+                  created_at: '2026-03-22T14:00:01Z'
+                  entry_count: 12
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1ProspectListLeadsMutationPayload'
+          description: The List after the change.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide at most 100 Lead IDs
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Malformed ID or invalid lead_ids body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: List or Lead unavailable in this Organization.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: Restore this List before changing its Leads
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: An archived List cannot be changed.
+      security:
+      - bearerAuth: []
+      summary: Add Leads to a List
+      tags:
+      - Lead Lists
+components:
+  schemas:
+    V1ProspectListDeletePayload:
+      description: Confirmation that the List and its memberships were deleted. Its Leads remain.
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `list_` identifier.
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1ProspectListDeletePayload
+      type: object
+    V1ProspectListPayload:
+      description: Saved Organization-scoped Lead List. All Leads is virtual and is not returned here.
+      properties:
+        archived_at:
+          oneOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        entry_count:
+          type: integer
+        id:
+          description: Opaque `list_` identifier.
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        name:
+          type: string
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+      required:
+      - archived_at
+      - created_at
+      - entry_count
+      - id
+      - name
+      - updated_at
+      title: V1ProspectListPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    V1ProspectListLeadsMutationPayload:
+      description: The List after the change and how many memberships changed.
+      properties:
+        changed_count:
+          type: integer
+        data:
+          $ref: '#/components/schemas/V1ProspectListPayload'
+      required:
+      - changed_count
+      - data
+      title: V1ProspectListLeadsMutationPayload
+      type: object
+    V1ProspectListDetailResponsePayload:
+      description: One saved Lead List, including its archive state and membership count.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1ProspectListPayload'
+      required:
+      - data
+      title: V1ProspectListDetailResponsePayload
+      type: object
+    V1UpdateLeadListRequest:
+      description: Provide name to rename, archived to archive (true) or restore (false), or both.
+      properties:
+        archived:
+          oneOf:
+          - type: boolean
+          - type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1UpdateLeadListRequest
+      type: object
+    V1ProspectListCollectionPayload:
+      description: Cursor-paginated saved Lead Lists.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1ProspectListPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1ProspectListCollectionPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1LeadListLeadsRequest:
+      description: Provide 1 to 100 lead_ IDs. Repeated IDs are deduplicated. Other members are preserved.
+      properties:
+        lead_ids:
+          description: List of opaque `lead_` IDs.
+          example:
+          - lead_4P2jXRFuLpTQ3nM4PkGvW6
+          items:
+            description: Opaque `lead_` identifier.
+            example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+            type: string
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+      - lead_ids
+      title: V1LeadListLeadsRequest
+      type: object
+    V1CreateLeadListRequest:
+      description: Request body for creating an empty saved Lead List.
+      properties:
+        name:
+          type: string
+      required:
+      - name
+      title: V1CreateLeadListRequest
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

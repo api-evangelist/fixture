@@ -1,0 +1,1528 @@
+openapi: 3.2.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Custom Fields API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- name: Custom Fields
+paths:
+  /api/v1/custom-fields/{record_kind}:
+    get:
+      deprecated: false
+      description: The record-kind read scope is required. Use account, contact, deal, or lead as record_kind. Active fields are returned by default; include_archived=true includes retained fields. Options retain archived labels. Use immutable field keys in sparse CRM custom_fields writes and option UUIDs for select values. Record reads use those keys with {id, label, type, value} entries; selected options contain {id, label}. User filter choices include retained Organization references, but new assignments require current members.
+      operationId: listCustomFields
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Include archived records. Defaults to false.
+        in: query
+        name: include_archived
+        required: false
+        schema:
+          default: false
+          example: false
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                layout_token: '0000000000000000000000000000000000000000000000000000000000000000'
+                limits:
+                  active_fields_per_record_kind: 500
+                  options_per_field: 1000
+                record_default_options: {}
+                sections:
+                - id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                  name: Profile
+                  position: 0
+                user_filter_options: []
+              schema:
+                $ref: '#/components/schemas/CustomFieldListPayload'
+          description: List custom fields
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+      security:
+      - bearerAuth: []
+      summary: List custom fields
+      tags:
+      - Custom Fields
+    post:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Creation must be enabled for the Organization and remain within the returned limits. Defaults and required fields apply to future record creation; existing records are not backfilled.
+      operationId: createCustomField
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      requestBody:
+        content:
+          application/json:
+            example:
+              field_type: short_text
+              key: customer_tier
+              label: Customer tier
+            schema:
+              $ref: '#/components/schemas/CreateCustomFieldRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Create a custom field
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+      security:
+      - bearerAuth: []
+      summary: Create a custom field
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/layout:
+    put:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Replace all named sections and the Other fields order for one record kind. Supply each retained field exactly once and the current layout_token from the definition list. Reload the list before retrying when the layout has changed.
+      operationId: saveCustomFieldLayout
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      requestBody:
+        content:
+          application/json:
+            example:
+              layout_token: '0000000000000000000000000000000000000000000000000000000000000000'
+              other_field_ids: []
+              sections:
+              - field_ids:
+                - a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                name: Profile
+            schema:
+              $ref: '#/components/schemas/SaveCustomFieldLayoutRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                sections:
+                - id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                  name: Profile
+                  position: 0
+              schema:
+                $ref: '#/components/schemas/CustomFieldLayoutPayload'
+          description: Save a custom field layout
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+      security:
+      - bearerAuth: []
+      summary: Save a custom field layout
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/{definition_id}:
+    delete:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Remove live values and its mappings. The field key remains reserved and history remains readable.
+      operationId: deleteCustomField
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                deleted: true
+                id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+              schema:
+                $ref: '#/components/schemas/CustomFieldDeletePayload'
+          description: Delete a custom field
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Delete a custom field
+      tags:
+      - Custom Fields
+    patch:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Change label, required state, or fixed default. Omit unchanged properties; explicit null clears a default. Saved values are not rewritten.
+      operationId: updateCustomField
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              label: Customer segment
+            schema:
+              $ref: '#/components/schemas/UpdateCustomFieldRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Update a custom field
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Update a custom field
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/{definition_id}/archive:
+    post:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Set archived=true to hide the field from ordinary reads and writes, or false to restore it. Values are retained.
+      operationId: archiveCustomField
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              archived: true
+            schema:
+              $ref: '#/components/schemas/ArchiveCustomFieldRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Archive or restore a custom field
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Archive or restore a custom field
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/{definition_id}/conversion-mappings/{destination_kind}:
+    delete:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. record_kind must be lead. Remove the mapping for this destination kind without changing existing destination values.
+      operationId: removeCustomFieldConversionMapping
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          const: lead
+          type: string
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - deprecated: false
+        in: path
+        name: destination_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Remove a Lead field mapping
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Remove a Lead field mapping
+      tags:
+      - Custom Fields
+    put:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. record_kind must be lead. Save the current preview's revisions and exact option_pairs. One source may map to one field per destination kind, and a destination accepts one source. Conversion copies once; explicit destination input overrides the copy and populated reused Account values win. Selected values with valid confirmed pairs copy even when other selections cannot. Original Lead values remain unchanged; conversion outcomes report any exclusions.
+      operationId: saveCustomFieldConversionMapping
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          const: lead
+          type: string
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - deprecated: false
+        in: path
+        name: destination_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      requestBody:
+        content:
+          application/json:
+            example:
+              destination_definition_id: f30bab82-8fbd-46bb-b542-ed0475d5c8ea
+              destination_revision: 1
+              option_pairs: {}
+              source_revision: 1
+            schema:
+              $ref: '#/components/schemas/SaveCustomFieldConversionMappingRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Confirm a Lead field mapping
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: Custom field configuration changed; refresh the mapping preview
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The preview no longer matches current configuration.
+      security:
+      - bearerAuth: []
+      summary: Confirm a Lead field mapping
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/{definition_id}/conversion-mappings/{destination_kind}/preview:
+    get:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. record_kind must be lead. Supply destination_definition_id and destination_kind account, contact, or deal. Both fields must have the same type. For the same destination, confirmed option-ID pairs are preserved; only newly unpaired active source options are matched by exact label. A different destination starts a fresh pairing. The preview returns current revisions without saving.
+      operationId: previewCustomFieldConversionMapping
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          const: lead
+          type: string
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - deprecated: false
+        in: path
+        name: destination_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: destination_definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  destination_definition_id: f30bab82-8fbd-46bb-b542-ed0475d5c8ea
+                  destination_record_kind: account
+                  destination_revision: 1
+                  option_pairs: {}
+                  source_definition_id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  source_revision: 1
+              schema:
+                $ref: '#/components/schemas/CustomFieldConversionPreviewResponse'
+          description: Preview a Lead field mapping
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Preview a Lead field mapping
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/{definition_id}/options:
+    post:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Add a stable option UUID and unique active label to a select field within the option limit.
+      operationId: addCustomFieldOption
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              label: Enterprise
+            schema:
+              $ref: '#/components/schemas/CustomFieldOptionRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Add a custom field option
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Add a custom field option
+      tags:
+      - Custom Fields
+  /api/v1/custom-fields/{record_kind}/{definition_id}/options/{option_id}:
+    patch:
+      deprecated: false
+      description: A current Organization Owner and the record-kind write scope are required. Mapping operations require both Lead and destination write scopes. Rename, reorder, archive, or restore the same option identity. Existing selections retain their identity.
+      operationId: updateCustomFieldOption
+      parameters:
+      - deprecated: false
+        in: path
+        name: record_kind
+        required: true
+        schema:
+          $ref: '#/components/schemas/CustomFieldRecordKind'
+      - deprecated: false
+        in: path
+        name: definition_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - deprecated: false
+        in: path
+        name: option_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              archived: true
+            schema:
+              $ref: '#/components/schemas/UpdateCustomFieldOptionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  archived: false
+                  conversion_mappings: []
+                  default_currency_code: null
+                  default_value: null
+                  description: Customer relationship tier
+                  field_type: short_text
+                  id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                  key: customer_tier
+                  label: Customer tier
+                  layout_position: 0
+                  options: []
+                  record_kind: lead
+                  required: false
+                  revision: 1
+                  section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponsePayload'
+          description: Update a custom field option
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Invalid field configuration
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid field configuration or parameter.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credentials.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: Forbidden
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Required scope, current Owner role, or creation access is missing.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Custom field not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Field not found in this Organization and record kind.
+      security:
+      - bearerAuth: []
+      summary: Update a custom field option
+      tags:
+      - Custom Fields
+components:
+  schemas:
+    CreateCustomFieldRequest:
+      description: New typed field. Creation requires the Organization creation gate and a current Owner with the record-kind write scope. A Currency field without default_currency_code receives USD.
+      properties:
+        default_currency_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        default_value:
+          oneOf:
+          - type: string
+          - type: boolean
+          - type: integer
+          - type: number
+          - items:
+              type: string
+            type: array
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        field_type:
+          $ref: '#/components/schemas/CustomFieldType'
+        key:
+          type: string
+        label:
+          type: string
+        options:
+          items:
+            $ref: '#/components/schemas/CustomFieldOptionRequest'
+          type: array
+        reference_kind:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldRecordKind'
+          - type: 'null'
+        required:
+          default: false
+          type: boolean
+        section_id:
+          oneOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+      required:
+      - field_type
+      - key
+      - label
+      title: CreateCustomFieldRequest
+      type: object
+    CustomFieldLayoutPayload:
+      description: Named sections after an Owner saves the record-page layout.
+      properties:
+        sections:
+          items:
+            $ref: '#/components/schemas/CustomFieldSectionPayload'
+          type: array
+      required:
+      - sections
+      title: CustomFieldLayoutPayload
+      type: object
+    ArchiveCustomFieldRequest:
+      properties:
+        archived:
+          type: boolean
+      required:
+      - archived
+      title: ArchiveCustomFieldRequest
+      type: object
+    CustomFieldDeletePayload:
+      description: Deleted field identity. Values are removed; its key remains reserved and history is retained.
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          type: string
+      required:
+      - deleted
+      - id
+      title: CustomFieldDeletePayload
+      type: object
+    CustomFieldOptionPayload:
+      properties:
+        archived:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        position:
+          type: integer
+      required:
+      - archived
+      - id
+      - label
+      - position
+      title: CustomFieldOptionPayload
+      type: object
+    CustomFieldRecordKind:
+      enum:
+      - account
+      - contact
+      - deal
+      - lead
+      title: CustomFieldRecordKind
+      type: string
+    SaveCustomFieldLayoutRequest:
+      description: Complete ordered placement of every retained field for one record kind. Read the current layout_token before saving; reload if it changed.
+      properties:
+        layout_token:
+          type: string
+        other_field_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        sections:
+          items:
+            $ref: '#/components/schemas/CustomFieldLayoutSectionRequest'
+          type: array
+      required:
+      - layout_token
+      - other_field_ids
+      - sections
+      title: SaveCustomFieldLayoutRequest
+      type: object
+    CustomFieldListPayload:
+      description: Definitions, record-page sections and layout token, configurable limits, and record-kind-scoped User filter choices including retained historical labels.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/CustomFieldDefinitionPayload'
+          type: array
+        layout_token:
+          type: string
+        limits:
+          additionalProperties:
+            type: integer
+          type: object
+        record_default_options:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+            type: array
+          type: object
+        sections:
+          items:
+            $ref: '#/components/schemas/CustomFieldSectionPayload'
+          type: array
+        user_filter_options:
+          items:
+            $ref: '#/components/schemas/UserFilterOptionPayload'
+          type: array
+      required:
+      - data
+      - layout_token
+      - limits
+      - record_default_options
+      - sections
+      - user_filter_options
+      title: CustomFieldListPayload
+      type: object
+    UpdateCustomFieldOptionRequest:
+      properties:
+        archived:
+          oneOf:
+          - type: boolean
+          - type: 'null'
+        label:
+          oneOf:
+          - type: string
+          - type: 'null'
+        position:
+          oneOf:
+          - type: integer
+          - type: 'null'
+      required: []
+      title: UpdateCustomFieldOptionRequest
+      type: object
+    CustomFieldConversionPreviewResponse:
+      description: Stateless mapping candidate. Save its exact revisions and option pairs to confirm it.
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomFieldConversionPreviewPayload'
+      required:
+      - data
+      title: CustomFieldConversionPreviewResponse
+      type: object
+    UpdateCustomFieldRequest:
+      description: Sparse changes to mutable configuration. Field identity, key, kind, and type cannot change. A Currency field's default_currency_code can change but cannot be null.
+      properties:
+        default_currency_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        default_value:
+          oneOf:
+          - type: string
+          - type: boolean
+          - type: integer
+          - type: number
+          - items:
+              type: string
+            type: array
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        label:
+          oneOf:
+          - type: string
+          - type: 'null'
+        required:
+          oneOf:
+          - type: boolean
+          - type: 'null'
+      required: []
+      title: UpdateCustomFieldRequest
+      type: object
+    CustomFieldConversionPreviewPayload:
+      properties:
+        destination_definition_id:
+          type: string
+        destination_record_kind:
+          type: string
+        destination_revision:
+          type: integer
+        option_pairs:
+          additionalProperties:
+            type: string
+          type: object
+        source_definition_id:
+          type: string
+        source_revision:
+          type: integer
+      required:
+      - destination_definition_id
+      - destination_record_kind
+      - destination_revision
+      - option_pairs
+      - source_definition_id
+      - source_revision
+      title: CustomFieldConversionPreviewPayload
+      type: object
+    CustomFieldOptionRequest:
+      properties:
+        id:
+          format: uuid
+          type: string
+        label:
+          type: string
+      required:
+      - label
+      title: CustomFieldOptionRequest
+      type: object
+    UserFilterOptionPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        label:
+          type: string
+      required:
+      - available
+      - id
+      - label
+      title: UserFilterOptionPayload
+      type: object
+    CustomFieldSectionPayload:
+      description: Named record-page section in its Organization-wide display order.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        position:
+          type: integer
+      required:
+      - id
+      - name
+      - position
+      title: CustomFieldSectionPayload
+      type: object
+    CustomFieldDefinitionPayload:
+      description: Typed field definition with stable UUID identity, optional description, record-page section and position, retained options, and confirmed Lead conversion mappings.
+      properties:
+        archived:
+          type: boolean
+        conversion_mappings:
+          items:
+            $ref: '#/components/schemas/CustomFieldConversionMappingPayload'
+          type: array
+        default_currency_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        default_value:
+          oneOf:
+          - oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: 'null'
+          - items: {}
+            type: array
+          - additionalProperties: {}
+            type: object
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        field_type:
+          type: string
+        id:
+          type: string
+        key:
+          type: string
+        label:
+          type: string
+        layout_position:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        options:
+          items:
+            $ref: '#/components/schemas/CustomFieldOptionPayload'
+          type: array
+        record_kind:
+          type: string
+        reference_kind:
+          oneOf:
+          - type: string
+          - type: 'null'
+        required:
+          type: boolean
+        revision:
+          type: integer
+        section_id:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - archived
+      - conversion_mappings
+      - default_currency_code
+      - default_value
+      - description
+      - field_type
+      - id
+      - key
+      - label
+      - layout_position
+      - options
+      - record_kind
+      - reference_kind
+      - required
+      - revision
+      - section_id
+      title: CustomFieldDefinitionPayload
+      type: object
+    CustomFieldConversionMappingPayload:
+      properties:
+        complete:
+          type: boolean
+        destination_definition_id:
+          type: string
+        destination_record_kind:
+          type: string
+        option_pairs:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+      - complete
+      - destination_definition_id
+      - destination_record_kind
+      - option_pairs
+      title: CustomFieldConversionMappingPayload
+      type: object
+    CustomFieldLayoutSectionRequest:
+      properties:
+        field_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+      required:
+      - field_ids
+      - id
+      - name
+      title: CustomFieldLayoutSectionRequest
+      type: object
+    CustomFieldType:
+      enum:
+      - short_text
+      - long_text
+      - number
+      - boolean
+      - date
+      - url
+      - single_select
+      - multi_select
+      - single_user
+      - multi_user
+      - single_record
+      - multi_record
+      - currency
+      - percentage
+      title: CustomFieldType
+      type: string
+    SelectedCustomFieldRecordPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        link:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - available
+      - id
+      - label
+      - link
+      title: SelectedCustomFieldRecordPayload
+      type: object
+    SaveCustomFieldConversionMappingRequest:
+      description: Confirmation of the current preview; changed revisions return a conflict and require a fresh preview.
+      properties:
+        destination_definition_id:
+          format: uuid
+          type: string
+        destination_revision:
+          type: integer
+        option_pairs:
+          additionalProperties:
+            type: string
+          type: object
+        source_revision:
+          type: integer
+      required:
+      - destination_definition_id
+      - destination_revision
+      - source_revision
+      title: SaveCustomFieldConversionMappingRequest
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    CustomFieldResponsePayload:
+      description: Current definition after an Owner configuration change.
+      properties:
+        data:
+          $ref: '#/components/schemas/CustomFieldDefinitionPayload'
+      required:
+      - data
+      title: CustomFieldResponsePayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

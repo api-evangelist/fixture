@@ -141,6 +141,25 @@ paths:
         schema:
           example: id,name,created_at
           type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: include_archived_custom_fields
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: URL-encoded JSON with up to 10 Custom Field filters. Each filter uses a definition UUID as `field_id`, an `operator`, and a `value` when required. Get definition IDs from `/api/v1/custom-fields/{record_kind}`. Custom-field sorts are unavailable on these cursor lists.
+        in: query
+        name: custom_query
+        required: false
+        schema:
+          example: '{"filters":[{"field_id":"a274a4f6-3239-4f1a-b8b5-776b17b3d0ae","operator":"gte","value":"20"}]}'
+          type: string
       responses:
         '200':
           content:
@@ -288,6 +307,179 @@ paths:
       summary: Create a Contact
       tags:
       - Contacts
+  /api/v1/contacts/bulk:
+    post:
+      deprecated: false
+      description: Create 1-25 records with the same fields and permissions as individual creates. Each row commits independently. Results stay in input order. Reuse a stable row key with the same create data to recover a prior creation after a lost response. Keys are scoped to the organization, resource, actor, and history source. Reusing a committed key with different data returns a row conflict. A replay reports the original created ID, even if the record was later updated or deleted. Corrected failed rows can reuse their key.
+      operationId: bulkCreateContacts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                items:
+                  items:
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/CreateContactRequest'
+                      key:
+                        maxLength: 128
+                        minLength: 1
+                        type: string
+                    required:
+                    - key
+                    - data
+                    type: object
+                  maxItems: 25
+                  minItems: 1
+                  type: array
+              required:
+              - items
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                created: 1
+                data:
+                - error: null
+                  id: contact_example
+                  key: row-1
+                  status: created
+                failed: 0
+                replayed: 0
+              schema:
+                $ref: '#/components/schemas/BulkCreatePayload'
+          description: Per-row results, including partial failures.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide between 1 and 25 items
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid batch envelope; no records were created.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Authentication required
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer token.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: contacts:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing write scope or role.
+        '429':
+          content:
+            application/json:
+              example:
+                error:
+                  code: rate_limit_exceeded
+                  message: Rate limit exceeded
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Request rate limit or sandbox request budget exhausted.
+      security:
+      - bearerAuth: []
+      summary: Bulk create Contacts
+      tags:
+      - Contacts
+  /api/v1/contacts/schema:
+    get:
+      deprecated: false
+      description: Return the JSON Schemas for Contact create and update request bodies and the Organization's active Contact custom fields. Use it before building write payloads. Requires contacts:read.
+      operationId: describeContactSchema
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  create:
+                    properties:
+                      name:
+                        type: string
+                      notes:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  custom_fields:
+                  - archived: false
+                    conversion_mappings: []
+                    default_currency_code: null
+                    default_value: null
+                    description: Customer relationship tier
+                    field_type: short_text
+                    id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                    key: customer_tier
+                    label: Customer tier
+                    layout_position: 0
+                    options: []
+                    record_kind: contact
+                    required: false
+                    revision: 1
+                    section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                  resource: contacts
+                  update:
+                    properties:
+                      title:
+                        type: string
+                    required: []
+                    type: object
+              schema:
+                $ref: '#/components/schemas/V1RecordSchemaResponsePayload'
+          description: Contact write schema.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid cursor
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid request.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: contacts:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: Describe Contact write fields
+      tags:
+      - Contacts
   /api/v1/contacts/{contact_id}:
     delete:
       deprecated: false
@@ -381,6 +573,15 @@ paths:
         schema:
           example: contact_6M4jXRFuLpTQ3nM4PkGvW8
           type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: include_archived_custom_fields
+        required: false
+        schema:
+          default: false
+          type: boolean
       responses:
         '200':
           content:
@@ -550,6 +751,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/V1ErrorResponse'
           description: Contact not found.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: A custom field changed after the preview
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: A User field token is missing or stale.
         '410':
           content:
             application/json:
@@ -568,320 +779,44 @@ paths:
       - Contacts
 components:
   schemas:
-    V1ContactListPayload:
-      description: Paginated list response for Contacts.
+    BulkCreatePayload:
       properties:
+        created:
+          type: integer
         data:
           items:
-            $ref: '#/components/schemas/V1ContactSelectedFieldsPayload'
+            $ref: '#/components/schemas/BulkCreateResult'
           type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
+        failed:
+          type: integer
+        replayed:
+          type: integer
+      required:
+      - created
+      - data
+      - failed
+      - replayed
+      title: BulkCreatePayload
+      type: object
+    CustomFieldCurrencyPayload:
+      properties:
+        amount:
+          type: string
+        code:
+          type: string
+      required:
+      - amount
+      - code
+      title: CustomFieldCurrencyPayload
+      type: object
+    V1RecordSchemaResponsePayload:
+      description: Write schema response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1RecordSchemaPayload'
       required:
       - data
-      - pagination
-      title: V1ContactListPayload
-      type: object
-    CreateContactRequest:
-      description: Request body for creating a Contact.
-      properties:
-        account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        emails:
-          description: All known email addresses for the Contact.
-          example:
-          - alex@acme.example
-          - sales@acme.example
-          oneOf:
-          - description: All known email addresses for the Contact.
-            example:
-            - alex@acme.example
-            - sales@acme.example
-            items:
-              description: Primary email address.
-              example: alex@acme.example
-              type: string
-            type: array
-          - description: All known email addresses for the Contact.
-            example:
-            - alex@acme.example
-            - sales@acme.example
-            type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-        twitter_handle:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required: []
-      title: CreateContactRequest
-      type: object
-    V1ContactSelectedFieldsPayload:
-      properties:
-        account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        created_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        emails:
-          description: All known email addresses for the Contact.
-          example:
-          - alex@acme.example
-          - sales@acme.example
-          items:
-            description: Primary email address.
-            example: alex@acme.example
-            type: string
-          type: array
-        id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          type: string
-        last_activity_at:
-          example: '2026-03-24T17:30:00Z'
-          oneOf:
-          - example: '2026-03-24T17:30:00Z'
-            format: date-time
-            type: string
-          - example: '2026-03-24T17:30:00Z'
-            type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-        twitter_handle:
-          oneOf:
-          - type: string
-          - type: 'null'
-        updated_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-      required: []
-      title: V1ContactSelectedFieldsPayload
-      type: object
-    V1ContactDetailPayload:
-      properties:
-        account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        created_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        emails:
-          description: All known email addresses for the Contact.
-          example:
-          - alex@acme.example
-          - sales@acme.example
-          items:
-            description: Primary email address.
-            example: alex@acme.example
-            type: string
-          type: array
-        id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
-          type: string
-        last_activity_at:
-          example: '2026-03-24T17:30:00Z'
-          oneOf:
-          - example: '2026-03-24T17:30:00Z'
-            format: date-time
-            type: string
-          - example: '2026-03-24T17:30:00Z'
-            type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-        twitter_handle:
-          oneOf:
-          - type: string
-          - type: 'null'
-        updated_at:
-          example: '2026-03-22T14:00:01Z'
-          format: date-time
-          type: string
-      required:
-      - account_id
-      - created_at
-      - email
-      - emails
-      - id
-      - last_activity_at
-      - linkedin_url
-      - name
-      - notes
-      - phone
-      - title
-      - twitter_handle
-      - updated_at
-      title: V1ContactDetailPayload
-      type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
-      properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
-      required:
-      - error
+      title: V1RecordSchemaResponsePayload
       type: object
     V1MergedContactGoneResponse:
       description: Error payload for mutations that target a merged Contact.
@@ -908,6 +843,200 @@ components:
       - merged_into
       - error
       type: object
+    BulkCreateError:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      title: BulkCreateError
+      type: object
+    V1ContactListPayload:
+      description: Paginated list response for Contacts.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1ContactSelectedFieldsPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1ContactListPayload
+      type: object
+    CustomFieldOptionPayload:
+      properties:
+        archived:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        position:
+          type: integer
+      required:
+      - archived
+      - id
+      - label
+      - position
+      title: CustomFieldOptionPayload
+      type: object
+    V1ContactDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1ContactDeletePayload
+      type: object
+    SelectedCustomFieldUserPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        label:
+          type: string
+      required:
+      - available
+      - id
+      - label
+      title: SelectedCustomFieldUserPayload
+      type: object
+    SelectedCustomFieldOptionPayload:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+      required:
+      - id
+      - label
+      title: SelectedCustomFieldOptionPayload
+      type: object
+    CustomFieldValuePayload:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldType'
+        value:
+          oneOf:
+          - type: string
+          - type: boolean
+          - $ref: '#/components/schemas/CustomFieldCurrencyPayload'
+          - $ref: '#/components/schemas/SelectedCustomFieldOptionPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldOptionPayload'
+            type: array
+          - $ref: '#/components/schemas/SelectedCustomFieldUserPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldUserPayload'
+            type: array
+          - $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+            type: array
+      required:
+      - id
+      - label
+      - type
+      - value
+      title: CustomFieldValuePayload
+      type: object
+    BulkCreateResult:
+      properties:
+        error:
+          oneOf:
+          - $ref: '#/components/schemas/BulkCreateError'
+          - type: 'null'
+        id:
+          oneOf:
+          - type: string
+          - type: 'null'
+        key:
+          type: string
+        status:
+          enum:
+          - created
+          - replayed
+          - error
+          type: string
+      required:
+      - error
+      - id
+      - key
+      - status
+      title: BulkCreateResult
+      type: object
+    V1RecordSchemaPayload:
+      description: JSON Schemas for one resource's create and update request bodies, plus the Organization's active custom fields. Write custom values under custom_fields using each definition's key.
+      properties:
+        create:
+          additionalProperties:
+            oneOf:
+            - oneOf:
+              - type: string
+              - type: integer
+              - type: number
+              - type: boolean
+              - type: 'null'
+            - items: {}
+              type: array
+            - additionalProperties: {}
+              type: object
+          type: object
+        custom_fields:
+          items:
+            $ref: '#/components/schemas/CustomFieldDefinitionPayload'
+          type: array
+        resource:
+          type: string
+        update:
+          additionalProperties:
+            oneOf:
+            - oneOf:
+              - type: string
+              - type: integer
+              - type: number
+              - type: boolean
+              - type: 'null'
+            - items: {}
+              type: array
+            - additionalProperties: {}
+              type: object
+          type: object
+      required:
+      - create
+      - custom_fields
+      - resource
+      - update
+      title: V1RecordSchemaPayload
+      type: object
+    V1MergedContactRedirectResponse:
+      description: Redirect payload for requests that hit a merged Contact.
+      properties:
+        merged_into:
+          description: Canonical survivor Contact ID.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW9
+          type: string
+      required:
+      - merged_into
+      type: object
     UpdateContactRequest:
       description: Request body for partially updating a Contact.
       properties:
@@ -921,6 +1050,31 @@ components:
           - description: Opaque `account_` identifier.
             example: account_7B5jXRFuLpTQ3nM4PkGvW2
             type: 'null'
+        custom_field_tokens:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: integer
+              - type: 'null'
+            type: object
+          - type: 'null'
+        custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
         email:
           description: Primary email address.
           example: alex@acme.example
@@ -993,29 +1147,479 @@ components:
       - data
       title: V1ContactDetailResponsePayload
       type: object
-    V1ContactDeletePayload:
+    CustomFieldDefinitionPayload:
+      description: Typed field definition with stable UUID identity, optional description, record-page section and position, retained options, and confirmed Lead conversion mappings.
       properties:
-        deleted:
-          const: true
+        archived:
           type: boolean
+        conversion_mappings:
+          items:
+            $ref: '#/components/schemas/CustomFieldConversionMappingPayload'
+          type: array
+        default_currency_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        default_value:
+          oneOf:
+          - oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: 'null'
+          - items: {}
+            type: array
+          - additionalProperties: {}
+            type: object
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        field_type:
+          type: string
+        id:
+          type: string
+        key:
+          type: string
+        label:
+          type: string
+        layout_position:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        options:
+          items:
+            $ref: '#/components/schemas/CustomFieldOptionPayload'
+          type: array
+        record_kind:
+          type: string
+        reference_kind:
+          oneOf:
+          - type: string
+          - type: 'null'
+        required:
+          type: boolean
+        revision:
+          type: integer
+        section_id:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - archived
+      - conversion_mappings
+      - default_currency_code
+      - default_value
+      - description
+      - field_type
+      - id
+      - key
+      - label
+      - layout_position
+      - options
+      - record_kind
+      - reference_kind
+      - required
+      - revision
+      - section_id
+      title: CustomFieldDefinitionPayload
+      type: object
+    CustomFieldConversionMappingPayload:
+      properties:
+        complete:
+          type: boolean
+        destination_definition_id:
+          type: string
+        destination_record_kind:
+          type: string
+        option_pairs:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+      - complete
+      - destination_definition_id
+      - destination_record_kind
+      - option_pairs
+      title: CustomFieldConversionMappingPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    CustomFieldType:
+      enum:
+      - short_text
+      - long_text
+      - number
+      - boolean
+      - date
+      - url
+      - single_select
+      - multi_select
+      - single_user
+      - multi_user
+      - single_record
+      - multi_record
+      - currency
+      - percentage
+      title: CustomFieldType
+      type: string
+    V1ContactDetailPayload:
+      properties:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        custom_field_tokens:
+          additionalProperties:
+            oneOf:
+            - type: integer
+            - type: 'null'
+          type: object
+        custom_fields:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValuePayload'
+          type: object
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        emails:
+          description: All known email addresses for the Contact.
+          example:
+          - alex@acme.example
+          - sales@acme.example
+          items:
+            description: Primary email address.
+            example: alex@acme.example
+            type: string
+          type: array
         id:
           description: Opaque `contact_` identifier.
           example: contact_6M4jXRFuLpTQ3nM4PkGvW8
           type: string
-      required:
-      - deleted
-      - id
-      title: V1ContactDeletePayload
-      type: object
-    V1MergedContactRedirectResponse:
-      description: Redirect payload for requests that hit a merged Contact.
-      properties:
-        merged_into:
-          description: Canonical survivor Contact ID.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW9
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        twitter_handle:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
           type: string
       required:
-      - merged_into
+      - account_id
+      - created_at
+      - custom_field_tokens
+      - custom_fields
+      - email
+      - emails
+      - id
+      - last_activity_at
+      - linkedin_url
+      - name
+      - notes
+      - phone
+      - title
+      - twitter_handle
+      - updated_at
+      title: V1ContactDetailPayload
+      type: object
+    SelectedCustomFieldRecordPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        link:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - available
+      - id
+      - label
+      - link
+      title: SelectedCustomFieldRecordPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1ContactSelectedFieldsPayload:
+      properties:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        created_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+        custom_field_tokens:
+          additionalProperties:
+            oneOf:
+            - type: integer
+            - type: 'null'
+          type: object
+        custom_fields:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValuePayload'
+          type: object
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        emails:
+          description: All known email addresses for the Contact.
+          example:
+          - alex@acme.example
+          - sales@acme.example
+          items:
+            description: Primary email address.
+            example: alex@acme.example
+            type: string
+          type: array
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        last_activity_at:
+          example: '2026-03-24T17:30:00Z'
+          oneOf:
+          - example: '2026-03-24T17:30:00Z'
+            format: date-time
+            type: string
+          - example: '2026-03-24T17:30:00Z'
+            type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        twitter_handle:
+          oneOf:
+          - type: string
+          - type: 'null'
+        updated_at:
+          example: '2026-03-22T14:00:01Z'
+          format: date-time
+          type: string
+      required: []
+      title: V1ContactSelectedFieldsPayload
+      type: object
+    CreateContactRequest:
+      description: Request body for creating a Contact.
+      properties:
+        account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          oneOf:
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
+            type: 'null'
+        custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        emails:
+          description: All known email addresses for the Contact.
+          example:
+          - alex@acme.example
+          - sales@acme.example
+          oneOf:
+          - description: All known email addresses for the Contact.
+            example:
+            - alex@acme.example
+            - sales@acme.example
+            items:
+              description: Primary email address.
+              example: alex@acme.example
+              type: string
+            type: array
+          - description: All known email addresses for the Contact.
+            example:
+            - alex@acme.example
+            - sales@acme.example
+            type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+        twitter_handle:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: CreateContactRequest
       type: object
   securitySchemes:
     bearerAuth:

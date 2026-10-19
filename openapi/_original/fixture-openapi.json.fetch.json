@@ -1,0 +1,12 @@
+{
+ "url": "https://www.fixture.ai/docs/openapi/fixture-v1.json",
+ "final": "https://www.fixture.ai/docs/openapi/fixture-v1.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 549352,
+ "sha256": "73a5aa32063cdeec4cabf3d65271bf189320914bf9bb5b0de7224378d8348191",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

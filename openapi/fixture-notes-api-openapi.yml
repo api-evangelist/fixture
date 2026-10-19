@@ -99,6 +99,166 @@ paths:
       summary: Create a Note
       tags:
       - Notes
+  /api/v1/notes/{note_id}:
+    delete:
+      deprecated: false
+      description: Delete a visible Note authored by the current user. Notes use `activity_` IDs. Requires activities:write and a resolved user; API-key Notes without a human author cannot be deleted.
+      operationId: deleteNote
+      parameters:
+      - deprecated: false
+        description: Opaque Note Activity ID with the `activity_` prefix.
+        in: path
+        name: note_id
+        required: true
+        schema:
+          example: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                deleted: true
+                id: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+              schema:
+                $ref: '#/components/schemas/V1NoteDeletePayload'
+          description: Note deleted.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Note ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Note ID or non-Note Activity.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: activities:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Note not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Note not found or not visible to the caller.
+      security:
+      - bearerAuth: []
+      summary: Delete a Note
+      tags:
+      - Notes
+    patch:
+      deprecated: false
+      description: Replace the content of a visible Note authored by the current user. Notes use `activity_` IDs. Requires activities:write and a resolved user; API-key Notes without a human author cannot be edited.
+      operationId: updateNote
+      parameters:
+      - deprecated: false
+        description: Opaque Note Activity ID with the `activity_` prefix.
+        in: path
+        name: note_id
+        required: true
+        schema:
+          example: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              content: Updated meeting notes
+            schema:
+              $ref: '#/components/schemas/UpdateNoteRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  actor: null
+                  content: Hello from v1
+                  created_at: '2026-03-22T14:00:01Z'
+                  entities:
+                  - entity_id: contact_6M4jXRFuLpTQ3nM4PkGvW8
+                    entity_type: contact
+                    role: primary
+                  - entity_id: account_7B5jXRFuLpTQ3nM4PkGvW2
+                    entity_type: account
+                    role: related
+                  external_id: null
+                  id: activity_3Q8jXRFuLpTQ3nM4PkGvW5
+                  occurred_at: '2026-03-22T14:00:00Z'
+                  title: null
+                  type: note_added
+                  updated_at: '2026-03-22T14:00:01Z'
+              schema:
+                $ref: '#/components/schemas/V1NoteCreateResponsePayload'
+          description: Note updated.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: content must not be empty
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Note ID, non-Note Activity, or request body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: activities:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Note not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Note not found or not visible to the caller.
+      security:
+      - bearerAuth: []
+      summary: Update a Note
+      tags:
+      - Notes
 components:
   schemas:
     V1CreateNoteEntityLinkRequest:
@@ -116,30 +276,6 @@ components:
       - entity_id
       - entity_type
       title: V1CreateNoteEntityLinkRequest
-      type: object
-    V1CreateNoteRequest:
-      description: Request body for creating a Note attached to one primary CRM entity.
-      properties:
-        additional_entity_links:
-          items:
-            $ref: '#/components/schemas/V1CreateNoteEntityLinkRequest'
-          type: array
-        content:
-          type: string
-        entity_id:
-          type: string
-        entity_type:
-          enum:
-          - account
-          - contact
-          - deal
-          - lead
-          type: string
-      required:
-      - content
-      - entity_id
-      - entity_type
-      title: V1CreateNoteRequest
       type: object
     V1ActivityEntityPayload:
       properties:
@@ -243,6 +379,41 @@ components:
       - updated_at
       title: V1ActivityDetailPayload
       type: object
+    V1CreateNoteRequest:
+      description: Request body for creating a Note attached to one primary CRM entity.
+      properties:
+        additional_entity_links:
+          items:
+            $ref: '#/components/schemas/V1CreateNoteEntityLinkRequest'
+          type: array
+        content:
+          type: string
+        entity_id:
+          type: string
+        entity_type:
+          enum:
+          - account
+          - contact
+          - deal
+          - lead
+          type: string
+      required:
+      - content
+      - entity_id
+      - entity_type
+      title: V1CreateNoteRequest
+      type: object
+    V1NoteDeletePayload:
+      properties:
+        deleted:
+          type: boolean
+        id:
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1NoteDeletePayload
+      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -271,6 +442,14 @@ components:
       required:
       - data
       title: V1NoteCreateResponsePayload
+      type: object
+    UpdateNoteRequest:
+      properties:
+        content:
+          type: string
+      required:
+      - content
+      title: UpdateNoteRequest
       type: object
   securitySchemes:
     bearerAuth:

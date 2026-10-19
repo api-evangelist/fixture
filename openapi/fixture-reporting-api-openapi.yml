@@ -1,0 +1,551 @@
+openapi: 3.2.0
+info:
+  description: 'Fixture''s public v1 CRM API for Accounts, Contacts, Deals, Leads, Activities, Pipelines, Notes, and Tasks. Authenticate with `Authorization: Bearer ...` using either a Fixture API key or a Fixture OAuth access token.'
+  title: Fixture Reporting API
+  version: v1
+servers:
+- url: https://beta-api.fixture.app
+security:
+- bearerAuth: []
+tags:
+- description: Describe and synchronously query authorized Semantic Query datasets.
+  name: Reporting
+paths:
+  /api/v1/reporting/catalog:
+    get:
+      deprecated: false
+      description: Return the governed Semantic Query datasets readable through the caller's existing scopes, plus the supported language operators and hard synchronous limits. This private-beta operation does not create a Report or run a query.
+      operationId: describeReporting
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                aggregate_functions:
+                - COUNT
+                - SUM
+                - AVG
+                - MIN
+                - MAX
+                boolean_operators:
+                - AND
+                - OR
+                clauses:
+                - FROM
+                - SHOW
+                - WHERE
+                - GROUP BY
+                - HAVING
+                - ORDER BY
+                - LIMIT
+                comparison_operators:
+                - '='
+                - '!='
+                - <
+                - <=
+                - '>'
+                - '>='
+                - CONTAINS
+                - IS NULL
+                - IS NOT NULL
+                datasets: []
+                limits:
+                  max_bytes: 1048576
+                  max_rows: 100
+                  timeout_ms: 10000
+                reference_functions:
+                - PIPELINE
+                - STAGE
+                - USER
+                - TASK_STATUS
+                - CUSTOM_FIELD
+                - ME
+                scalar_functions:
+                - ADD
+                - COALESCE
+                - DIVIDE
+                - MULTIPLY
+                - PERCENT_OF
+                - ROUND
+                - SUBTRACT
+                time_grains:
+                - DAY
+                - WEEK
+                - MONTH
+                - QUARTER
+                - YEAR
+                time_operators:
+                - DURING
+                - BEFORE
+                - AFTER
+              schema:
+                $ref: '#/components/schemas/ExternalReportingCatalogPayload'
+          description: Authorized Semantic Query catalog.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credential.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: feature_not_enabled
+                  message: External Semantic Query is not enabled for this organization
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The private beta is disabled for this organization.
+        '503':
+          content:
+            application/json:
+              example:
+                error:
+                  code: query_unavailable
+                  message: The report could not run
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The reporting database is temporarily unavailable.
+        '504':
+          content:
+            application/json:
+              example:
+                error:
+                  code: query_timeout
+                  message: The report took too long to run
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Catalog discovery exceeded the synchronous timeout.
+      security:
+      - bearerAuth: []
+      summary: Describe reporting
+      tags:
+      - Reporting
+  /api/v1/reporting/query:
+    post:
+      deprecated: false
+      description: Prepare and execute one governed Semantic Query synchronously. Returns a complete typed result bounded to 100 rows, 1 MiB, and 10 seconds. Decimal values are exact JSON strings. The operation does not save a Report, Result, Artifact, job, or conversation.
+      operationId: runReport
+      requestBody:
+        content:
+          application/json:
+            example:
+              query: "FROM deals\nSHOW deals.name,\n     ROUND(PERCENT_OF(deals.value, 13), 2) AS hst\nORDER BY deals.name ASC,\n         deals.id ASC\nLIMIT 100"
+              timezone: America/Toronto
+            schema:
+              $ref: '#/components/schemas/ExternalReportingQueryRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                columns:
+                - name: deals.name
+                  nullable: false
+                  role: dimension
+                  type: text
+                - name: hst
+                  nullable: true
+                  role: value
+                  type: money_usd
+                contract_version: 2
+                dataset: deals
+                query: "FROM deals\nSHOW deals.name,\n     ROUND(PERCENT_OF(deals.value, 13), 2) AS hst\nORDER BY deals.name ASC,\n         deals.id ASC\nLIMIT 100"
+                resolved_time_ranges: []
+                row_count: 1
+                rows:
+                - - Enterprise renewal
+                  - '13.00'
+                timezone: America/Toronto
+                truncated: false
+                warnings: []
+              schema:
+                $ref: '#/components/schemas/ExternalReportingResultPayload'
+          description: Complete bounded Semantic Query result.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_query
+                  message: 'Unknown name: deals.missing'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid query with one-based source diagnostics when available.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer credential.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope for dataset: deals'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The private beta is disabled or the dataset read scope is missing.
+        '503':
+          content:
+            application/json:
+              example:
+                error:
+                  code: query_unavailable
+                  message: The report could not run
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The reporting database is temporarily unavailable.
+        '504':
+          content:
+            application/json:
+              example:
+                error:
+                  code: query_timeout
+                  message: The report took too long to run
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The synchronous query exceeded 10 seconds.
+      security:
+      - bearerAuth: []
+      summary: Run a report
+      tags:
+      - Reporting
+components:
+  schemas:
+    ExternalReportingDatasetPayload:
+      properties:
+        aggregatable_fields:
+          items:
+            type: string
+          type: array
+        contract_version:
+          type: integer
+        example:
+          type: string
+        fields:
+          items:
+            $ref: '#/components/schemas/ExternalReportingFieldPayload'
+          type: array
+        grain:
+          type: string
+        measures:
+          items:
+            type: string
+          type: array
+        name:
+          type: string
+        relationships:
+          items:
+            type: string
+          type: array
+      required:
+      - aggregatable_fields
+      - contract_version
+      - example
+      - fields
+      - grain
+      - measures
+      - name
+      - relationships
+      title: ExternalReportingDatasetPayload
+      type: object
+    ExternalReportingQueryRequest:
+      description: One synchronous governed Semantic Query request.
+      properties:
+        query:
+          type: string
+        timezone:
+          type: string
+      required:
+      - query
+      - timezone
+      title: ExternalReportingQueryRequest
+      type: object
+    ExternalReportingLimitsPayload:
+      properties:
+        max_bytes:
+          type: integer
+        max_rows:
+          type: integer
+        timeout_ms:
+          type: integer
+      required:
+      - max_bytes
+      - max_rows
+      - timeout_ms
+      title: ExternalReportingLimitsPayload
+      type: object
+    ExternalReportingColumnPayload:
+      properties:
+        currency_code_column:
+          type: string
+        custom_field_id:
+          type: string
+        custom_reference_kind:
+          type: string
+        dimension_key:
+          type: string
+        internal:
+          type: boolean
+        label:
+          type: string
+        name:
+          type: string
+        nullable:
+          type: boolean
+        role:
+          type: string
+        time_grain:
+          type: string
+        timezone:
+          type: string
+        type:
+          type: string
+      required:
+      - name
+      - nullable
+      - role
+      - type
+      title: ExternalReportingColumnPayload
+      type: object
+    ExternalReportingResultPayload:
+      description: Complete typed result for one non-persisted Semantic Query.
+      properties:
+        columns:
+          items:
+            $ref: '#/components/schemas/ExternalReportingColumnPayload'
+          type: array
+        contract_version:
+          type: integer
+        dataset:
+          type: string
+        query:
+          type: string
+        resolved_time_ranges:
+          items:
+            $ref: '#/components/schemas/ExternalReportingTimeRangePayload'
+          type: array
+        row_count:
+          type: integer
+        rows:
+          items:
+            items:
+              oneOf:
+              - oneOf:
+                - type: string
+                - type: integer
+                - type: number
+                - type: boolean
+                - type: 'null'
+              - items: {}
+                type: array
+              - additionalProperties: {}
+                type: object
+            type: array
+          type: array
+        timezone:
+          type: string
+        truncated:
+          type: boolean
+        warnings:
+          items:
+            type: string
+          type: array
+      required:
+      - columns
+      - contract_version
+      - dataset
+      - query
+      - resolved_time_ranges
+      - row_count
+      - rows
+      - timezone
+      - truncated
+      - warnings
+      title: ExternalReportingResultPayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    ExternalReportingOptionPayload:
+      properties:
+        archived:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+      required:
+      - archived
+      - id
+      - label
+      title: ExternalReportingOptionPayload
+      type: object
+    ExternalReportingFieldPayload:
+      properties:
+        archived:
+          type: boolean
+        custom_field_id:
+          oneOf:
+          - type: string
+          - type: 'null'
+        custom_field_type:
+          oneOf:
+          - type: string
+          - type: 'null'
+        custom_reference_kind:
+          oneOf:
+          - type: string
+          - type: 'null'
+        groupable:
+          type: boolean
+        label:
+          oneOf:
+          - type: string
+          - type: 'null'
+        name:
+          type: string
+        nullable:
+          type: boolean
+        options:
+          items:
+            $ref: '#/components/schemas/ExternalReportingOptionPayload'
+          type: array
+        reference_kind:
+          oneOf:
+          - type: string
+          - type: 'null'
+        relationship:
+          oneOf:
+          - type: string
+          - type: 'null'
+        result_type:
+          type: string
+        selectable:
+          type: boolean
+        sortable:
+          type: boolean
+        type:
+          type: string
+      required:
+      - archived
+      - custom_field_id
+      - custom_field_type
+      - custom_reference_kind
+      - groupable
+      - label
+      - name
+      - nullable
+      - options
+      - reference_kind
+      - relationship
+      - result_type
+      - selectable
+      - sortable
+      - type
+      title: ExternalReportingFieldPayload
+      type: object
+    ExternalReportingTimeRangePayload:
+      properties:
+        end:
+          type: string
+        field:
+          type: string
+        start:
+          type: string
+      required:
+      - end
+      - field
+      - start
+      title: ExternalReportingTimeRangePayload
+      type: object
+    ExternalReportingCatalogPayload:
+      description: Authorized Semantic Query catalog and hard execution limits.
+      properties:
+        aggregate_functions:
+          items:
+            type: string
+          type: array
+        boolean_operators:
+          items:
+            type: string
+          type: array
+        clauses:
+          items:
+            type: string
+          type: array
+        comparison_operators:
+          items:
+            type: string
+          type: array
+        datasets:
+          items:
+            $ref: '#/components/schemas/ExternalReportingDatasetPayload'
+          type: array
+        limits:
+          $ref: '#/components/schemas/ExternalReportingLimitsPayload'
+        reference_functions:
+          items:
+            type: string
+          type: array
+        scalar_functions:
+          items:
+            type: string
+          type: array
+        time_grains:
+          items:
+            type: string
+          type: array
+        time_operators:
+          items:
+            type: string
+          type: array
+      required:
+      - aggregate_functions
+      - boolean_operators
+      - clauses
+      - comparison_operators
+      - datasets
+      - limits
+      - reference_functions
+      - scalar_functions
+      - time_grains
+      - time_operators
+      title: ExternalReportingCatalogPayload
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: API key or OAuth access token
+      description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
+      scheme: bearer
+      type: http

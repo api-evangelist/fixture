@@ -52,18 +52,6 @@ paths:
       - Fixture API
 components:
   schemas:
-    V1RootPayload:
-      description: Status payload for the public v1 API namespace.
-      properties:
-        status:
-          type: string
-        version:
-          type: string
-      required:
-      - status
-      - version
-      title: V1RootPayload
-      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -83,6 +71,18 @@ components:
           type: object
       required:
       - error
+      type: object
+    V1RootPayload:
+      description: Status payload for the public v1 API namespace.
+      properties:
+        status:
+          type: string
+        version:
+          type: string
+      required:
+      - status
+      - version
+      title: V1RootPayload
       type: object
   securitySchemes:
     bearerAuth:

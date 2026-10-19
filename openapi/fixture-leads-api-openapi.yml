@@ -14,7 +14,7 @@ paths:
   /api/v1/leads:
     get:
       deprecated: false
-      description: Return a paginated list of Leads. Supports filtering by `status` (new, contacted, qualified, unqualified, converted), `source`, `name`, `email`, `company_name`, and created/updated timestamps. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`. Use `fields` to choose which public Lead fields appear in each record.
+      description: Return a paginated list of Leads. Supports filtering by `status` (new, contacted, qualified, unqualified, converted), `source`, `name`, `email`, `company_name`, `lead_list_id`, and created/updated timestamps. The List filter accepts saved list_ IDs, including archived Lists. Sort supports `created_at` or `-created_at`; pagination uses `limit` and `cursor`. Use `fields` to choose which public Lead fields appear in each record.
       operationId: listLeads
       parameters:
       - allowEmptyValue: false
@@ -48,6 +48,16 @@ paths:
         schema:
           default: -created_at
           example: -created_at
+          type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: Filter Leads to one saved List, including archived Lists.
+        in: query
+        name: lead_list_id
+        required: false
+        schema:
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
           type: string
       - allowEmptyValue: false
         allowReserved: false
@@ -175,6 +185,25 @@ paths:
         schema:
           example: id,name,created_at
           type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: include_archived_custom_fields
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: URL-encoded JSON with up to 10 Custom Field filters. Each filter uses a definition UUID as `field_id`, an `operator`, and a `value` when required. Get definition IDs from `/api/v1/custom-fields/{record_kind}`. Custom-field sorts are unavailable on these cursor lists.
+        in: query
+        name: custom_query
+        required: false
+        schema:
+          example: '{"filters":[{"field_id":"a274a4f6-3239-4f1a-b8b5-776b17b3d0ae","operator":"gte","value":"20"}]}'
+          type: string
       responses:
         '200':
           content:
@@ -230,6 +259,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/V1ErrorResponse'
           description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: The filtered List is unavailable in this Organization.
       security:
       - bearerAuth: []
       summary: List Leads
@@ -237,7 +276,7 @@ paths:
       - Leads
     post:
       deprecated: false
-      description: Create a new Lead for an unqualified prospect. Leads are kept separate from Accounts and Contacts until explicitly converted via `POST /api/v1/leads/{lead_id}/convert`.
+      description: Create a new Lead for an unqualified prospect. Leads are kept separate from Accounts and Contacts until explicitly converted via `POST /api/v1/leads/{lead_id}/convert`. Optional list_ids assigns up to 100 saved Lists in the same transaction. Omitted, null, or empty list_ids adds no memberships. Any invalid or archived target rolls back the Lead and every membership.
       operationId: createLead
       requestBody:
         content:
@@ -246,6 +285,8 @@ paths:
               company_name: Prospect Labs
               email: taylor@prospect.example
               estimated_value: 50000
+              list_ids:
+              - list_7B5jXRFuLpTQ3nM4PkGvW2
               name: Taylor Reed
               source: website
               title: Head of Revenue
@@ -314,9 +355,199 @@ paths:
               schema:
                 $ref: '#/components/schemas/V1ErrorResponse'
           description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: A requested List is unavailable in this Organization. No Lead is created.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: Restore this List before changing its Leads
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: A requested List is archived. No Lead is created.
       security:
       - bearerAuth: []
       summary: Create a Lead
+      tags:
+      - Leads
+  /api/v1/leads/bulk:
+    post:
+      deprecated: false
+      description: Create 1-25 records with the same fields and permissions as individual creates. Each row commits independently. Results stay in input order. Reuse a stable row key with the same create data to recover a prior creation after a lost response. Keys are scoped to the organization, resource, actor, and history source. Reusing a committed key with different data returns a row conflict. A replay reports the original created ID, even if the record was later updated or deleted. Corrected failed rows can reuse their key. Lead list_ids commits with its row. An invalid target rolls back only that row. Replays do not reapply memberships removed after creation.
+      operationId: bulkCreateLeads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                items:
+                  items:
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/V1CreateLeadRequest'
+                      key:
+                        maxLength: 128
+                        minLength: 1
+                        type: string
+                    required:
+                    - key
+                    - data
+                    type: object
+                  maxItems: 25
+                  minItems: 1
+                  type: array
+              required:
+              - items
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                created: 1
+                data:
+                - error: null
+                  id: lead_example
+                  key: row-1
+                  status: created
+                failed: 0
+                replayed: 0
+              schema:
+                $ref: '#/components/schemas/BulkCreatePayload'
+          description: Per-row results, including partial failures.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide between 1 and 25 items
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid batch envelope; no records were created.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Authentication required
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer token.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing write scope or role.
+        '429':
+          content:
+            application/json:
+              example:
+                error:
+                  code: rate_limit_exceeded
+                  message: Rate limit exceeded
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Request rate limit or sandbox request budget exhausted.
+      security:
+      - bearerAuth: []
+      summary: Bulk create Leads
+      tags:
+      - Leads
+  /api/v1/leads/schema:
+    get:
+      deprecated: false
+      description: Return the JSON Schemas for Lead create and update request bodies and the Organization's active Lead custom fields. Use it before building write payloads. Requires leads:read.
+      operationId: describeLeadSchema
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  create:
+                    properties:
+                      notes:
+                        type: string
+                    required: []
+                    type: object
+                  custom_fields:
+                  - archived: false
+                    conversion_mappings: []
+                    default_currency_code: null
+                    default_value: null
+                    description: Customer relationship tier
+                    field_type: short_text
+                    id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                    key: customer_tier
+                    label: Customer tier
+                    layout_position: 0
+                    options: []
+                    record_kind: lead
+                    required: false
+                    revision: 1
+                    section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                  resource: leads
+                  update:
+                    properties:
+                      status:
+                        type: string
+                    required: []
+                    type: object
+              schema:
+                $ref: '#/components/schemas/V1RecordSchemaResponsePayload'
+          description: Lead write schema.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid cursor
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid request.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: Describe Lead write fields
       tags:
       - Leads
   /api/v1/leads/{lead_id}:
@@ -401,6 +632,15 @@ paths:
         schema:
           example: lead_4P2jXRFuLpTQ3nM4PkGvW6
           type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: include_archived_custom_fields
+        required: false
+        schema:
+          default: false
+          type: boolean
       responses:
         '200':
           content:
@@ -573,6 +813,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/V1ErrorResponse'
           description: Lead not found.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: A custom field changed after the preview
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: A User field token is missing or stale.
       security:
       - bearerAuth: []
       summary: Update a Lead
@@ -581,7 +831,7 @@ paths:
   /api/v1/leads/{lead_id}/convert:
     post:
       deprecated: false
-      description: Convert a Lead into an Account and Contact, and optionally create a Deal in a single step. You can target an existing Account via `existing_account_id` or let Fixture create a new one from the Lead's `company_name`. On success the Lead is marked `converted` and linked to the newly created records.
+      description: Convert a Lead into an Account and Contact, and optionally create a Deal in a single step. You can target an existing Account via `existing_account_id` or let Fixture create a new one from the Lead's `company_name`. On success the Lead is marked `converted` and linked to the newly created records. The response includes copied and skipped custom-field mapping outcomes.
       operationId: convertLead
       parameters:
       - deprecated: false
@@ -619,6 +869,7 @@ paths:
                     email: taylor@prospect.example
                     id: contact_6M4jXRFuLpTQ3nM4PkGvW8
                     name: Taylor Reed
+                  custom_field_outcomes: []
                   deal:
                     id: deal_5N2jXRFuLpTQ3nM4PkGvW7
                     name: Prospect Labs expansion
@@ -698,8 +949,558 @@ paths:
       summary: Convert a Lead
       tags:
       - Leads
+  /api/v1/leads/{lead_id}/lists:
+    delete:
+      deprecated: false
+      description: Add or remove only the memberships named in list_ids. Provide 1 to 100 saved list_ IDs. All targets are validated before any change. Archived Lists return 409. Requires leads:write. Retries are idempotent and unrelated memberships are preserved. Returns all remaining memberships.
+      operationId: removeLeadMemberships
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              list_ids:
+              - list_7B5jXRFuLpTQ3nM4PkGvW2
+            schema:
+              $ref: '#/components/schemas/V1LeadListMembershipRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - added_at: '2026-03-24T14:00:01Z'
+                  archived_at: null
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+              schema:
+                $ref: '#/components/schemas/V1LeadListMembershipsPayload'
+          description: Current saved List memberships.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide 1 to 100 saved List IDs
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Malformed ID or invalid list_ids body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead or List unavailable in this Organization.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: Restore this List before changing its Leads
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: An archived List cannot be changed.
+      security:
+      - bearerAuth: []
+      summary: Remove a Lead from Lists
+      tags:
+      - Leads
+    get:
+      deprecated: false
+      description: Read every saved List containing this Lead, including archived Lists. Each membership carries its added_at timestamp. Returns an empty data array for a Lead with no saved memberships. Requires leads:read. All Leads is virtual and is not returned.
+      operationId: listLeadMemberships
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - added_at: '2026-03-24T14:00:01Z'
+                  archived_at: null
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+              schema:
+                $ref: '#/components/schemas/V1LeadListMembershipsPayload'
+          description: Saved List memberships.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid Lead ID
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid Lead ID.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: Lead not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead unavailable in this Organization.
+      security:
+      - bearerAuth: []
+      summary: Get a Lead's Lists
+      tags:
+      - Leads
+    post:
+      deprecated: false
+      description: Add or remove only the memberships named in list_ids. Provide 1 to 100 saved list_ IDs. All targets are validated before any change. Archived Lists return 409. Requires leads:write. Retries are idempotent and unrelated memberships are preserved. Returns all remaining memberships.
+      operationId: addLeadMemberships
+      parameters:
+      - deprecated: false
+        description: Opaque Lead ID with the `lead_` prefix.
+        in: path
+        name: lead_id
+        required: true
+        schema:
+          example: lead_4P2jXRFuLpTQ3nM4PkGvW6
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              list_ids:
+              - list_7B5jXRFuLpTQ3nM4PkGvW2
+            schema:
+              $ref: '#/components/schemas/V1LeadListMembershipRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                - added_at: '2026-03-24T14:00:01Z'
+                  archived_at: null
+                  id: list_7B5jXRFuLpTQ3nM4PkGvW2
+                  name: Conference Leads
+              schema:
+                $ref: '#/components/schemas/V1LeadListMembershipsPayload'
+          description: Current saved List memberships.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide 1 to 100 saved List IDs
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Malformed ID or invalid list_ids body.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: leads:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+        '404':
+          content:
+            application/json:
+              example:
+                error:
+                  code: not_found
+                  message: List not found
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Lead or List unavailable in this Organization.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: Restore this List before changing its Leads
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: An archived List cannot be changed.
+      security:
+      - bearerAuth: []
+      summary: Add a Lead to Lists
+      tags:
+      - Leads
 components:
   schemas:
+    BulkCreatePayload:
+      properties:
+        created:
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/BulkCreateResult'
+          type: array
+        failed:
+          type: integer
+        replayed:
+          type: integer
+      required:
+      - created
+      - data
+      - failed
+      - replayed
+      title: BulkCreatePayload
+      type: object
+    CustomFieldCurrencyPayload:
+      properties:
+        amount:
+          type: string
+        code:
+          type: string
+      required:
+      - amount
+      - code
+      title: CustomFieldCurrencyPayload
+      type: object
+    V1RecordSchemaResponsePayload:
+      description: Write schema response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1RecordSchemaPayload'
+      required:
+      - data
+      title: V1RecordSchemaResponsePayload
+      type: object
+    BulkCreateError:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      title: BulkCreateError
+      type: object
+    V1CreateLeadRequest:
+      description: Request body for creating a Lead.
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_domain:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_linkedin_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_phone:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_revenue:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        email_status:
+          oneOf:
+          - type: string
+          - type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        list_ids:
+          description: List of opaque `list_` IDs.
+          oneOf:
+          - description: List of opaque `list_` IDs.
+            example:
+            - list_7B5jXRFuLpTQ3nM4PkGvW2
+            items:
+              description: Opaque `list_` identifier.
+              example: list_7B5jXRFuLpTQ3nM4PkGvW2
+              type: string
+            maxItems: 100
+            type: array
+          - description: List of opaque `list_` IDs.
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          oneOf:
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: string
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1CreateLeadRequest
+      type: object
+    V1LeadConversionResultPayload:
+      properties:
+        account:
+          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
+        contact:
+          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
+        custom_field_outcomes:
+          items:
+            $ref: '#/components/schemas/CustomFieldConversionOutcome'
+          type: array
+        deal:
+          oneOf:
+          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
+          - type: 'null'
+        lead:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
+      required:
+      - account
+      - contact
+      - custom_field_outcomes
+      - deal
+      - lead
+      title: V1LeadConversionResultPayload
+      type: object
+    CustomFieldOptionPayload:
+      properties:
+        archived:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        position:
+          type: integer
+      required:
+      - archived
+      - id
+      - label
+      - position
+      title: CustomFieldOptionPayload
+      type: object
+    SelectedCustomFieldUserPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        label:
+          type: string
+      required:
+      - available
+      - id
+      - label
+      title: SelectedCustomFieldUserPayload
+      type: object
     V1LeadRelatedDealPayload:
       properties:
         id:
@@ -731,23 +1532,27 @@ components:
       - value
       title: V1LeadRelatedDealPayload
       type: object
-    V1LeadDetailResponsePayload:
-      description: Single-Lead response envelope.
+    V1LeadListMembershipsPayload:
+      description: All saved List memberships for one Lead. An empty data array means no memberships.
       properties:
         data:
-          $ref: '#/components/schemas/V1LeadDetailPayload'
+          items:
+            $ref: '#/components/schemas/V1ProspectListMembershipPayload'
+          type: array
       required:
       - data
-      title: V1LeadDetailResponsePayload
+      title: V1LeadListMembershipsPayload
       type: object
-    V1LeadConversionResponsePayload:
-      description: Lead conversion response envelope.
+    SelectedCustomFieldOptionPayload:
       properties:
-        data:
-          $ref: '#/components/schemas/V1LeadConversionResultPayload'
+        id:
+          type: string
+        label:
+          type: string
       required:
-      - data
-      title: V1LeadConversionResponsePayload
+      - id
+      - label
+      title: SelectedCustomFieldOptionPayload
       type: object
     V1LeadDeletePayload:
       properties:
@@ -763,19 +1568,37 @@ components:
       - id
       title: V1LeadDeletePayload
       type: object
-    V1LeadListPayload:
-      description: Paginated list response for Leads.
+    CustomFieldValuePayload:
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1LeadSelectedFieldsPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
+        id:
+          type: string
+        label:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldType'
+        value:
+          oneOf:
+          - type: string
+          - type: boolean
+          - $ref: '#/components/schemas/CustomFieldCurrencyPayload'
+          - $ref: '#/components/schemas/SelectedCustomFieldOptionPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldOptionPayload'
+            type: array
+          - $ref: '#/components/schemas/SelectedCustomFieldUserPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldUserPayload'
+            type: array
+          - $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+            type: array
       required:
-      - data
-      - pagination
-      title: V1LeadListPayload
+      - id
+      - label
+      - type
+      - value
+      title: CustomFieldValuePayload
       type: object
     V1LeadRelatedAccountPayload:
       properties:
@@ -790,70 +1613,26 @@ components:
       - name
       title: V1LeadRelatedAccountPayload
       type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
-    V1LeadConversionResultPayload:
-      properties:
-        account:
-          $ref: '#/components/schemas/V1LeadRelatedAccountPayload'
-        contact:
-          $ref: '#/components/schemas/V1LeadRelatedContactPayload'
-        deal:
-          oneOf:
-          - $ref: '#/components/schemas/V1LeadRelatedDealPayload'
-          - type: 'null'
-        lead:
-          $ref: '#/components/schemas/V1LeadDetailPayload'
-      required:
-      - account
-      - contact
-      - deal
-      - lead
-      title: V1LeadConversionResultPayload
-      type: object
-    V1ErrorResponse:
-      description: Standard error envelope for all public v1 API errors.
-      properties:
-        error:
-          properties:
-            code:
-              description: Stable machine-readable error code.
-              example: not_found
-              type: string
-            message:
-              description: Human-readable error message.
-              example: Account not found
-              type: string
-          required:
-          - code
-          - message
-          type: object
-      required:
-      - error
-      type: object
-    V1LeadDetailPayload:
+    V1UpdateLeadRequest:
+      description: Request body for partially updating a Lead.
       properties:
         city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_domain:
           oneOf:
           - type: string
           - type: 'null'
@@ -865,7 +1644,391 @@ components:
           oneOf:
           - type: string
           - type: 'null'
+        company_linkedin_url:
+          oneOf:
+          - type: string
+          - type: 'null'
         company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_phone:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_revenue:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_website:
+          oneOf:
+          - type: string
+          - type: 'null'
+        country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        custom_field_tokens:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: integer
+              - type: 'null'
+            type: object
+          - type: 'null'
+        custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        email_status:
+          oneOf:
+          - type: string
+          - type: 'null'
+        estimated_value:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        notes:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        source:
+          enum:
+          - website
+          - referral
+          - linkedin
+          - cold_outreach
+          - event
+          - form
+          - other
+          oneOf:
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: string
+          - enum:
+            - website
+            - referral
+            - linkedin
+            - cold_outreach
+            - event
+            - form
+            - other
+            type: 'null'
+        state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        status:
+          enum:
+          - new
+          - contacted
+          - qualified
+          - unqualified
+          - converted
+          oneOf:
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: string
+          - enum:
+            - new
+            - contacted
+            - qualified
+            - unqualified
+            - converted
+            type: 'null'
+        title:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required: []
+      title: V1UpdateLeadRequest
+      type: object
+    CustomFieldConversionOutcome:
+      properties:
+        copied_value:
+          oneOf:
+          - oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: 'null'
+          - items: {}
+            type: array
+          - additionalProperties: {}
+            type: object
+        destination_definition_id:
+          type: string
+        destination_label:
+          type: string
+        destination_record_kind:
+          type: string
+        option_labels:
+          additionalProperties:
+            type: string
+          type: object
+        reason:
+          enum:
+          - field_archived
+          - unavailable_option_pair
+          - unavailable_user
+          - unavailable_record
+          - null
+          type:
+          - 'null'
+          - string
+        skipped_value:
+          oneOf:
+          - oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: 'null'
+          - items: {}
+            type: array
+          - additionalProperties: {}
+            type: object
+        source_definition_id:
+          type: string
+        source_label:
+          type: string
+      required:
+      - copied_value
+      - destination_definition_id
+      - destination_label
+      - destination_record_kind
+      - option_labels
+      - reason
+      - skipped_value
+      - source_definition_id
+      - source_label
+      title: CustomFieldConversionOutcome
+      type: object
+    V1LeadListMembershipRequest:
+      description: Provide 1 to 100 saved list_ IDs. Repeated IDs are deduplicated. No replace-all operation.
+      properties:
+        list_ids:
+          description: List of opaque `list_` IDs.
+          example:
+          - list_7B5jXRFuLpTQ3nM4PkGvW2
+          items:
+            description: Opaque `list_` identifier.
+            example: list_7B5jXRFuLpTQ3nM4PkGvW2
+            type: string
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+      - list_ids
+      title: V1LeadListMembershipRequest
+      type: object
+    BulkCreateResult:
+      properties:
+        error:
+          oneOf:
+          - $ref: '#/components/schemas/BulkCreateError'
+          - type: 'null'
+        id:
+          oneOf:
+          - type: string
+          - type: 'null'
+        key:
+          type: string
+        status:
+          enum:
+          - created
+          - replayed
+          - error
+          type: string
+      required:
+      - error
+      - id
+      - key
+      - status
+      title: BulkCreateResult
+      type: object
+    V1RecordSchemaPayload:
+      description: JSON Schemas for one resource's create and update request bodies, plus the Organization's active custom fields. Write custom values under custom_fields using each definition's key.
+      properties:
+        create:
+          additionalProperties:
+            oneOf:
+            - oneOf:
+              - type: string
+              - type: integer
+              - type: number
+              - type: boolean
+              - type: 'null'
+            - items: {}
+              type: array
+            - additionalProperties: {}
+              type: object
+          type: object
+        custom_fields:
+          items:
+            $ref: '#/components/schemas/CustomFieldDefinitionPayload'
+          type: array
+        resource:
+          type: string
+        update:
+          additionalProperties:
+            oneOf:
+            - oneOf:
+              - type: string
+              - type: integer
+              - type: number
+              - type: boolean
+              - type: 'null'
+            - items: {}
+              type: array
+            - additionalProperties: {}
+              type: object
+          type: object
+      required:
+      - create
+      - custom_fields
+      - resource
+      - update
+      title: V1RecordSchemaPayload
+      type: object
+    V1LeadRelatedContactPayload:
+      properties:
+        email:
+          description: Primary email address.
+          example: alex@acme.example
+          oneOf:
+          - description: Primary email address.
+            example: alex@acme.example
+            type: string
+          - description: Primary email address.
+            example: alex@acme.example
+            type: 'null'
+        id:
+          description: Opaque `contact_` identifier.
+          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
+          type: string
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+      required:
+      - email
+      - id
+      - name
+      title: V1LeadRelatedContactPayload
+      type: object
+    V1LeadConversionResponsePayload:
+      description: Lead conversion response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadConversionResultPayload'
+      required:
+      - data
+      title: V1LeadConversionResponsePayload
+      type: object
+    V1LeadDetailPayload:
+      properties:
+        city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_domain:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_linkedin_url:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_phone:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_revenue:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_state:
           oneOf:
           - type: string
           - type: 'null'
@@ -909,6 +2072,16 @@ components:
           example: '2026-03-22T14:00:01Z'
           format: date-time
           type: string
+        custom_field_tokens:
+          additionalProperties:
+            oneOf:
+            - type: integer
+            - type: 'null'
+          type: object
+        custom_fields:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValuePayload'
+          type: object
         email:
           description: Primary email address.
           example: alex@acme.example
@@ -919,6 +2092,10 @@ components:
           - description: Primary email address.
             example: alex@acme.example
             type: 'null'
+        email_status:
+          oneOf:
+          - type: string
+          - type: 'null'
         estimated_value:
           oneOf:
           - type: integer
@@ -1007,16 +2184,27 @@ components:
           type: string
       required:
       - city
+      - company_city
+      - company_country
+      - company_description
+      - company_domain
       - company_employee_count
       - company_industry
+      - company_linkedin_url
       - company_name
+      - company_phone
+      - company_revenue
+      - company_state
       - company_website
       - converted_account_id
       - converted_at
       - converted_contact_id
       - country
       - created_at
+      - custom_field_tokens
+      - custom_fields
       - email
+      - email_status
       - estimated_value
       - id
       - last_activity_at
@@ -1031,223 +2219,165 @@ components:
       - updated_at
       title: V1LeadDetailPayload
       type: object
-    V1ConvertLeadRequest:
-      description: Request body for converting a Lead into an Account and Contact.
+    CustomFieldDefinitionPayload:
+      description: Typed field definition with stable UUID identity, optional description, record-page section and position, retained options, and confirmed Lead conversion mappings.
       properties:
-        company_industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_website:
-          oneOf:
-          - type: string
-          - type: 'null'
-        create_account:
-          default: true
+        archived:
           type: boolean
-        create_deal:
-          default: false
-          type: boolean
-        deal_name:
+        conversion_mappings:
+          items:
+            $ref: '#/components/schemas/CustomFieldConversionMappingPayload'
+          type: array
+        default_currency_code:
           oneOf:
           - type: string
           - type: 'null'
-        deal_stage_id:
-          description: Opaque `stage_` identifier.
-          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+        default_value:
           oneOf:
-          - description: Opaque `stage_` identifier.
-            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-            type: string
-          - description: Opaque `stage_` identifier.
-            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
-            type: 'null'
-        deal_value:
+          - oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: 'null'
+          - items: {}
+            type: array
+          - additionalProperties: {}
+            type: object
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        field_type:
+          type: string
+        id:
+          type: string
+        key:
+          type: string
+        label:
+          type: string
+        layout_position:
           oneOf:
           - type: integer
           - type: 'null'
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        existing_account_id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          oneOf:
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: string
-          - description: Opaque `account_` identifier.
-            example: account_7B5jXRFuLpTQ3nM4PkGvW2
-            type: 'null'
-        name:
+        options:
+          items:
+            $ref: '#/components/schemas/CustomFieldOptionPayload'
+          type: array
+        record_kind:
+          type: string
+        reference_kind:
           oneOf:
           - type: string
           - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        pipeline_id:
-          description: Opaque `pipeline_` identifier.
-          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-          oneOf:
-          - description: Opaque `pipeline_` identifier.
-            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-            type: string
-          - description: Opaque `pipeline_` identifier.
-            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
-            type: 'null'
-        title:
+        required:
+          type: boolean
+        revision:
+          type: integer
+        section_id:
           oneOf:
           - type: string
           - type: 'null'
-      required: []
-      title: V1ConvertLeadRequest
+      required:
+      - archived
+      - conversion_mappings
+      - default_currency_code
+      - default_value
+      - description
+      - field_type
+      - id
+      - key
+      - label
+      - layout_position
+      - options
+      - record_kind
+      - reference_kind
+      - required
+      - revision
+      - section_id
+      title: CustomFieldDefinitionPayload
       type: object
-    V1UpdateLeadRequest:
-      description: Request body for partially updating a Lead.
+    CustomFieldConversionMappingPayload:
       properties:
-        city:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_employee_count:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        company_industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        company_website:
-          oneOf:
-          - type: string
-          - type: 'null'
-        country:
-          oneOf:
-          - type: string
-          - type: 'null'
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
+        complete:
+          type: boolean
+        destination_definition_id:
+          type: string
+        destination_record_kind:
+          type: string
+        option_pairs:
+          additionalProperties:
             type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
-        estimated_value:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
-            type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
-          oneOf:
-          - type: string
-          - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        source:
-          enum:
-          - website
-          - referral
-          - linkedin
-          - cold_outreach
-          - event
-          - form
-          - other
-          oneOf:
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: string
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        status:
-          enum:
-          - new
-          - contacted
-          - qualified
-          - unqualified
-          - converted
-          oneOf:
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: string
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: 'null'
-        title:
-          oneOf:
-          - type: string
-          - type: 'null'
-      required: []
-      title: V1UpdateLeadRequest
+          type: object
+      required:
+      - complete
+      - destination_definition_id
+      - destination_record_kind
+      - option_pairs
+      title: CustomFieldConversionMappingPayload
       type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    CustomFieldType:
+      enum:
+      - short_text
+      - long_text
+      - number
+      - boolean
+      - date
+      - url
+      - single_select
+      - multi_select
+      - single_user
+      - multi_user
+      - single_record
+      - multi_record
+      - currency
+      - percentage
+      title: CustomFieldType
+      type: string
     V1LeadSelectedFieldsPayload:
       properties:
         city:
           oneOf:
           - type: string
           - type: 'null'
+        company_city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_domain:
+          oneOf:
+          - type: string
+          - type: 'null'
         company_employee_count:
           oneOf:
           - type: integer
@@ -1256,7 +2386,23 @@ components:
           oneOf:
           - type: string
           - type: 'null'
+        company_linkedin_url:
+          oneOf:
+          - type: string
+          - type: 'null'
         company_name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_phone:
+          oneOf:
+          - type: string
+          - type: 'null'
+        company_revenue:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        company_state:
           oneOf:
           - type: string
           - type: 'null'
@@ -1300,6 +2446,16 @@ components:
           example: '2026-03-22T14:00:01Z'
           format: date-time
           type: string
+        custom_field_tokens:
+          additionalProperties:
+            oneOf:
+            - type: integer
+            - type: 'null'
+          type: object
+        custom_fields:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValuePayload'
+          type: object
         email:
           description: Primary email address.
           example: alex@acme.example
@@ -1310,6 +2466,10 @@ components:
           - description: Primary email address.
             example: alex@acme.example
             type: 'null'
+        email_status:
+          oneOf:
+          - type: string
+          - type: 'null'
         estimated_value:
           oneOf:
           - type: integer
@@ -1399,42 +2559,44 @@ components:
       required: []
       title: V1LeadSelectedFieldsPayload
       type: object
-    V1LeadRelatedContactPayload:
+    SelectedCustomFieldRecordPayload:
       properties:
-        email:
-          description: Primary email address.
-          example: alex@acme.example
-          oneOf:
-          - description: Primary email address.
-            example: alex@acme.example
-            type: string
-          - description: Primary email address.
-            example: alex@acme.example
-            type: 'null'
+        available:
+          type: boolean
         id:
-          description: Opaque `contact_` identifier.
-          example: contact_6M4jXRFuLpTQ3nM4PkGvW8
           type: string
-        name:
+        label:
+          type: string
+        link:
           oneOf:
           - type: string
           - type: 'null'
       required:
-      - email
+      - available
       - id
-      - name
-      title: V1LeadRelatedContactPayload
+      - label
+      - link
+      title: SelectedCustomFieldRecordPayload
       type: object
-    V1CreateLeadRequest:
-      description: Request body for creating a Lead.
+    V1ConvertLeadRequest:
+      description: Request body for converting a Lead into an Account and Contact.
       properties:
-        city:
+        account_custom_fields:
           oneOf:
-          - type: string
-          - type: 'null'
-        company_employee_count:
-          oneOf:
-          - type: integer
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
           - type: 'null'
         company_industry:
           oneOf:
@@ -1448,9 +2610,63 @@ components:
           oneOf:
           - type: string
           - type: 'null'
-        country:
+        contact_custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
+        create_account:
+          default: true
+          type: boolean
+        create_deal:
+          default: false
+          type: boolean
+        deal_custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
+        deal_name:
           oneOf:
           - type: string
+          - type: 'null'
+        deal_stage_id:
+          description: Opaque `stage_` identifier.
+          example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+          oneOf:
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: string
+          - description: Opaque `stage_` identifier.
+            example: stage_2R7jXRFuLpTQ3nM4PkGvW4
+            type: 'null'
+        deal_value:
+          oneOf:
+          - type: integer
           - type: 'null'
         email:
           description: Primary email address.
@@ -1462,22 +2678,17 @@ components:
           - description: Primary email address.
             example: alex@acme.example
             type: 'null'
-        estimated_value:
+        existing_account_id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
           oneOf:
-          - type: integer
-          - type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
             type: string
-          - example: https://www.linkedin.com/company/acme
+          - description: Opaque `account_` identifier.
+            example: account_7B5jXRFuLpTQ3nM4PkGvW2
             type: 'null'
         name:
-          oneOf:
-          - type: string
-          - type: 'null'
-        notes:
           oneOf:
           - type: string
           - type: 'null'
@@ -1488,66 +2699,89 @@ components:
             type: string
           - example: +1-415-555-0100
             type: 'null'
-        source:
-          enum:
-          - website
-          - referral
-          - linkedin
-          - cold_outreach
-          - event
-          - form
-          - other
+        pipeline_id:
+          description: Opaque `pipeline_` identifier.
+          example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
           oneOf:
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
             type: string
-          - enum:
-            - website
-            - referral
-            - linkedin
-            - cold_outreach
-            - event
-            - form
-            - other
-            type: 'null'
-        state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        status:
-          enum:
-          - new
-          - contacted
-          - qualified
-          - unqualified
-          - converted
-          oneOf:
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
-            type: string
-          - enum:
-            - new
-            - contacted
-            - qualified
-            - unqualified
-            - converted
+          - description: Opaque `pipeline_` identifier.
+            example: pipeline_1S6jXRFuLpTQ3nM4PkGvW3
             type: 'null'
         title:
           oneOf:
           - type: string
           - type: 'null'
       required: []
-      title: V1CreateLeadRequest
+      title: V1ConvertLeadRequest
+      type: object
+    V1LeadListPayload:
+      description: Paginated list response for Leads.
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/V1LeadSelectedFieldsPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
+      required:
+      - data
+      - pagination
+      title: V1LeadListPayload
+      type: object
+    V1LeadDetailResponsePayload:
+      description: Single-Lead response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1LeadDetailPayload'
+      required:
+      - data
+      title: V1LeadDetailResponsePayload
+      type: object
+    V1ErrorResponse:
+      description: Standard error envelope for all public v1 API errors.
+      properties:
+        error:
+          properties:
+            code:
+              description: Stable machine-readable error code.
+              example: not_found
+              type: string
+            message:
+              description: Human-readable error message.
+              example: Account not found
+              type: string
+          required:
+          - code
+          - message
+          type: object
+      required:
+      - error
+      type: object
+    V1ProspectListMembershipPayload:
+      description: A Lead's membership in a saved List, including archived Lists.
+      properties:
+        added_at:
+          format: date-time
+          type: string
+        archived_at:
+          oneOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+        id:
+          description: Opaque `list_` identifier.
+          example: list_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        name:
+          type: string
+      required:
+      - added_at
+      - archived_at
+      - id
+      - name
+      title: V1ProspectListMembershipPayload
       type: object
   securitySchemes:
     bearerAuth:

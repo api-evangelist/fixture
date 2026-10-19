@@ -151,6 +151,25 @@ paths:
         schema:
           example: id,name,created_at
           type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: include_archived_custom_fields
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        description: URL-encoded JSON with up to 10 Custom Field filters. Each filter uses a definition UUID as `field_id`, an `operator`, and a `value` when required. Get definition IDs from `/api/v1/custom-fields/{record_kind}`. Custom-field sorts are unavailable on these cursor lists.
+        in: query
+        name: custom_query
+        required: false
+        schema:
+          example: '{"filters":[{"field_id":"a274a4f6-3239-4f1a-b8b5-776b17b3d0ae","operator":"gte","value":"20"}]}'
+          type: string
       responses:
         '200':
           content:
@@ -302,6 +321,179 @@ paths:
       summary: Create an Account
       tags:
       - Accounts
+  /api/v1/accounts/bulk:
+    post:
+      deprecated: false
+      description: Create 1-25 records with the same fields and permissions as individual creates. Each row commits independently. Results stay in input order. Reuse a stable row key with the same create data to recover a prior creation after a lost response. Keys are scoped to the organization, resource, actor, and history source. Reusing a committed key with different data returns a row conflict. A replay reports the original created ID, even if the record was later updated or deleted. Corrected failed rows can reuse their key.
+      operationId: bulkCreateAccounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                items:
+                  items:
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/CreateAccountRequest'
+                      key:
+                        maxLength: 128
+                        minLength: 1
+                        type: string
+                    required:
+                    - key
+                    - data
+                    type: object
+                  maxItems: 25
+                  minItems: 1
+                  type: array
+              required:
+              - items
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                created: 1
+                data:
+                - error: null
+                  id: account_example
+                  key: row-1
+                  status: created
+                failed: 0
+                replayed: 0
+              schema:
+                $ref: '#/components/schemas/BulkCreatePayload'
+          description: Per-row results, including partial failures.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: validation_error
+                  message: Provide between 1 and 25 items
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid batch envelope; no records were created.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Authentication required
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid bearer token.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: accounts:write'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing write scope or role.
+        '429':
+          content:
+            application/json:
+              example:
+                error:
+                  code: rate_limit_exceeded
+                  message: Rate limit exceeded
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Request rate limit or sandbox request budget exhausted.
+      security:
+      - bearerAuth: []
+      summary: Bulk create Accounts
+      tags:
+      - Accounts
+  /api/v1/accounts/schema:
+    get:
+      deprecated: false
+      description: Return the JSON Schemas for Account create and update request bodies and the Organization's active Account custom fields. Use it before building write payloads. Requires accounts:read.
+      operationId: describeAccountSchema
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  create:
+                    properties:
+                      name:
+                        type: string
+                      notes:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  custom_fields:
+                  - archived: false
+                    conversion_mappings: []
+                    default_currency_code: null
+                    default_value: null
+                    description: Customer relationship tier
+                    field_type: short_text
+                    id: a274a4f6-3239-4f1a-b8b5-776b17b3d0ae
+                    key: customer_tier
+                    label: Customer tier
+                    layout_position: 0
+                    options: []
+                    record_kind: account
+                    required: false
+                    revision: 1
+                    section_id: b36731e8-8ceb-4b57-9690-ed3f92f9164a
+                  resource: accounts
+                  update:
+                    properties:
+                      industry:
+                        type: string
+                    required: []
+                    type: object
+              schema:
+                $ref: '#/components/schemas/V1RecordSchemaResponsePayload'
+          description: Account write schema.
+        '400':
+          content:
+            application/json:
+              example:
+                error:
+                  code: invalid_parameter
+                  message: Invalid cursor
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Invalid request.
+        '401':
+          content:
+            application/json:
+              example:
+                error:
+                  code: unauthorized
+                  message: Invalid or missing API key
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: Missing or invalid API key.
+        '403':
+          content:
+            application/json:
+              example:
+                error:
+                  code: forbidden
+                  message: 'Missing required scope: accounts:read'
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: API key is missing the required scope.
+      security:
+      - bearerAuth: []
+      summary: Describe Account write fields
+      tags:
+      - Accounts
   /api/v1/accounts/{account_id}:
     delete:
       deprecated: false
@@ -384,6 +576,15 @@ paths:
         schema:
           example: account_7B5jXRFuLpTQ3nM4PkGvW2
           type: string
+      - allowEmptyValue: false
+        allowReserved: false
+        deprecated: false
+        in: query
+        name: include_archived_custom_fields
+        required: false
+        schema:
+          default: false
+          type: boolean
       responses:
         '200':
           content:
@@ -556,6 +757,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/V1ErrorResponse'
           description: Account not found.
+        '409':
+          content:
+            application/json:
+              example:
+                error:
+                  code: conflict
+                  message: A custom field changed after the preview
+              schema:
+                $ref: '#/components/schemas/V1ErrorResponse'
+          description: A User field token is missing or stale.
       security:
       - bearerAuth: []
       summary: Update an Account
@@ -563,14 +774,54 @@ paths:
       - Accounts
 components:
   schemas:
-    V1AccountDetailResponsePayload:
-      description: Single-Account response envelope.
+    BulkCreatePayload:
+      properties:
+        created:
+          type: integer
+        data:
+          items:
+            $ref: '#/components/schemas/BulkCreateResult'
+          type: array
+        failed:
+          type: integer
+        replayed:
+          type: integer
+      required:
+      - created
+      - data
+      - failed
+      - replayed
+      title: BulkCreatePayload
+      type: object
+    CustomFieldCurrencyPayload:
+      properties:
+        amount:
+          type: string
+        code:
+          type: string
+      required:
+      - amount
+      - code
+      title: CustomFieldCurrencyPayload
+      type: object
+    V1RecordSchemaResponsePayload:
+      description: Write schema response envelope.
       properties:
         data:
-          $ref: '#/components/schemas/V1AccountDetailPayload'
+          $ref: '#/components/schemas/V1RecordSchemaPayload'
       required:
       - data
-      title: V1AccountDetailResponsePayload
+      title: V1RecordSchemaResponsePayload
+      type: object
+    V1OwnerRelationshipSetUserPayload:
+      description: User assignment entry for an owner relationship update.
+      properties:
+        user_id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - user_id
       type: object
     V1OwnerRelationshipPayload:
       description: Owner relationship state for an Account or Deal.
@@ -583,15 +834,24 @@ components:
       required:
       - users
       type: object
-    V1OwnerUserPayload:
-      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
+    V1RelationshipsPayload:
+      description: Relationships attached to an Account or Deal.
       properties:
-        id:
-          description: Opaque `user_` identifier.
-          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
+      required:
+      - owner
+      type: object
+    BulkCreateError:
+      properties:
+        code:
+          type: string
+        message:
           type: string
       required:
-      - id
+      - code
+      - message
+      title: BulkCreateError
       type: object
     V1OwnerRelationshipWritePayload:
       description: Owner relationship update payload.
@@ -609,11 +869,184 @@ components:
       required:
       - set
       type: object
-    V1RelationshipsWritePayload:
-      description: Relationship updates accepted on Account and Deal writes.
+    CustomFieldOptionPayload:
       properties:
-        owner:
-          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
+        archived:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        position:
+          type: integer
+      required:
+      - archived
+      - id
+      - label
+      - position
+      title: CustomFieldOptionPayload
+      type: object
+    UpdateAccountRequest:
+      description: Request body for partially updating an Account.
+      properties:
+        custom_field_tokens:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: integer
+              - type: 'null'
+            type: object
+          - type: 'null'
+        custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
+        description:
+          oneOf:
+          - type: string
+          - type: 'null'
+        employee_count:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        estimated_revenue:
+          oneOf:
+          - type: integer
+          - type: 'null'
+        headquarters_address:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_city:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_country:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_postal_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        headquarters_state:
+          oneOf:
+          - type: string
+          - type: 'null'
+        industry:
+          oneOf:
+          - type: string
+          - type: 'null'
+        linkedin_url:
+          example: https://www.linkedin.com/company/acme
+          oneOf:
+          - example: https://www.linkedin.com/company/acme
+            type: string
+          - example: https://www.linkedin.com/company/acme
+            type: 'null'
+        name:
+          oneOf:
+          - type: string
+          - type: 'null'
+        phone:
+          example: +1-415-555-0100
+          oneOf:
+          - example: +1-415-555-0100
+            type: string
+          - example: +1-415-555-0100
+            type: 'null'
+        relationships:
+          $ref: '#/components/schemas/V1RelationshipsWritePayload'
+        website_url:
+          example: https://acme.example
+          oneOf:
+          - example: https://acme.example
+            type: string
+          - example: https://acme.example
+            type: 'null'
+      required: []
+      title: UpdateAccountRequest
+      type: object
+    SelectedCustomFieldUserPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+        label:
+          type: string
+      required:
+      - available
+      - id
+      - label
+      title: SelectedCustomFieldUserPayload
+      type: object
+    V1AccountDetailResponsePayload:
+      description: Single-Account response envelope.
+      properties:
+        data:
+          $ref: '#/components/schemas/V1AccountDetailPayload'
+      required:
+      - data
+      title: V1AccountDetailResponsePayload
+      type: object
+    SelectedCustomFieldOptionPayload:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+      required:
+      - id
+      - label
+      title: SelectedCustomFieldOptionPayload
+      type: object
+    CustomFieldValuePayload:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        type:
+          $ref: '#/components/schemas/CustomFieldType'
+        value:
+          oneOf:
+          - type: string
+          - type: boolean
+          - $ref: '#/components/schemas/CustomFieldCurrencyPayload'
+          - $ref: '#/components/schemas/SelectedCustomFieldOptionPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldOptionPayload'
+            type: array
+          - $ref: '#/components/schemas/SelectedCustomFieldUserPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldUserPayload'
+            type: array
+          - $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+          - items:
+              $ref: '#/components/schemas/SelectedCustomFieldRecordPayload'
+            type: array
+      required:
+      - id
+      - label
+      - type
+      - value
+      title: CustomFieldValuePayload
       type: object
     V1AccountDetailPayload:
       properties:
@@ -621,6 +1054,16 @@ components:
           example: '2026-03-22T14:00:01Z'
           format: date-time
           type: string
+        custom_field_tokens:
+          additionalProperties:
+            oneOf:
+            - type: integer
+            - type: 'null'
+          type: object
+        custom_fields:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValuePayload'
+          type: object
         description:
           oneOf:
           - type: string
@@ -700,6 +1143,8 @@ components:
             type: 'null'
       required:
       - created_at
+      - custom_field_tokens
+      - custom_fields
       - description
       - employee_count
       - estimated_revenue
@@ -719,78 +1164,281 @@ components:
       - website_url
       title: V1AccountDetailPayload
       type: object
-    UpdateAccountRequest:
-      description: Request body for partially updating an Account.
+    BulkCreateResult:
       properties:
+        error:
+          oneOf:
+          - $ref: '#/components/schemas/BulkCreateError'
+          - type: 'null'
+        id:
+          oneOf:
+          - type: string
+          - type: 'null'
+        key:
+          type: string
+        status:
+          enum:
+          - created
+          - replayed
+          - error
+          type: string
+      required:
+      - error
+      - id
+      - key
+      - status
+      title: BulkCreateResult
+      type: object
+    V1RecordSchemaPayload:
+      description: JSON Schemas for one resource's create and update request bodies, plus the Organization's active custom fields. Write custom values under custom_fields using each definition's key.
+      properties:
+        create:
+          additionalProperties:
+            oneOf:
+            - oneOf:
+              - type: string
+              - type: integer
+              - type: number
+              - type: boolean
+              - type: 'null'
+            - items: {}
+              type: array
+            - additionalProperties: {}
+              type: object
+          type: object
+        custom_fields:
+          items:
+            $ref: '#/components/schemas/CustomFieldDefinitionPayload'
+          type: array
+        resource:
+          type: string
+        update:
+          additionalProperties:
+            oneOf:
+            - oneOf:
+              - type: string
+              - type: integer
+              - type: number
+              - type: boolean
+              - type: 'null'
+            - items: {}
+              type: array
+            - additionalProperties: {}
+              type: object
+          type: object
+      required:
+      - create
+      - custom_fields
+      - resource
+      - update
+      title: V1RecordSchemaPayload
+      type: object
+    V1RelationshipsWritePayload:
+      description: Relationship updates accepted on Account and Deal writes.
+      properties:
+        owner:
+          $ref: '#/components/schemas/V1OwnerRelationshipWritePayload'
+      type: object
+    CustomFieldDefinitionPayload:
+      description: Typed field definition with stable UUID identity, optional description, record-page section and position, retained options, and confirmed Lead conversion mappings.
+      properties:
+        archived:
+          type: boolean
+        conversion_mappings:
+          items:
+            $ref: '#/components/schemas/CustomFieldConversionMappingPayload'
+          type: array
+        default_currency_code:
+          oneOf:
+          - type: string
+          - type: 'null'
+        default_value:
+          oneOf:
+          - oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - type: 'null'
+          - items: {}
+            type: array
+          - additionalProperties: {}
+            type: object
         description:
           oneOf:
           - type: string
           - type: 'null'
-        employee_count:
+        field_type:
+          type: string
+        id:
+          type: string
+        key:
+          type: string
+        label:
+          type: string
+        layout_position:
           oneOf:
           - type: integer
           - type: 'null'
-        estimated_revenue:
-          oneOf:
-          - type: integer
-          - type: 'null'
-        headquarters_address:
-          oneOf:
-          - type: string
-          - type: 'null'
-        headquarters_city:
+        options:
+          items:
+            $ref: '#/components/schemas/CustomFieldOptionPayload'
+          type: array
+        record_kind:
+          type: string
+        reference_kind:
           oneOf:
           - type: string
           - type: 'null'
-        headquarters_country:
+        required:
+          type: boolean
+        revision:
+          type: integer
+        section_id:
           oneOf:
           - type: string
           - type: 'null'
-        headquarters_postal_code:
-          oneOf:
-          - type: string
-          - type: 'null'
-        headquarters_state:
-          oneOf:
-          - type: string
-          - type: 'null'
-        industry:
-          oneOf:
-          - type: string
-          - type: 'null'
-        linkedin_url:
-          example: https://www.linkedin.com/company/acme
-          oneOf:
-          - example: https://www.linkedin.com/company/acme
+      required:
+      - archived
+      - conversion_mappings
+      - default_currency_code
+      - default_value
+      - description
+      - field_type
+      - id
+      - key
+      - label
+      - layout_position
+      - options
+      - record_kind
+      - reference_kind
+      - required
+      - revision
+      - section_id
+      title: CustomFieldDefinitionPayload
+      type: object
+    CustomFieldConversionMappingPayload:
+      properties:
+        complete:
+          type: boolean
+        destination_definition_id:
+          type: string
+        destination_record_kind:
+          type: string
+        option_pairs:
+          additionalProperties:
             type: string
-          - example: https://www.linkedin.com/company/acme
-            type: 'null'
-        name:
+          type: object
+      required:
+      - complete
+      - destination_definition_id
+      - destination_record_kind
+      - option_pairs
+      title: CustomFieldConversionMappingPayload
+      type: object
+    V1PaginationPayload:
+      description: Cursor pagination block for public list responses.
+      properties:
+        has_more:
+          description: Whether another page is available.
+          example: false
+          type: boolean
+        limit:
+          description: Requested page size.
+          example: 50
+          type: integer
+        next_cursor:
+          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - limit
+      - next_cursor
+      - has_more
+      type: object
+    CustomFieldType:
+      enum:
+      - short_text
+      - long_text
+      - number
+      - boolean
+      - date
+      - url
+      - single_select
+      - multi_select
+      - single_user
+      - multi_user
+      - single_record
+      - multi_record
+      - currency
+      - percentage
+      title: CustomFieldType
+      type: string
+    V1AccountDeletePayload:
+      properties:
+        deleted:
+          const: true
+          type: boolean
+        id:
+          description: Opaque `account_` identifier.
+          example: account_7B5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - deleted
+      - id
+      title: V1AccountDeletePayload
+      type: object
+    SelectedCustomFieldRecordPayload:
+      properties:
+        available:
+          type: boolean
+        id:
+          type: string
+        label:
+          type: string
+        link:
           oneOf:
           - type: string
           - type: 'null'
-        phone:
-          example: +1-415-555-0100
-          oneOf:
-          - example: +1-415-555-0100
-            type: string
-          - example: +1-415-555-0100
-            type: 'null'
-        relationships:
-          $ref: '#/components/schemas/V1RelationshipsWritePayload'
-        website_url:
-          example: https://acme.example
-          oneOf:
-          - example: https://acme.example
-            type: string
-          - example: https://acme.example
-            type: 'null'
-      required: []
-      title: UpdateAccountRequest
+      required:
+      - available
+      - id
+      - label
+      - link
+      title: SelectedCustomFieldRecordPayload
+      type: object
+    V1OwnerUserPayload:
+      description: User assigned through an owner relationship. Fetch user profile fields from `/api/v1/users` with `users:read`.
+      properties:
+        id:
+          description: Opaque `user_` identifier.
+          example: user_9T5jXRFuLpTQ3nM4PkGvW2
+          type: string
+      required:
+      - id
       type: object
     CreateAccountRequest:
       description: Request body for creating an Account.
       properties:
+        custom_fields:
+          oneOf:
+          - additionalProperties:
+              oneOf:
+              - type: string
+              - type: boolean
+              - type: integer
+              - type: number
+              - items:
+                  type: string
+                type: array
+              - additionalProperties:
+                  type: string
+                type: object
+              - type: 'null'
+            type: object
+          - type: 'null'
         description:
           oneOf:
           - type: string
@@ -856,52 +1504,6 @@ components:
       - name
       title: CreateAccountRequest
       type: object
-    V1PaginationPayload:
-      description: Cursor pagination block for public list responses.
-      properties:
-        has_more:
-          description: Whether another page is available.
-          example: false
-          type: boolean
-        limit:
-          description: Requested page size.
-          example: 50
-          type: integer
-        next_cursor:
-          description: Opaque cursor to pass as `cursor` for the next page, or null when this is the last page.
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - limit
-      - next_cursor
-      - has_more
-      type: object
-    V1AccountListPayload:
-      description: Paginated list response for Accounts.
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/V1AccountSelectedFieldsPayload'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/V1PaginationPayload'
-      required:
-      - data
-      - pagination
-      title: V1AccountListPayload
-      type: object
-    V1OwnerRelationshipSetUserPayload:
-      description: User assignment entry for an owner relationship update.
-      properties:
-        user_id:
-          description: Opaque `user_` identifier.
-          example: user_9T5jXRFuLpTQ3nM4PkGvW2
-          type: string
-      required:
-      - user_id
-      type: object
     V1ErrorResponse:
       description: Standard error envelope for all public v1 API errors.
       properties:
@@ -922,27 +1524,19 @@ components:
       required:
       - error
       type: object
-    V1AccountDeletePayload:
+    V1AccountListPayload:
+      description: Paginated list response for Accounts.
       properties:
-        deleted:
-          const: true
-          type: boolean
-        id:
-          description: Opaque `account_` identifier.
-          example: account_7B5jXRFuLpTQ3nM4PkGvW2
-          type: string
+        data:
+          items:
+            $ref: '#/components/schemas/V1AccountSelectedFieldsPayload'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/V1PaginationPayload'
       required:
-      - deleted
-      - id
-      title: V1AccountDeletePayload
-      type: object
-    V1RelationshipsPayload:
-      description: Relationships attached to an Account or Deal.
-      properties:
-        owner:
-          $ref: '#/components/schemas/V1OwnerRelationshipPayload'
-      required:
-      - owner
+      - data
+      - pagination
+      title: V1AccountListPayload
       type: object
     V1AccountSelectedFieldsPayload:
       properties:
@@ -950,6 +1544,16 @@ components:
           example: '2026-03-22T14:00:01Z'
           format: date-time
           type: string
+        custom_field_tokens:
+          additionalProperties:
+            oneOf:
+            - type: integer
+            - type: 'null'
+          type: object
+        custom_fields:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValuePayload'
+          type: object
         description:
           oneOf:
           - type: string
