@@ -683,3 +683,9 @@ components:
       description: Send either a Fixture API key or a Fixture OAuth access token in the Authorization header as a bearer token.
       scheme: bearer
       type: http
+x-provenance:
+  method: harvested
+  publisher: Fixture
+  source: https://www.fixture.ai/docs/openapi/fixture-v1.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
