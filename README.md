@@ -64,23 +64,137 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Fixture is an AI-native CRM built for startups, backed by Y Combinator (Winter 2026 batch). It aggregates every customer interaction — email, calendar, Slack and Slack Connect, meeting notes from Granola, Notion and Circleback, and Stripe billing events — into a single structured activity graph across Accounts, Contacts, Deals, Leads, Tasks and Notes, then uses agents to surface next actions and keep records current without manual data entry.
+Fixture is an AI-native CRM built for startups, backed by Y Combinator (Winter 2026 batch). Fixture aggregates every customer interaction — email, calendar, Slack and Slack Connect, meeting notes from Granola, Notion and Circleback, and Stripe billing events — into a single structured activity graph across Accounts, Contacts, Deals, Leads, Tasks and Notes, then uses agents to surface next actions and keep records current without manual data entry. The whole system is programmable — Fixture publishes a documented REST v1 API with a generated OpenAPI 3.1 description, a hosted remote MCP server with OAuth 2.1 and dynamic client registration, and a first-party agent-oriented CLI, so humans and agents work against the same surface.
 
-- Website: https://fixture.app
-- Docs: https://fixture.app/docs
-- API reference: https://fixture.app/docs/api-reference/overview
-- Status: https://status.fixture.app
+**Areas:** Company · CRM · Sales · B2B · Artificial Intelligence · Agents · MCP
 
-## API surface
+## Fixture on APIs.io
 
-| Surface | Where |
-| --- | --- |
-| REST v1 API | `https://beta-api.fixture.app/api/v1` |
-| OpenAPI 3.1 | [`openapi/fixture-v1-openapi.json`](openapi/fixture-v1-openapi.json) — generated and published by the provider |
-| Remote MCP server | `https://beta-api.fixture.app/api/mcp` (OAuth 2.1, PKCE S256, dynamic client registration) |
-| CLI | `fixture` — hosted installer, agent-oriented (`fixture agent-context`) |
-| llms.txt | https://fixture.app/docs/llms.txt |
+Everything profiled for Fixture is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/fixture/](https://apis.io/providers/fixture/)** — or go straight to one of the APIs or properties below.
 
-Auth is bearer-only: a workspace API key (`fx_` prefix) for service-to-service integrations, or a Fixture OAuth access token for CLI, Agent, and MCP clients. Session cookies are rejected on `/api/v1/*`.
+### APIs (11)
 
-Backed by: y-combinator
+- [Fixture Accounts API](https://apis.io/apis/fixture/fixture-accounts-api/) — Create, read, update, and delete company records.
+- [Fixture Activities API](https://apis.io/apis/fixture/fixture-activities-api/) — List and ingest CRM Activity records.
+- [Fixture Contacts API](https://apis.io/apis/fixture/fixture-contacts-api/) — Create, read, update, and delete person records.
+- [Fixture Deals API](https://apis.io/apis/fixture/fixture-deals-api/) — Create, read, update, and delete Deal records.
+- [Fixture API](https://apis.io/apis/fixture/fixture-fixture-api-api/) — The Fixture API API from Fixture — 1 operation(s) for fixture api.
+- [Fixture Leads API](https://apis.io/apis/fixture/fixture-leads-api/) — Create, read, update, and convert Leads.
+- [Fixture Notes API](https://apis.io/apis/fixture/fixture-notes-api/) — Create Notes linked to CRM entities.
+- [Fixture Pipelines API](https://apis.io/apis/fixture/fixture-pipelines-api/) — List Pipelines and inspect their nested stages.
+- [Fixture Task Statuses API](https://apis.io/apis/fixture/fixture-task-statuses-api/) — List Task status definitions available to the current organization.
+- [Fixture Tasks API](https://apis.io/apis/fixture/fixture-tasks-api/) — Create, read, update, and delete Tasks.
+- [Fixture Users API](https://apis.io/apis/fixture/fixture-users-api/) — The Users API from Fixture — 1 operation(s) for users.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Fixture MCP](https://apis.io/servers/fixture/fixture-mcp/)
+
+#### Collections (11)
+
+Postman and Open Collection request collections.
+
+- [Fixture Accounts API](https://apis.io/collections/fixture/open-fixture-accounts-api/)
+- [Fixture Accounts Activities API](https://apis.io/collections/fixture/open-fixture-activities-api/)
+- [Fixture Accounts Contacts API](https://apis.io/collections/fixture/open-fixture-contacts-api/)
+- [Fixture Accounts Deals API](https://apis.io/collections/fixture/open-fixture-deals-api/)
+- [Fixture Accounts Fixture API API](https://apis.io/collections/fixture/open-fixture-fixture-api-api/)
+- [Fixture Accounts Leads API](https://apis.io/collections/fixture/open-fixture-leads-api/)
+- [Fixture Accounts Notes API](https://apis.io/collections/fixture/open-fixture-notes-api/)
+- [Fixture Accounts Pipelines API](https://apis.io/collections/fixture/open-fixture-pipelines-api/)
+- [Fixture Accounts Task Statuses API](https://apis.io/collections/fixture/open-fixture-task-statuses-api/)
+- [Fixture Accounts Tasks API](https://apis.io/collections/fixture/open-fixture-tasks-api/)
+- [Fixture Accounts Users API](https://apis.io/collections/fixture/open-fixture-users-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Fixture V1 Overlay](https://apis.io/overlays/fixture/fixture-v1-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Fixture Authentication](https://apis.io/security/fixture/fixture-authentication/)
+- [Fixture Domain Security](https://apis.io/security/fixture/fixture-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Fixture Scopes](https://apis.io/scopes/fixture/fixture-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://fixture.app)
+- [Documentation](https://fixture.app/docs)
+- [Getting started](https://fixture.app/docs/getting-started/quickstart)
+- [API reference](https://fixture.app/docs/api-reference/overview)
+- [Sign up](https://fixture.app/beta)
+- [Terms of service](https://fixture.app/terms)
+- [Privacy policy](https://fixture.app/privacy)
+- [Status](https://status.fixture.app)
+
+## API Evangelist rating
+
+**Kin Score 46.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 56.3 |
+| Contract governance | 4.5 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 34.2 |
+
+**Agent readiness 58.3** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 31.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/fixture/](https://apis.io/providers/fixture/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Fixture: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/fixture/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
